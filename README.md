@@ -1,2 +1,2 @@
 # frontend
-Front-end for our workspace reservation app
+Frontend for our workspace reservation app
