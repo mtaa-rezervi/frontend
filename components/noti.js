@@ -2,7 +2,7 @@ import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import colors from '../styles/colors';
 import textStyle from '../styles/text';
 
-const Notification = ({ type, time, text }) => {
+const Notification = ({ type, time, text, action }) => {
   let component;
 
   if (type === 'missed_call') {
@@ -11,7 +11,7 @@ const Notification = ({ type, time, text }) => {
         <Text style={[styles.time, textStyle.smaller]}>{time} ago</Text>
         <View style={ styles.notification }>
             <Text style={[styles.text, textStyle.smaller]}>{text}</Text>
-            <Text style={[styles.text, styles.clickableText]} onPress={()=> someAction()}>Call them back?</Text>
+            <Text style={[styles.text, styles.clickableText]} onPress={action}>Call them back?</Text>
         </View>
       </View>
     );
@@ -61,7 +61,7 @@ const styles = StyleSheet.create({
   clickableText: {
     color: colors.blue,
     textDecorationLine: 'underline',
-    fontFamily: 'roboto-bold'
+    fontFamily: 'roboto-bold',
   }
 });
 

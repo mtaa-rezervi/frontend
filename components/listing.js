@@ -2,15 +2,17 @@ import { StyleSheet, Text, TouchableOpacity, Image, View } from 'react-native';
 import colors from '../styles/colors';
 import textStyle from '../styles/text';
 
-const Listing = ({ roomName }) => {
+const Listing = ({ roomName, info, numSeats, amenities, action}) => {
   return (
-    <TouchableOpacity style={ styles.button }>
+    <TouchableOpacity style={ styles.button }
+      onPress={action}
+    >
       <View style={ styles.container }>
         <Image style={ styles.image } source={require('../assets/images/room1.jpg')}/>
         <Text style={[styles.heading, textStyle.small, { fontFamily: 'roboto-bold' }]}>{ roomName || 'Room name' }</Text>
-        <Text style={[styles.text, textStyle.smaller]}>alalallalala</Text>
-        <Text style={[styles.text, textStyle.smaller]}>alalallalala</Text>
-        <Text style={[styles.text, textStyle.smaller]}>aladadadalallalala</Text>
+        <Text style={[styles.text, textStyle.smaller]}>{info}</Text>
+        <Text style={[styles.text, textStyle.smaller]}>{numSeats} seats</Text>
+        <Text style={[styles.text, textStyle.smaller]}>{amenities}</Text>
       </View>
     </TouchableOpacity>
 )};
