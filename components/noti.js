@@ -2,54 +2,26 @@ import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import colors from '../styles/colors';
 import textStyle from '../styles/text';
 
-const Notification = ({ type, time, roomName, street, user }) => {
+const Notification = ({ type, time, text }) => {
   let component;
 
-  if (type === 'booked_room') {
+  if (type === 'missed_call') {
     component = (
       <View style={ styles.container }>
         <Text style={[styles.time, textStyle.smaller]}>{time} ago</Text>
         <View style={ styles.notification }>
-            <Text style={[styles.text, textStyle.smaller]}>Someone has just reserved your room,
-            <Text style={{ fontFamily: 'roboto-bold' }}> {roomName}</Text> on 
-            <Text style={{ fontFamily: 'roboto-bold' }}> {street}</Text>!
-            </Text>
-        </View>
-      </View>
-    );
-  } else if (type === 'new_booking') {
-    component = (
-      <View style={ styles.container }>
-        <Text style={[styles.time, textStyle.smaller]}>{time} ago</Text>
-        <View style={ styles.notification }>
-            <Text style={[styles.text, textStyle.smaller]}>You have just reserved a room, 
-            <Text style={{ fontFamily: 'roboto-bold' }}> {roomName}</Text> on 
-            <Text style={{ fontFamily: 'roboto-bold' }}> {street}</Text>!
-            </Text>
-        </View>
-      </View>
-    );
-  } else if (type === 'missed_call') {
-    component = (
-      <View style={ styles.container }>
-        <Text style={[styles.time, textStyle.smaller]}>{time} ago</Text>
-        <View style={ styles.notification }>
-            <Text style={[styles.text, textStyle.smaller]}>Missed call from,
-            <Text style={{ fontFamily: 'roboto-bold' }}> {user}.</Text>
-            </Text>
+            <Text style={[styles.text, textStyle.smaller]}>{text}</Text>
             <Text style={[styles.text, styles.clickableText]} onPress={()=> someAction()}>Call them back?</Text>
         </View>
       </View>
     );
-  } else if (type === 'removed_listing') {
+  } else {
     component = (
       <View style={ styles.container }>
         <Text style={[styles.time, textStyle.smaller]}>{time} ago</Text>
-        <TouchableOpacity style={ styles.notification }>
-            <Text style={[styles.text, textStyle.smaller]}>Room named
-            <Text style={{ fontFamily: 'roboto-bold' }}> {roomName} </Text> 
-            that you had reservation for has just been removed.</Text>
-        </TouchableOpacity>
+        <View style={ styles.notification }>
+            <Text style={[styles.text, textStyle.smaller]}>{text}</Text>
+        </View>
       </View>
     );
   }
