@@ -1,32 +1,58 @@
-import React from "react";
+import React, { useState } from "react";
 import { StyleSheet, SafeAreaView, View, Text, Image, TextInput, Button, TouchableOpacity} from "react-native";
 
+import { saveKeyValue } from "../SecureStore";
 
 import { useFonts } from 'expo-font';
 import AppLoading from 'expo-app-loading';
 
 import colors from '../styles/colors';
 
-function login(user, pass){
-    fetch('https://mtaa-backend.herokuapp.com/users/login', {
-        method: 'POST',
-        headers: {
-            Accept: 'application/json',
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-            username: user,
-            password: pass
-        })
-    }).then((response) => response.json())
-    .then((json) => {
-      return json.token;
-    })
-    .catch((error) => {
-      console.error(error);
-    });
-}
+
 function LoginScreen({ navigation }) {
+
+    const [username, setUsername] = useState('')
+    const [password, setPassword] = useState('')
+
+    const login = async (user, pass) => {
+        try {
+          const response = await fetch('https://mtaa-backend.herokuapp.com/users/login', {
+              method: 'POST',
+              headers: {
+                  Accept: 'application/json',
+                  'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({
+                  username: user,
+                  password: pass
+              })
+          });
+          const json = await response.json();
+          
+          if(response.status == 200){
+              
+
+              console.log(json.token, typeof json.token);
+
+              var storeKey = 'bearer';
+              var storeValue = JSON.stringify(json.token);
+              // store users jwt token
+              if(json.token){
+                saveKeyValue(storeKey, storeValue).catch(error => {
+                    console.log(error);
+                });
+              }
+
+              navigation.navigate('Home');
+          }
+          else if(response.status == 404){
+              alert(json.error.message);
+          }
+
+        } catch (error) {
+          console.error(error);
+        }
+      };
 
     let [fontsLoaded] = useFonts({
         'roboto-bold': require('../assets/fonts/Roboto-Bold.ttf'),
@@ -48,12 +74,19 @@ function LoginScreen({ navigation }) {
         style={styles.image}
       ></Image>
       
-      <TextInput placeholder="Username" style={styles.username}></TextInput>
+      <TextInput
+        placeholder="Username"
+        style={styles.username}
+        value={username}
+        onChangeText={text => setUsername(text)}
+        />
       <TextInput
         placeholder="Password"
         secureTextEntry={true}
         style={styles.password}
-      ></TextInput>
+        value={password}
+        onChangeText={text => setPassword(text)}
+        />
       
         <View style={styles.loremIpsumRow}>
             <Text style={styles.loremIpsum}>Don&#39;t have an account yet?</Text>
@@ -61,8 +94,7 @@ function LoginScreen({ navigation }) {
         </View>
         <TouchableOpacity
             style={styles.loginButton}
-            onPress={() => console.log("login pressed")}
-        >
+            onPress={ () => login(username, password) }>
             <Text style={styles.loginText}>
                 Login
             </Text>
