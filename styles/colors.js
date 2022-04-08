@@ -5,6 +5,6 @@ const colors = {
     grey: '#979797',
     lightGrey: '#F6F6F6',
     red: '#E03E3E',
-}
+}; 
 
 export default colors;
