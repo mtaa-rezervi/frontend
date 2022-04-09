@@ -3,19 +3,19 @@ import colors from '../styles/colors';
 import textStyle from '../styles/text';
 import React, { useState } from 'react'
 
-const Input = ({ placeholder }) => {
-  const [text, setText] = useState('')
+export default function Input({ placeholder }) {
+  const [text, setText] = useState('');
 
-  return ( 
-    <View style={ styles.inputContainer }>
-      <TextInput style= {[styles.input, textStyle.small]} value={text}
-        placeholder={ placeholder || 'Placeholder' }
+  return (
+    <View style={styles.inputContainer}>
+      <TextInput style={[styles.input, textStyle.small]} value={text}
+        placeholder={placeholder || 'Placeholder'}
         onChangeText={(text) => {
-          setText(text)
-        }}
-      />
+          setText(text);
+        } } />
     </View>
-)};
+  );
+}
 
 const styles = StyleSheet.create({
   inputContainer: {
@@ -32,5 +32,3 @@ const styles = StyleSheet.create({
     color: colors.grey
   }
 });
-
-export default Input;

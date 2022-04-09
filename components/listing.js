@@ -9,13 +9,13 @@ const SmallButton = ({ title, action }) => {
     </TouchableOpacity>
 )};
 
-const Listing = ({ roomName, info, numSeats, amenities, buttonTitle, buttonAction }) => {
+export default function Listing({ roomName, image, info, numSeats, amenities, buttonTitle, buttonAction }) {
   return (
-    <View style={ styles.container }>
-      <Image style={ styles.image } source={require('../assets/images/room1.jpg')}/>
-      <View style={ styles.box }>
-        <View style={ styles.textContainer }>
-          <Text style={[styles.heading, textStyle.small, { fontFamily: 'roboto-bold' }]}>{ roomName || 'Room name' }</Text>
+    <View style={styles.container}>
+      <Image style={styles.image} source={image} />
+      <View style={styles.box}>
+        <View style={styles.textContainer}>
+          <Text style={[styles.heading, textStyle.small, { fontFamily: 'roboto-bold' }]}>{roomName || 'Room name'}</Text>
           <Text style={[styles.text, textStyle.smaller]}>{info}</Text>
           <Text style={[styles.text, textStyle.smaller]}>{numSeats} seats</Text>
           <Text style={[styles.text, textStyle.smaller]}>{amenities}</Text>
@@ -23,7 +23,8 @@ const Listing = ({ roomName, info, numSeats, amenities, buttonTitle, buttonActio
         <SmallButton title={buttonTitle} action={buttonAction} />
       </View>
     </View>
-)};
+  );
+}
 
 const styles = StyleSheet.create({
   textContainer: {
@@ -74,5 +75,3 @@ const styles = StyleSheet.create({
     margin: 10
   }
 });
-
-export default Listing;

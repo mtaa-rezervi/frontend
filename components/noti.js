@@ -2,32 +2,32 @@ import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import colors from '../styles/colors';
 import textStyle from '../styles/text';
 
-const Notification = ({ type, time, text, action }) => {
+export default function Notification({ type, time, text, action }) {
   let component;
 
   if (type === 'missed_call') {
     component = (
-      <View style={ styles.container }>
+      <View style={styles.container}>
         <Text style={[styles.time, textStyle.smaller]}>{time} ago</Text>
-        <View style={ styles.notification }>
-            <Text style={[styles.text, textStyle.smaller]}>{text}</Text>
-            <Text style={[styles.text, styles.clickableText]} onPress={action}>Call them back?</Text>
+        <View style={styles.notification}>
+          <Text style={[styles.text, textStyle.smaller]}>{text}</Text>
+          <Text style={[styles.text, styles.clickableText]} onPress={action}>Call them back?</Text>
         </View>
       </View>
     );
   } else {
     component = (
-      <View style={ styles.container }>
+      <View style={styles.container}>
         <Text style={[styles.time, textStyle.smaller]}>{time} ago</Text>
-        <View style={ styles.notification }>
-            <Text style={[styles.text, textStyle.smaller]}>{text}</Text>
+        <View style={styles.notification}>
+          <Text style={[styles.text, textStyle.smaller]}>{text}</Text>
         </View>
       </View>
     );
   }
 
   return component;
-};
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -64,5 +64,3 @@ const styles = StyleSheet.create({
     fontFamily: 'roboto-bold',
   }
 });
-
-export default Notification;

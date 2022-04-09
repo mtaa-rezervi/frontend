@@ -2,12 +2,13 @@ import { StyleSheet, Text, TouchableOpacity } from 'react-native';
 import colors from '../styles/colors';
 import textStyle from '../styles/text';
 
-const StandardButton = ({ title, action }) => {
+export default function StandardButton({ title, action }) {
   return (
-    <TouchableOpacity style={ styles.button } onPress={action}>
-      <Text style={[styles.buttonText, textStyle.small]}>{ title || 'Button' }</Text>
+    <TouchableOpacity style={styles.button} onPress={action}>
+      <Text style={[styles.buttonText, textStyle.small]}>{title || 'Button'}</Text>
     </TouchableOpacity>
-)};
+  );
+}
 
 const styles = StyleSheet.create({
   button: {
@@ -22,5 +23,3 @@ const styles = StyleSheet.create({
     color: colors.white,
   }
 });
-
-export default StandardButton;
