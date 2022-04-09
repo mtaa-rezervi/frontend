@@ -12,7 +12,7 @@ export default function Input({ placeholder }) {
         placeholder={placeholder || 'Placeholder'}
         onChangeText={(text) => {
           setText(text);
-        } } />
+        }} />
     </View>
   );
 }

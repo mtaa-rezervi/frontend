@@ -20,7 +20,7 @@ export default function App() {
   return (
     <View style={styles.container}>
       <Text style={[textStyle.h1, { color: colors.blue }]}>Ahojky!</Text>
-      {/* <ComponentsExample /> */}
+      <ComponentsExample />
       <StatusBar style="auto" />
     </View>
   );
