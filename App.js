@@ -4,6 +4,7 @@ import { useFonts } from 'expo-font';
 import AppLoading from 'expo-app-loading';
 import colors from './styles/colors';
 import textStyle from './styles/text';
+import ComponentsExample from './components/componentsExample';
 
 export default function App() {
   
@@ -19,6 +20,7 @@ export default function App() {
   return (
     <View style={styles.container}>
       <Text style={[textStyle.h1, { color: colors.blue }]}>Ahojky!</Text>
+      <ComponentsExample />
       <StatusBar style="auto" />
     </View>
   );
