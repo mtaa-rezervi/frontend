@@ -11,9 +11,9 @@ const SmallButton = ({ title, action }) => {
 
 export default function Listing({ roomName, image, info, numSeats, amenities, buttonTitle, buttonAction }) {
   return (
-    <View style={styles.container}>
+    <View style={styles.card}>
       <Image style={styles.image} source={image} />
-      <View style={styles.box}>
+      <View style={styles.container}>
         <View style={styles.textContainer}>
           <Text style={[styles.heading, textStyle.small, { fontFamily: 'roboto-bold' }]}>{roomName || 'Room name'}</Text>
           <Text style={[styles.text, textStyle.smaller]}>{info}</Text>
@@ -32,7 +32,7 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     alignItems: 'flex-start',
   },
-  box: {
+  container: {
     justifyContent: 'space-between',
     flexDirection: 'row',
     alignItems: 'center',
@@ -47,7 +47,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center'
   },
-  container: {
+  card: {
     width: 330,
     height: 261,
     borderRadius: 20,
