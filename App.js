@@ -1,37 +1,39 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
-import { useFonts } from 'expo-font';
-import AppLoading from 'expo-app-loading';
+// import { useFonts } from 'expo-font';
+// import AppLoading from 'expo-app-loading';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+
+
 import colors from './styles/colors';
 import textStyle from './styles/text';
 import ComponentsExample from './components/componentsExample';
 
+import LoginScreen from './screens/Login';
+import RegisterScreen from './screens/Register';
+import HomeScreen from './screens/Home';
+
 export default function App() {
   
-  let [fontsLoaded] = useFonts({
-    'roboto-bold': require('./assets/fonts/Roboto-Bold.ttf'),
-    'roboto-regular': require('./assets/fonts/Roboto-Regular.ttf'),
-  });
-
-  if (!fontsLoaded) {
-    return <AppLoading />;
-  }
+  const Stack = createNativeStackNavigator();
 
   return (
-    <View style={styles.container}>
-      <Text style={[textStyle.h1, { color: colors.blue }]}>Ahojky!</Text>
-      <ComponentsExample />
-      <StatusBar style="auto" />
-    </View>
+    <NavigationContainer>
+      <Stack.Navigator
+        screenOptions={{
+          headerShown: false
+        }}>
+        <Stack.Screen name="Login" component={LoginScreen} />
+        <Stack.Screen name="Register" component={RegisterScreen} />
+        <Stack.Screen name="Home" component={HomeScreen} />
+      </Stack.Navigator>
+    </NavigationContainer>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
-    marginTop: 60,
-    alignItems: 'center',
-    justifyContent: 'flex-start',
   },
 });
