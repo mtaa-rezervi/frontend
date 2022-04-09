@@ -8,7 +8,7 @@ import colors from './styles/colors';
 import textStyle from './styles/text';
 
 import StandardButton from './components/standardButton';
-import CustomInput from './components/customInput';
+import Input from './components/Input';
 import ProfileButton from './components/profileButton';
 import Listing from './components/listing';
 import Notification from './components/noti';
@@ -27,10 +27,17 @@ export default function App() {
   return (
     <View style={ styles.container } >
       {/* <Text style={[textStyle.small, { color: colors.blue }]}>Ahojky!</Text> */}
-      <StandardButton title='' action={() => {console.log('Clicked')}} /> 
+      <StandardButton style={styles.button} title='' action={() => {console.log('Clicked')}} />
       <ProfileButton title='' color={ colors.lightGrey } action={() => {console.log('Clicked')}} /> 
-      <CustomInput placeholder='Password' action={() => {console.log('Clicked')}} />
-      <Listing roomName='' info='info' numSeats='x' amenities='amenities' action={() => {console.log('Clicked')}} /> 
+      <Input placeholder='Password' action={() => {console.log('Clicked')}} />
+      <Listing 
+        roomName='' 
+        info='Very nice room' 
+        numSeats='12' 
+        amenities='whiteboard, ethernet' 
+        buttonTitle='Book again'
+        buttonAction={() => {console.log('Clicked')}} 
+      /> 
       {/* <Notification type='booked_room' time='1hr' text='Someone has just reserved your room, Room 1 on Carrot st. 123!' />
       <Notification type='new_booking' time='1hr' text='You have just reserved a room, Room 2 on Broccoli st. 11!' />
       <Notification type='missed_call' time='1hr' text='Missed call from Alice.' action={() => {console.log('Clicked')}} />
@@ -40,11 +47,14 @@ export default function App() {
 }
 
 const styles = StyleSheet.create({
-container: {
-  flex: 1,
-  backgroundColor: '#fff',
-  padding: 10,
-  alignItems: 'center',
-  justifyContent: 'space-evenly',
-}
+  container: {
+    flex: 1,
+    backgroundColor: '#fff',
+    padding: 10,
+    alignItems: 'center',
+    justifyContent: 'space-evenly',
+  },
+  button: {
+    height: 10
+  }
 });

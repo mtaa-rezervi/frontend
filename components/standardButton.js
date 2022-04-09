@@ -4,9 +4,7 @@ import textStyle from '../styles/text';
 
 const StandardButton = ({ title, action }) => {
   return (
-    <TouchableOpacity style={ styles.button }
-      onPress={action}
-    >
+    <TouchableOpacity style={ styles.button } onPress={action}>
       <Text style={[styles.buttonText, textStyle.small]}>{ title || 'Button' }</Text>
     </TouchableOpacity>
 )};

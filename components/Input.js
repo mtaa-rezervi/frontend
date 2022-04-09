@@ -3,15 +3,15 @@ import colors from '../styles/colors';
 import textStyle from '../styles/text';
 import React, { useState } from 'react'
 
-const CustomInput = ({ placeholder }) => {
+const Input = ({ placeholder }) => {
   const [text, setText] = useState('')
 
   return ( 
     <View style={ styles.inputContainer }>
       <TextInput style= {[styles.input, textStyle.small]} value={text}
-        placeholder={ placeholder }
+        placeholder={ placeholder || 'Placeholder' }
         onChangeText={(text) => {
-        setText(text)
+          setText(text)
         }}
       />
     </View>
@@ -33,4 +33,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default CustomInput;
+export default Input;
