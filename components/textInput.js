@@ -3,32 +3,32 @@ import colors from '../styles/colors';
 import textStyle from '../styles/text';
 import React, { useState } from 'react'
 
-export default function Input({ placeholder }) {
-  const [text, setText] = useState('');
+export default function Input({ placeholder, secureTextEntry, value, onChangeText }) {
 
   return (
-    <View style={styles.inputContainer}>
-      <TextInput style={[styles.input, textStyle.small]} value={text}
+    <View>
+      <TextInput 
+        style={[styles.input, textStyle.small]} 
+        value={value} 
+        secureTextEntry={secureTextEntry || false}
         placeholder={placeholder || 'Placeholder'}
-        onChangeText={(text) => {
-          setText(text);
-        }} />
+        onChangeText={onChangeText} 
+        autoCapitalize='none'/>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  inputContainer: {
+  input: {
     width: 330,
     height: 48,
     backgroundColor: '#EBEBEB',
     borderRadius: 10,
     justifyContent: 'flex-start',
     alignItems: 'center',
-    flexDirection: 'row'
-  },
-  input: {
+    flexDirection: 'row',
     paddingLeft: 20,
+    paddingRight: 20,
     color: colors.grey
   }
 });

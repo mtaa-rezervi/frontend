@@ -5,7 +5,7 @@ import colors from '../styles/colors';
 import textStyle from '../styles/text';
 
 import StandardButton from './standardButton';
-import Input from './input';
+import Input from './textInput';
 import ProfileButton from './profileButton';
 import Listing from './listing';
 import Notification from './noti';
@@ -13,13 +13,17 @@ import ProfileIcon from './profile';
 import Tag from './tag';
 
 export default function ComponentsExample() {
+  const [text, setText] = useState('');
 
   return (
     <View style={ styles.container } >
-      
       <StandardButton style={styles.button} title='' action={() => {console.log('Clicked')}} />
       <ProfileButton title='' color={ colors.lightGrey } action={() => {console.log('Clicked')}} /> 
-      <Input placeholder='Password' action={() => {console.log('Clicked')}} />
+      <Input 
+        placeholder='Password' 
+        onChangeText={setText} 
+        value={text} 
+      />
       <Listing 
         roomName='' 
         image={require('../assets/images/room1.jpg')}
