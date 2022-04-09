@@ -8,6 +8,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 import colors from './styles/colors';
 import textStyle from './styles/text';
+import ComponentsExample from './components/componentsExample';
 
 import LoginScreen from './screens/Login';
 import RegisterScreen from './screens/Register';

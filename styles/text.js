@@ -1,4 +1,4 @@
-const text = {
+const textStyle = {
     h1: {
         fontFamily: 'roboto-bold',
         fontSize: 33,
@@ -21,4 +21,4 @@ const text = {
     },
 };
 
-export default text;
+export default textStyle;
