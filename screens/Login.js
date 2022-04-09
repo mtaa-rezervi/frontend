@@ -1,15 +1,15 @@
 import React, { useState } from "react";
 import { StyleSheet, SafeAreaView, View, Text, Image, TextInput, Button, TouchableOpacity} from "react-native";
-
 import { saveKeyValue } from "../SecureStore";
-
 import { useFonts } from 'expo-font';
 import AppLoading from 'expo-app-loading';
 
+import Input from "../components/textInput";
+import StandardButton from "../components/standardButton";
+
 import colors from '../styles/colors';
 
-
-function LoginScreen({ navigation }) {
+export default function LoginScreen({ navigation }) {
 
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
@@ -30,8 +30,6 @@ function LoginScreen({ navigation }) {
           const json = await response.json();
           
           if(response.status == 200){
-              
-
               console.log(json.token, typeof json.token);
 
               var storeKey = 'bearer';
@@ -59,46 +57,42 @@ function LoginScreen({ navigation }) {
         'roboto-regular': require('../assets/fonts/Roboto-Regular.ttf'),
     });
 
-    if (!fontsLoaded) {
-    return <AppLoading />;
-    }
+    if (!fontsLoaded) return <AppLoading />;
 
     return (
-    <SafeAreaView style={styles.container}>
-      
+    <SafeAreaView style={styles.container}>      
       <Text style={styles.title}>Welcome to Rezervi</Text>
       <Text style={styles.subtitle}>workspace reservation app</Text>
       <Image
         source={require("../assets/images/Meeting.png")}
         resizeMode="contain"
         style={styles.image}
-      ></Image>
-      
-      <TextInput
-        placeholder="Username"
-        style={styles.username}
-        value={username}
-        onChangeText={text => setUsername(text)}
-        />
-      <TextInput
-        placeholder="Password"
-        secureTextEntry={true}
-        style={styles.password}
-        value={password}
-        onChangeText={text => setPassword(text)}
-        />
-      
-        <View style={styles.loremIpsumRow}>
-            <Text style={styles.loremIpsum}>Don&#39;t have an account yet?</Text>
+      />
+      <View style={styles.username}>
+        <Input
+          placeholder="Username"
+          value={username}
+          onChangeText={text => setUsername(text)}
+          />
+      </View>
+      <View style={styles.password}>
+        <Input
+          placeholder="Password"
+          secureTextEntry={true}
+          value={password}
+          onChangeText={text => setPassword(text)}
+          />
+        </View>
+        <View style={styles.bottomTextContainer}>
+            <Text style={styles.bottomText}>Don&#39;t have an account yet?</Text>
             <Text style={styles.register} onPress={() => navigation.navigate('Register')}>Register</Text>
         </View>
-        <TouchableOpacity
-            style={styles.loginButton}
-            onPress={ () => login(username, password) }>
-            <Text style={styles.loginText}>
-                Login
-            </Text>
-        </TouchableOpacity>
+        <View style={styles.loginButton}>
+          <StandardButton 
+            title='Login' 
+            action={() => login(username, password)}
+          />
+        </View>
     </SafeAreaView>
   );
 }
@@ -108,21 +102,8 @@ const styles = StyleSheet.create({
     flex: 1
   },
   loginButton: {
-    width: 330,
-    height: 36,
-    borderRadius: 10,
     marginTop: 5,
     alignSelf: "center",
-    backgroundColor: colors.blue,
-    justifyContent: "center"
-  },
-  loginText: {
-    color: "#fff",
-    fontSize: 14,
-    height: 17,
-    width: 55,
-    textAlign: "center",
-    alignSelf: "center"
   },
   title: {
     fontFamily: "roboto-bold",
@@ -145,24 +126,14 @@ const styles = StyleSheet.create({
     marginLeft: 93
   },
   username: {
-    height: 48,
-    width: 330,
-    backgroundColor: "rgba(235,235,235,1)",
-    borderRadius: 10,
     marginTop: 53,
     alignSelf: "center",
-    paddingLeft: 10
   },
   password: {
-    height: 48,
-    width: 330,
-    backgroundColor: "rgba(235,235,235,1)",
-    borderRadius: 10,
-    marginTop: 24,
+    marginTop: 20,
     alignSelf: "center",
-    paddingLeft: 10
   },
-  loremIpsum: {
+  bottomText: {
     fontFamily: "roboto-regular",
     color: "#121212",
     height: 17,
@@ -173,11 +144,9 @@ const styles = StyleSheet.create({
     color: "rgba(54,110,255,1)",
     textDecorationLine: "underline"
   },
-  loremIpsumRow: {
+  bottomTextContainer: {
     flexDirection: "row",
     marginTop: 70,
     marginLeft: 40
   }
 });
-
-export default LoginScreen;

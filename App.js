@@ -5,7 +5,6 @@ import { StyleSheet, Text, View } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
-
 import colors from './styles/colors';
 import textStyle from './styles/text';
 import ComponentsExample from './components/componentsExample';
@@ -15,10 +14,10 @@ import RegisterScreen from './screens/Register';
 import HomeScreen from './screens/Home';
 
 export default function App() {
-  
   const Stack = createNativeStackNavigator();
 
   return (
+    // <View style={styles.container}><ComponentsExample/></View>
     <NavigationContainer>
       <Stack.Navigator
         screenOptions={{

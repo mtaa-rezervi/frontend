@@ -28,7 +28,6 @@ function RegisterScreen({ navigation }) {
   return (
     <SafeAreaView style={styles.container}>
       <Text style={styles.createAnAccount}>Create an account</Text>
-
       <TextInput placeholder="First name" style={styles.firstName}></TextInput>
       <TextInput placeholder="Last name" style={styles.lastName}></TextInput>
       <TextInput placeholder="Username" style={styles.username}></TextInput>
