@@ -47,9 +47,10 @@ const TabNavigator = () => {
         options={{
           tabBarIcon: ({color}) => <MaterialCommunityIcons style={styles.tabBarIcon} name='bell' size={30} color={color} />,
         }}/>
-      <Tab.Screen name="Profile" component={ProfileScreen} options={{
-        tabBarIcon: ({color}) => <Ionicons style={styles.tabBarIcon} name='person-circle-sharp' size={34} color={color} />,
-      }}/>
+      <Tab.Screen name="Profile" component={ProfileScreen} 
+        options={{
+          tabBarIcon: ({color}) => <Ionicons style={styles.tabBarIcon} name='person-circle-sharp' size={34} color={color} />,
+        }}/>
     </Tab.Navigator>
   );
 };
@@ -69,9 +70,9 @@ export default function App() {
         screenOptions={{
           headerShown: false
         }}>
-        {/* <Stack.Screen name='Login' component={LoginScreen} />
-        <Stack.Screen name='Register' component={RegisterScreen} /> */}
-        <Stack.Screen name='BottomTab' component={TabNavigator} />
+        <Stack.Screen name='Login' component={LoginScreen} />
+        <Stack.Screen name='Register' component={RegisterScreen} />
+        <Stack.Screen name='TabNavigator' component={TabNavigator} />
         <Stack.Screen name='Room' component={RoomScreen} />
       </Stack.Navigator>
     </NavigationContainer>
