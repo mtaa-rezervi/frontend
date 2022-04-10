@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { StyleSheet, SafeAreaView, View, Text, Image } from "react-native";
-import { saveKeyValue } from "../SecureStore";
+import { saveKeyValue } from "../utils/SecureStore";
 import { useFonts } from 'expo-font';
 import AppLoading from 'expo-app-loading';
 
@@ -41,7 +41,7 @@ export default function LoginScreen({ navigation }) {
                 });
               }
 
-              navigation.navigate('Home');
+              navigation.navigate('TabNavigator');
           }
           else if(response.status == 404){
               alert(json.error.message);

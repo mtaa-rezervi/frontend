@@ -10,6 +10,8 @@ const SmallButton = ({ title, action }) => {
 )};
 
 export default function Listing({ roomName, image, info, numSeats, amenities, buttonTitle, buttonAction }) {
+  image == '' || image.uri == '' ? image = require('../assets/images/room1.jpg') : image = image;
+
   return (
     <View style={styles.card}>
       <Image style={styles.image} source={image} />
@@ -27,11 +29,6 @@ export default function Listing({ roomName, image, info, numSeats, amenities, bu
 }
 
 const styles = StyleSheet.create({
-  textContainer: {
-    justifyContent: 'center',
-    flexDirection: 'column',
-    alignItems: 'flex-start',
-  },
   container: {
     justifyContent: 'space-between',
     flexDirection: 'row',
@@ -49,18 +46,25 @@ const styles = StyleSheet.create({
   },
   card: {
     width: 330,
-    height: 261,
+    //height: 261,
     borderRadius: 20,
     backgroundColor: colors.lightGrey,
     shadowColor: colors.black,
     shadowOffset: { width: 4, height: 4 },
     shadowOpacity: 0.1,
     shadowRadius: 3,  
-    elevation: 3
+    elevation: 3,
+    paddingBottom: 7
   },
   heading: {
     paddingBottom: 5,
     color: colors.black,
+  },
+  textContainer: {
+    justifyContent: 'center',
+    flexDirection: 'column',
+    alignItems: 'flex-start',
+    width: 150
   },
   text: {
     paddingBottom: 3,
