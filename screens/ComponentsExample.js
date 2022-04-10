@@ -4,13 +4,13 @@ import React, { useState } from 'react'
 import colors from '../styles/colors';
 import textStyle from '../styles/text';
 
-import StandardButton from './standardButton';
-import Input from './textInput';
-import ProfileButton from './profileButton';
-import Listing from './listing';
-import Notification from './noti';
-import ProfileIcon from './profile';
-import Tag from './tag';
+import StandardButton from '../components/StandardButton';
+import Input from '../components/Input';
+import ProfileButton from '../components/ProfileButton';
+import Listing from '../components/Listing';
+import Notification from '../components/Notification';
+import ProfileIcon from '../components/Profile';
+import Tag from '../components/Tag';
 
 export default function ComponentsExample() {
   const [text, setText] = useState('');
