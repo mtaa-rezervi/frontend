@@ -1,18 +1,16 @@
 import React, { useState } from 'react'
 import { StyleSheet, Text, SafeAreaView, View, TouchableOpacity, TextInput } from 'react-native';
 
-import { Feather } from '@expo/vector-icons'; 
+import BackButton from '../components/BackButton';
 
-import colors from '../styles/colors';
 import textStyle from '../styles/text';
+import colors from '../styles/colors';
 
 export default function RoomScreen({ navigation, route }) {
   return (
     <SafeAreaView style={styles.container}>
-      <TouchableOpacity onPress={() => navigation.goBack()}>
-        <Feather name="arrow-left" size={24} color="black" />
-      </TouchableOpacity>
-      <Text style={textStyle.h1}>{route.params.name}</Text>
+      <BackButton action={() => navigation.goBack()}/>
+      <Text style={[textStyle.h1, styles.header]}>{route.params.name}</Text>
     </SafeAreaView>
   );
 }
@@ -20,6 +18,13 @@ export default function RoomScreen({ navigation, route }) {
 const styles = StyleSheet.create({
 	container: {
 		flex: 1,
-		backgroundColor: colors.white
-	}
+		backgroundColor: colors.white,
+	},
+  arrow: {
+    marginLeft: 30
+  },
+  header: {
+    marginTop: 8,
+    marginLeft: 30
+  }
 });
