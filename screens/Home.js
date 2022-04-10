@@ -11,35 +11,6 @@ import textStyle from "../styles/text";
 import ProfileIcon from "../components/Profile";
 import Listing from "../components/Listing";
 
-// const data = [
-// 	{
-// 		_id: 'aaaaaa',
-// 		roomName: 'Room 1',
-// 		info: 'Very nice room',
-// 		numSeats: 12,
-// 		amenities: ['whiteboard', 'etherner'],
-// 		thumbnail: require('../assets/images/room1.jpg')
-// 	},
-// 	{
-// 		_id: 'bbbbbb',
-// 		roomName: 'Room 2',
-// 		info: 'Also a very nice room',
-// 		numSeats: 6,
-// 		amenities: ['whiteboard'],
-// 		thumbnail: require('../assets/images/room2.jpg')
-// 	},
-// 	{
-// 		_id: 'cccccc',
-// 		roomName: 'Room 3',
-// 		info: 'Also a very nice room',
-// 		numSeats: 15,
-// 		amenities: ['whiteboard', 'projector'],
-// 		thumbnail: require('../assets/images/room3.jpg')
-// 	}
-// ]
-
-let i = 0;
-
 export default function HomeScreen({ navigation }) {
 	// const [selectedId, setSelectedId] = useState(null);
 	// console.log(selectedId)
@@ -76,8 +47,6 @@ export default function HomeScreen({ navigation }) {
 		getRooms();
 	}, []);
 
-	//console.log(rooms)
-
 	const renderItem = ({ item }) => (
 		<View style={styles.listing}>
 			<Listing 
@@ -87,7 +56,9 @@ export default function HomeScreen({ navigation }) {
 				numSeats={item.number_of_seats}
 				amenities={item.amenities.join(', ')} 
 				buttonTitle='View'
-				buttonAction={() => { navigation.navigate('Room', { _id: item._id, name: item.name })}} 
+				buttonAction={() => { 
+					navigation.navigate('Room', { _id: item._id, name: item.name })
+				}} 
 			/>
 		</View>
   );
