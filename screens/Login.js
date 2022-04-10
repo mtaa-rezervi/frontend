@@ -1,11 +1,11 @@
 import React, { useState } from "react";
-import { StyleSheet, SafeAreaView, View, Text, Image, TextInput, Button, TouchableOpacity} from "react-native";
+import { StyleSheet, SafeAreaView, View, Text, Image } from "react-native";
 import { saveKeyValue } from "../SecureStore";
 import { useFonts } from 'expo-font';
 import AppLoading from 'expo-app-loading';
 
-import Input from "../components/textInput";
-import StandardButton from "../components/standardButton";
+import Input from "../components/Input";
+import StandardButton from "../components/StandardButton";
 
 import colors from '../styles/colors';
 
@@ -99,7 +99,8 @@ export default function LoginScreen({ navigation }) {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1
+    flex: 1,
+    backgroundColor: colors.white
   },
   loginButton: {
     marginTop: 5,

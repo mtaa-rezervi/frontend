@@ -3,9 +3,9 @@ import { StyleSheet, SafeAreaView, View, Text} from "react-native";
 
 import { getValueFor } from "../SecureStore";
 
+import colors from '../styles/colors';
 
 function HomeScreen({ navigation }) {
-
     const getRooms = async () => {
         
         try {
@@ -53,7 +53,8 @@ function HomeScreen({ navigation }) {
 
 const styles = StyleSheet.create({
     container: {
-      flex: 1
+      flex: 1,
+      backgroundColor: colors.white
     }
 });
 
