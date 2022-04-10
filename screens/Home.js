@@ -106,7 +106,7 @@ export default function HomeScreen({ navigation }) {
 					data={rooms}
 					renderItem={renderItem}
 					keyExtractor={item => item._id}
-					style={styles.listingContainer}
+					contentContainerStyle={styles.listingContainer}
 				/>
 			)}
 		</SafeAreaView>
@@ -119,14 +119,14 @@ const styles = StyleSheet.create({
 		backgroundColor: colors.white,
 	},
 	header: {
-		width: 330,
 		height: 65,
 		marginRight: 30,
 		marginLeft: 30,
 		marginTop: 24,
+		paddingBottom: 10,
 		flexDirection: 'row',
 		justifyContent: 'space-between',
-		alignItems: 'center'
+		alignItems: 'center',
 	},
 	heading: {
 		color: colors.black
@@ -135,8 +135,12 @@ const styles = StyleSheet.create({
 		color: colors.grey
 	},
 	listingContainer: {
-		marginTop: 24,
+		marginTop: 14,
 		marginLeft: 30,
+		marginRight: 30,
+		flexDirection: 'column',
+		justifyContent: 'center',
+		alignItems: 'center'
 	},
 	listing: {
 		marginBottom: 20,
