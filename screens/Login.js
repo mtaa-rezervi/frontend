@@ -91,6 +91,7 @@ export default function LoginScreen({ navigation }) {
           <StandardButton 
             title='Login' 
             action={() => login(username, password)}
+            //action={() => navigation.navigate('HomeScreen')}
           />
         </View>
     </SafeAreaView>
