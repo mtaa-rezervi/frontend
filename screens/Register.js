@@ -25,6 +25,42 @@ function RegisterScreen({ navigation }) {
   const [password, setPassword] = useState('')
   
 
+  const sendRegistration = async (firstName, lastName, username, email, password) => {
+    try {
+      const response = await fetch('https://mtaa-backend.herokuapp.com/users/register', {      
+      method: 'POST',
+          headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            first_name: firstName,
+            last_name: lastName,
+            username: username,
+            email: email,
+            password: password
+          })
+      });
+      const json = await response.json();
+      
+      if(response.status == 201){
+          console.log("account created");
+          alert("Account created successfully!");
+
+          navigation.navigate('TabNavigator');
+      }
+      else if(response.status == 409){
+          alert(json.error.message);
+      }
+      else{
+        alert(`Error occurred (${response.status})`);
+      }
+
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   let [fontsLoaded] = useFonts({
     'roboto-bold': require('../assets/fonts/Roboto-Bold.ttf'),
     'roboto-regular': require('../assets/fonts/Roboto-Regular.ttf'),
@@ -86,7 +122,8 @@ function RegisterScreen({ navigation }) {
       </View>
       <View style={styles.button}>
           <StandardButton 
-            title='Register'
+            title='Register' 
+            action={() => sendRegistration(firstName, lastName, username, email, password)}
           />
         </View>
     </SafeAreaView>
@@ -182,13 +219,13 @@ const styles = StyleSheet.create({
     width: 202,
     height: 17,
     marginTop: 80,
-    marginLeft: 40
+    marginLeft: 45
   },
   button: {
     width: 330,
     height: 36,
     borderRadius: 10,
-    marginTop: 5,
+    marginTop: 10,
     alignSelf: "center",
     backgroundColor: colors.blue,
     justifyContent: "center"
