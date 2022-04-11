@@ -9,7 +9,7 @@ export default function ProfileButton({ title, color, action }) {
       onPress={action}
     >
       <Text style={[styles.buttonText, textStyle.h2]}>{title || 'Button'}</Text>
-      <Entypo style={styles.chevron} name="chevron-right" size={24} color="black" />
+      <Entypo style={styles.chevron} name="chevron-right" size={24} color={colors.blue} />
     </TouchableOpacity>
   );
 }
