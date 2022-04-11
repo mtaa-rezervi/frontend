@@ -1,11 +1,12 @@
-import React, { Component } from "react";
+import React, { Component, useState } from "react";
 import {
   StyleSheet,
   View,
   Text,
   TextInput,
   TouchableOpacity,
-  SafeAreaView
+  SafeAreaView,
+  Alert
 } from "react-native";
 
 import { useFonts } from 'expo-font';
@@ -13,33 +14,132 @@ import AppLoading from 'expo-app-loading';
 
 import colors from '../styles/colors';
 
+import Input from "../components/Input";
+import StandardButton from "../components/StandardButton";
+import BackButton from "../components/BackButton";
+
 function RegisterScreen({ navigation }) {
 
-    let [fontsLoaded] = useFonts({
-        'roboto-bold': require('../assets/fonts/Roboto-Bold.ttf'),
-        'roboto-regular': require('../assets/fonts/Roboto-Regular.ttf'),
-    });
+  const [firstName, setFirstName] = useState('')
+  const [lastName, setLastName] = useState('')
+  const [username, setUsername] = useState('')
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  
 
-    if (!fontsLoaded) {
-    return <AppLoading />;
+  const sendRegistration = async (firstName, lastName, username, email, password) => {
+    try {
+      const response = await fetch('https://mtaa-backend.herokuapp.com/users/register', {      
+      method: 'POST',
+          headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            first_name: firstName,
+            last_name: lastName,
+            username: username,
+            email: email,
+            password: password
+          })
+      });
+      const json = await response.json();
+      
+      if(response.status == 201){
+          console.log("account created");
+          Alert.alert(
+            'Success',
+            'Account created successfully!',
+            [{
+              text: 'OK',
+              onPress: () => navigation.navigate('TabNavigator')
+            }]
+          )
+      }
+      else if(response.status == 409){
+        Alert.alert(
+          'Error',  // title
+          json.error.message, // text
+          [{
+            text: 'OK'  // button
+          }]
+        )
+      }
+      else{
+        alert(`Error occurred (${response.status})`);
+      }
+
+    } catch (error) {
+      console.error(error);
     }
+  };
 
+  let [fontsLoaded] = useFonts({
+    'roboto-bold': require('../assets/fonts/Roboto-Bold.ttf'),
+    'roboto-regular': require('../assets/fonts/Roboto-Regular.ttf'),
+  });
+  
+  if (!fontsLoaded) {
+    return <AppLoading />;
+  }
 
+    
   return (
     <SafeAreaView style={styles.container}>
+      <BackButton action={() => navigation.goBack()}/>
       <Text style={styles.createAnAccount}>Create an account</Text>
-      <TextInput placeholder="First name" style={styles.firstName}></TextInput>
-      <TextInput placeholder="Last name" style={styles.lastName}></TextInput>
-      <TextInput placeholder="Username" style={styles.username}></TextInput>
-      <TextInput placeholder="Email" style={styles.email}></TextInput>
-      <TextInput placeholder="Password" style={styles.password}></TextInput>
+      
+      <View style={styles.firstName}>
+        <Input
+            placeholder="First name"
+            value={firstName}
+            onChangeText={text => setFirstName(text)}
+            />
+      </View>
+
+      <View style={styles.lastName}>
+        <Input
+            placeholder="Last name"
+            value={lastName}
+            onChangeText={text => setLastName(text)}
+            />
+      </View>
+
+      <View style={styles.username}>
+        <Input
+            placeholder="Username"
+            value={username}
+            onChangeText={text => setUsername(text)}
+            />
+      </View>
+
+      <View style={styles.email}>
+        <Input
+            placeholder="Email"
+            value={email}
+            onChangeText={text => setEmail(text)}
+            />
+      </View>
+
+      <View style={styles.email}>
+        <Input
+            placeholder="Password"
+            value={password}
+            onChangeText={text => setPassword(text)}
+            secureTextEntry={true}
+            />
+      </View>
+
       <View style={styles.hasAccountStack}>
         <Text style={styles.hasAccount}>Already have an account?</Text>
         <Text style={styles.logIn} onPress={() => navigation.navigate('Login')}>Log in</Text>
       </View>
-      <TouchableOpacity style={styles.button}>
-        <Text style={styles.register}>Register</Text>
-      </TouchableOpacity>
+      <View style={styles.button}>
+          <StandardButton 
+            title='Register' 
+            action={() => sendRegistration(firstName, lastName, username, email, password)}
+          />
+        </View>
     </SafeAreaView>
   );
 }
@@ -54,7 +154,7 @@ const styles = StyleSheet.create({
     fontSize: 33,
     height: 39,
     width: 294,
-    marginTop: 72,
+    //marginTop: 72,
     marginLeft: 30
   },
   firstName: {
@@ -133,13 +233,13 @@ const styles = StyleSheet.create({
     width: 202,
     height: 17,
     marginTop: 80,
-    marginLeft: 40
+    marginLeft: 45
   },
   button: {
     width: 330,
     height: 36,
     borderRadius: 10,
-    marginTop: 5,
+    marginTop: 10,
     alignSelf: "center",
     backgroundColor: colors.blue,
     justifyContent: "center"
