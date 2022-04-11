@@ -5,7 +5,8 @@ import {
   Text,
   TextInput,
   TouchableOpacity,
-  SafeAreaView
+  SafeAreaView,
+  Alert
 } from "react-native";
 
 import { useFonts } from 'expo-font';
@@ -45,12 +46,23 @@ function RegisterScreen({ navigation }) {
       
       if(response.status == 201){
           console.log("account created");
-          alert("Account created successfully!");
-
-          navigation.navigate('TabNavigator');
+          Alert.alert(
+            'Success',
+            'Account created successfully!',
+            [{
+              text: 'OK',
+              onPress: () => navigation.navigate('TabNavigator')
+            }]
+          )
       }
       else if(response.status == 409){
-          alert(json.error.message);
+        Alert.alert(
+          'Error',  // title
+          json.error.message, // text
+          [{
+            text: 'OK'  // button
+          }]
+        )
       }
       else{
         alert(`Error occurred (${response.status})`);
