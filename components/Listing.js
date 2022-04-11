@@ -10,11 +10,14 @@ const SmallButton = ({ title, action }) => {
 )};
 
 export default function Listing({ roomName, image, info, numSeats, amenities, buttonTitle, buttonAction }) {
-  image == '' || image.uri == '' ? image = require('../assets/images/room1.jpg') : image = image;
+  //image == '' || image.uri == '' ? image = require('../assets/images/room1.jpg') : image = image;
 
   return (
     <View style={styles.card}>
-      <Image style={styles.image} source={image} />
+      { image == '' || image.uri == '' ? 
+        <View style={[styles.image, {backgroundColor: colors.lightBlue}]}/> : (
+        <Image style={styles.image} source={image} />
+      )}
       <View style={styles.container}>
         <View style={styles.textContainer}>
           <Text style={[styles.heading, textStyle.small, { fontFamily: 'roboto-bold' }]}>{roomName || 'Room name'}</Text>
