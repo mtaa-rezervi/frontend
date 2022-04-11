@@ -20,7 +20,7 @@ const ImageCarousel = ({ data }) => {
   const [index, setIndex] = React.useState(0)
   //let data = room.image_urls
 
-  // When there are now images, render lightBlue rectangles
+  // When there are no images, render lightBlue rectangles
   if (data[0] == '') {
     data = [0, 1, 2]
   }
@@ -52,6 +52,34 @@ const ImageCarousel = ({ data }) => {
   );
 }
 
+// TODO: - Check when is the room available 
+//       - Needs to be changed in the backend aswel
+/*
+const checkVacancy = async (id, token) => {
+  //const endpoint = 'https://mtaa-backend.herokuapp.com/rooms';
+  const endpoint = 'http://192.168.1.194:3000/rooms';
+
+  let requestHeaders = new Headers();
+  requestHeaders.append('Accept', 'application/json');
+
+  let auth = ('Bearer ' + token).replace(/"/g, '');
+  requestHeaders.append('Authorization', auth);
+
+  const today = new Date()
+  let dateFrom;
+  let dateTo;
+  if (today.getHours() + 1 >= 20) {
+    dateFrom = new Date(today.getFullYear(), today.getMonth(), today.getUTCDate()+1, 8).toISOString()
+    dateTo = new Date(today.getFullYear(), today.getMonth(), today.getUTCDate()+1, 9).toISOString()
+  } else {
+    dateFrom = new Date(today.getFullYear(), today.getMonth(), today.getUTCDate(), today.getHours()+1).toISOString()
+    //dateTo = new Date(today.getFullYear(), today.getMonth(), today.getUTCDate()).toISOString()
+  }
+  const query = endpoint+`?vacant_from=${dateFrom}&vacant_to=${dateTo}`
+  console.log(query)
+};
+*/
+
 export default function RoomScreen({ navigation, route }) {
   const [isLoading, setLoading] = useState(true);
   const [room, setData] = useState([]);
@@ -67,7 +95,10 @@ export default function RoomScreen({ navigation, route }) {
 			let auth = ('Bearer ' + token).replace(/"/g, '');
 			requestHeaders.append('Authorization', auth);
 
-			const response = await fetch(`https://mtaa-backend.herokuapp.com/rooms/${route.params._id}`, {
+      const endpoint = `https://mtaa-backend.herokuapp.com/rooms/${route.params._id}`;
+      //checkVacancy(route.params._id, token)
+
+			const response = await fetch(endpoint, {
 				method: 'GET',
 				headers: requestHeaders
 			});
@@ -88,7 +119,6 @@ export default function RoomScreen({ navigation, route }) {
 		getRoom();
 	}, []);
 
-  //image == '' || image.uri == '' ? image = require('../assets/images/room1.jpg') : image = image;
   return (
     <SafeAreaView style={styles.container}>
       {isLoading || room == null ? <ActivityIndicator size='large' style={styles.activityIndicator} /> : (

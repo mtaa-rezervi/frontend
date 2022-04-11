@@ -27,8 +27,15 @@ export default function HomeScreen({ navigation }) {
 
 			let auth = ('Bearer ' + token).replace(/"/g, '');
 			requestHeaders.append('Authorization', auth);
-	
-			const response = await fetch('https://mtaa-backend.herokuapp.com/rooms', {
+			
+			const endpoint = 'https://mtaa-backend.herokuapp.com/rooms';
+
+			const today = new Date()
+			const dateFrom = new Date(today.getFullYear(), today.getMonth(), today.getUTCDate(), 8).toISOString();
+			const dateTo = new Date(today.getFullYear(), today.getMonth(), today.getUTCDate(), 20).toISOString();
+			const query = endpoint+`?vacant_from=${dateFrom}&vacant_to=${dateTo}`
+			//console.log(query)
+			const response = await fetch(query, {
 				method: 'GET',
 				headers: requestHeaders
 			});
