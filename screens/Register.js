@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, useState } from "react";
 import {
   StyleSheet,
   View,
@@ -13,33 +13,82 @@ import AppLoading from 'expo-app-loading';
 
 import colors from '../styles/colors';
 
+import Input from "../components/Input";
+import StandardButton from "../components/StandardButton";
+
 function RegisterScreen({ navigation }) {
 
-    let [fontsLoaded] = useFonts({
-        'roboto-bold': require('../assets/fonts/Roboto-Bold.ttf'),
-        'roboto-regular': require('../assets/fonts/Roboto-Regular.ttf'),
-    });
+  const [firstName, setFirstName] = useState('')
+  const [lastName, setLastName] = useState('')
+  const [username, setUsername] = useState('')
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  
 
-    if (!fontsLoaded) {
+  let [fontsLoaded] = useFonts({
+    'roboto-bold': require('../assets/fonts/Roboto-Bold.ttf'),
+    'roboto-regular': require('../assets/fonts/Roboto-Regular.ttf'),
+  });
+  
+  if (!fontsLoaded) {
     return <AppLoading />;
-    }
+  }
 
-
+    
   return (
     <SafeAreaView style={styles.container}>
       <Text style={styles.createAnAccount}>Create an account</Text>
-      <TextInput placeholder="First name" style={styles.firstName}></TextInput>
-      <TextInput placeholder="Last name" style={styles.lastName}></TextInput>
-      <TextInput placeholder="Username" style={styles.username}></TextInput>
-      <TextInput placeholder="Email" style={styles.email}></TextInput>
-      <TextInput placeholder="Password" style={styles.password}></TextInput>
+      
+      <View style={styles.firstName}>
+        <Input
+            placeholder="First name"
+            value={firstName}
+            onChangeText={text => setFirstName(text)}
+            />
+      </View>
+
+      <View style={styles.lastName}>
+        <Input
+            placeholder="Last name"
+            value={lastName}
+            onChangeText={text => setLastName(text)}
+            />
+      </View>
+
+      <View style={styles.username}>
+        <Input
+            placeholder="Username"
+            value={username}
+            onChangeText={text => setUsername(text)}
+            />
+      </View>
+
+      <View style={styles.email}>
+        <Input
+            placeholder="Email"
+            value={email}
+            onChangeText={text => setEmail(text)}
+            />
+      </View>
+
+      <View style={styles.email}>
+        <Input
+            placeholder="Password"
+            value={password}
+            onChangeText={text => setPassword(text)}
+            secureTextEntry={true}
+            />
+      </View>
+
       <View style={styles.hasAccountStack}>
         <Text style={styles.hasAccount}>Already have an account?</Text>
         <Text style={styles.logIn} onPress={() => navigation.navigate('Login')}>Log in</Text>
       </View>
-      <TouchableOpacity style={styles.button}>
-        <Text style={styles.register}>Register</Text>
-      </TouchableOpacity>
+      <View style={styles.button}>
+          <StandardButton 
+            title='Register'
+          />
+        </View>
     </SafeAreaView>
   );
 }
