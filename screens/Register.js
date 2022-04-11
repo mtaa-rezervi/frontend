@@ -16,6 +16,7 @@ import colors from '../styles/colors';
 
 import Input from "../components/Input";
 import StandardButton from "../components/StandardButton";
+import BackButton from "../components/BackButton";
 
 function RegisterScreen({ navigation }) {
 
@@ -85,6 +86,7 @@ function RegisterScreen({ navigation }) {
     
   return (
     <SafeAreaView style={styles.container}>
+      <BackButton action={() => navigation.goBack()}/>
       <Text style={styles.createAnAccount}>Create an account</Text>
       
       <View style={styles.firstName}>
@@ -152,7 +154,7 @@ const styles = StyleSheet.create({
     fontSize: 33,
     height: 39,
     width: 294,
-    marginTop: 72,
+    //marginTop: 72,
     marginLeft: 30
   },
   firstName: {
