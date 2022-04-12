@@ -21,6 +21,7 @@ import SearchScreen from './screens/Search';
 import NotiScreen from './screens/Notifications';
 import ProfileScreen from './screens/Profile';
 import RoomScreen from './screens/Room';
+import EditProfileScreen from './screens/EditProfile';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -74,6 +75,8 @@ export default function App() {
         <Stack.Screen name='Register' component={RegisterScreen} />
         <Stack.Screen name='TabNavigator' component={TabNavigator} />
         <Stack.Screen name='Room' component={RoomScreen} />
+        <Stack.Screen name='Profile' component={ProfileScreen} />
+        <Stack.Screen name='EditProfile' component={EditProfileScreen}/>
       </Stack.Navigator>
     </NavigationContainer>
   );

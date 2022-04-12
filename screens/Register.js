@@ -17,6 +17,7 @@ import colors from '../styles/colors';
 import Input from "../components/Input";
 import StandardButton from "../components/StandardButton";
 import BackButton from "../components/BackButton";
+import userLogin from "../utils/userLogin";
 
 function RegisterScreen({ navigation }) {
 
@@ -52,7 +53,7 @@ function RegisterScreen({ navigation }) {
             'Account created successfully!',
             [{
               text: 'OK',
-              onPress: () => navigation.navigate('TabNavigator')
+              onPress: async () => await userLogin(username, password, navigation)
             }]
           )
       }
