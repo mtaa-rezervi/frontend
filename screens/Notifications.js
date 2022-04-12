@@ -14,10 +14,8 @@ export default function NotiScreen({ navigation }) {
 
   const getNotis = async () => {
     try {
-      // TODO: - save user id in secureStorage
       const token = await getValueFor('bearer');
-      //const id = await getValueFor('id');
-      const id = '623765f8e22ae61b0522eab0';
+      const id = await getValueFor('id');
 
       let requestHeaders = new Headers();
       requestHeaders.append('Accept', 'application/json');
@@ -33,7 +31,6 @@ export default function NotiScreen({ navigation }) {
 
       const notis = await response.json();
       setData(notis.notifications);
-      console.log(notis.notifications)
     } catch (error) {
         console.error(error);
         alert('Something went wrong');

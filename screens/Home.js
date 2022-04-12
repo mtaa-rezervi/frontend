@@ -20,7 +20,6 @@ export default function HomeScreen({ navigation }) {
   const getRooms = async () => {
     try {
       const token = await getValueFor('bearer');
-      //console.log(token);
 
       let requestHeaders = new Headers();
       requestHeaders.append('Accept', 'application/json');
