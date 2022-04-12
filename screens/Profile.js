@@ -15,6 +15,8 @@ export default function ProfileScreen({ navigation }) {
   const [firstName, setFirstName] = useState('')
   const [lastName, setLastName] = useState('')
 
+  const [activeReservations, setActiveReservations] = useState([])
+
   const getCredentials = async () => {
     const token = await getValueFor('bearer');
     const userID = await getValueFor('_id');
@@ -37,8 +39,30 @@ export default function ProfileScreen({ navigation }) {
     setLastName(user.name.last_name);
   }
   
+  const getActiveReservations = async () => {
+    const token = await getValueFor('bearer');
+    const userID = await getValueFor('_id');
+
+    let auth = ('Bearer ' + token).replace(/"/g, '');
+    let userIdParam = userID.replace(/"/g, '');
+
+    const response = await fetch(`https://mtaa-backend.herokuapp.com/users/${userIdParam}/active-reservations`, {
+      method: 'GET',
+      headers: {
+          Accept: 'application/json',
+          'Authorization': auth
+      }
+    });
+
+    const activeReservations = await response.json();
+
+    console.log(activeReservations.active_reservations)
+    //setActiveReservations(activeReservations.active_reservations);
+  }
+
   useEffect(() => {
 		getCredentials();
+    getActiveReservations();
 	}, []);
 
   return (
@@ -77,6 +101,8 @@ export default function ProfileScreen({ navigation }) {
         />
 
       </View>
+        
+      
       
     </SafeAreaView>
   );
@@ -114,5 +140,14 @@ const styles = StyleSheet.create({
   subtitle: {
     paddingLeft: 20,
     color: colors.grey,
+  },
+  activeReservationsContainer: {
+    flex: 1,
+    backgroundColor: colors.lightGrey,
+    alignSelf: 'center',
+    width: 330,
+  },
+  activeReservations: {
+    alignItems: 'center',
   }
 });
