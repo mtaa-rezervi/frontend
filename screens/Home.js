@@ -73,7 +73,7 @@ export default function HomeScreen({ navigation }) {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
-        <View style={styles.headerText}>
+        <View>
           <Text style={[styles.heading, textStyle.h1]}>Welcome</Text>
           <Text style={[styles.subHeading, textStyle.h2]}>Available today</Text>
         </View>

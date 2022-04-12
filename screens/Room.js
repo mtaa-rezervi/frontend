@@ -85,39 +85,39 @@ export default function RoomScreen({ navigation, route }) {
   const [room, setData] = useState([]);
 
   const getRoom = async () => {
-		try {
-			const token = await getValueFor('bearer');
-			//console.log(token);
+    try {
+      const token = await getValueFor('bearer');
+      //console.log(token);
 
-			let requestHeaders = new Headers();
-			requestHeaders.append('Accept', 'application/json');
+      let requestHeaders = new Headers();
+      requestHeaders.append('Accept', 'application/json');
 
-			let auth = ('Bearer ' + token).replace(/"/g, '');
-			requestHeaders.append('Authorization', auth);
+      let auth = ('Bearer ' + token).replace(/"/g, '');
+      requestHeaders.append('Authorization', auth);
 
       const endpoint = `https://mtaa-backend.herokuapp.com/rooms/${route.params._id}`;
       //checkVacancy(route.params._id, token)
 
-			const response = await fetch(endpoint, {
-				method: 'GET',
-				headers: requestHeaders
-			});
+      const response = await fetch(endpoint, {
+        method: 'GET',
+        headers: requestHeaders
+      });
 
-			const room = await response.json();
+      const room = await response.json();
       room.address = `${room.address.street}, ${room.address.city} ${room.address.zip}, ${room.address.state}`
       room.image_urls.splice(0, 0, room.thumbnail_url)
-			setData(room);
-		} catch (error) {
-				console.error(error);
-				alert('Something went wrong');
-		} finally {
+      setData(room);
+    } catch (error) {
+        console.error(error);
+        alert('Something went wrong');
+    } finally {
       setLoading(false);
-		}
-	}
+    }
+  }
 
-	useEffect(() => {
-		getRoom();
-	}, []);
+  useEffect(() => {
+    getRoom();
+  }, []);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -153,10 +153,10 @@ export default function RoomScreen({ navigation, route }) {
 }
 
 const styles = StyleSheet.create({
-	container: {
-		flex: 1,
-		backgroundColor: colors.white,
-	},
+  container: {
+    flex: 1,
+    backgroundColor: colors.white,
+  },
   arrow: {
     marginLeft: 30
   },
@@ -229,5 +229,8 @@ const styles = StyleSheet.create({
     marginRight: 30,
     marginBottom: 60,
     alignSelf: 'center'
+  },
+  activityIndicator: {
+    flex: 1
   }
 });
