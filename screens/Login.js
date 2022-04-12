@@ -8,50 +8,14 @@ import Input from "../components/Input";
 import StandardButton from "../components/StandardButton";
 
 import colors from '../styles/colors';
+import userLogin from "../utils/userLogin";
 
 export default function LoginScreen({ navigation }) {
 
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
 
-    const login = async (user, pass) => {
-        try {
-          const response = await fetch('https://mtaa-backend.herokuapp.com/users/login', {
-              method: 'POST',
-              headers: {
-                  Accept: 'application/json',
-                  'Content-Type': 'application/json'
-              },
-              body: JSON.stringify({
-                  username: user,
-                  password: pass
-              })
-          });
-          const json = await response.json();
-          
-          if(response.status == 200){
-              console.log(json.token, typeof json.token);
-
-              var storeKey = 'bearer';
-              var storeValue = JSON.stringify(json.token);
-              // store users jwt token
-              if(json.token){
-                saveKeyValue(storeKey, storeValue).catch(error => {
-                    console.log(error);
-                });
-              }
-
-              navigation.navigate('TabNavigator');
-          }
-          else if(response.status == 404){
-              alert(json.error.message);
-          }
-
-        } catch (error) {
-          console.error(error);
-        }
-      };
-
+    
     let [fontsLoaded] = useFonts({
         'roboto-bold': require('../assets/fonts/Roboto-Bold.ttf'),
         'roboto-regular': require('../assets/fonts/Roboto-Regular.ttf'),
@@ -90,7 +54,7 @@ export default function LoginScreen({ navigation }) {
         <View style={styles.loginButton}>
           <StandardButton 
             title='Login' 
-            action={() => login(username, password)}
+            action={() => userLogin(username, password, navigation)}
           />
         </View>
     </SafeAreaView>
