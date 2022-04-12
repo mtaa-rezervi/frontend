@@ -1,19 +1,45 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { StyleSheet, Text, SafeAreaView, View, TouchableOpacity, TextInput } from 'react-native';
 import { Entypo } from '@expo/vector-icons';
+import { getValueFor } from '../utils/SecureStore';
 
 import colors from '../styles/colors';
 import textStyle from '../styles/text';
 
 import ProfileButton from '../components/ProfileButton';
-//import Profile from '../components/Profile';
 import ProfileIcon from '../components/Profile';
 
 export default function ProfileScreen({ navigation }) {
 
-  // const logout = async () => {
+  const [userName, setUserName] = useState('')
+  const [firstName, setFirstName] = useState('')
+  const [lastName, setLastName] = useState('')
 
-  // }
+  const getCredentials = async () => {
+    const token = await getValueFor('bearer');
+    const userID = await getValueFor('_id');
+
+    let auth = ('Bearer ' + token).replace(/"/g, '');
+    let userIdParam = userID.replace(/"/g, '');
+
+    const response = await fetch(`https://mtaa-backend.herokuapp.com/users/${userIdParam}`, {
+      method: 'GET',
+      headers: {
+          Accept: 'application/json',
+          'Authorization': auth
+      }
+    });
+
+    const user = await response.json();
+
+    setUserName(user.credentials.username);
+    setFirstName(user.name.first_name);
+    setLastName(user.name.last_name);
+  }
+  
+  useEffect(() => {
+		getCredentials();
+	}, []);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -28,8 +54,8 @@ export default function ProfileScreen({ navigation }) {
                 image={require('../assets/images/Avatar.png')}        
           />
           <View style={{flexDirection: 'column'}}>
-            <Text style={[styles.buttonText, textStyle.h1]}>first last</Text>
-            <Text style={[styles.buttonText, textStyle.h3]}>username</Text>
+            <Text style={[styles.buttonText, textStyle.h2]}>{firstName} {lastName}</Text>
+            <Text style={[styles.subtitle, textStyle.h3]}>{userName}</Text>
           </View>
           <Entypo style={styles.chevron} name="chevron-right" size={24} color={colors.blue} />
         </TouchableOpacity>
@@ -84,5 +110,9 @@ const styles = StyleSheet.create({
   },
   chevron: {
     right: 0
+  },
+  subtitle: {
+    paddingLeft: 20,
+    color: colors.grey,
   }
 });
