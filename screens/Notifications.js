@@ -15,7 +15,8 @@ export default function NotiScreen({ navigation }) {
   const getNotis = async () => {
     try {
       const token = await getValueFor('bearer');
-      const id = await getValueFor('id');
+      let id = await getValueFor('_id');
+      id = id.replace(/"/g, '');
 
       let requestHeaders = new Headers();
       requestHeaders.append('Accept', 'application/json');
@@ -28,7 +29,7 @@ export default function NotiScreen({ navigation }) {
         method: 'GET',
         headers: requestHeaders
       });
-
+      
       const notis = await response.json();
       setData(notis.notifications);
     } catch (error) {
