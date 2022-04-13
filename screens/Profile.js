@@ -160,11 +160,11 @@ export default function ProfileScreen({ navigation }) {
             />
             <ProfileButton
               title={"Reservation history"}
-              //action={() => navigation.navigate('ReservationHistory')}
+              action={() => navigation.navigate('ReservationHistory')}
             />
             <ProfileButton
               title={"Your listings"}
-              //action={() => navigation.navigate('ListedRooms')}
+              action={() => navigation.navigate('UserListing')}
             />
           </View>
           <Text style={[styles.activeReservationsHeading, textStyle.h2]}>Your active reservations:</Text>
