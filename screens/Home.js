@@ -44,7 +44,8 @@ export default function HomeScreen({ navigation }) {
 	// const [selectedId, setSelectedId] = useState(null);
 	// console.log(selectedId)
 	const [isLoading, setLoading] = useState(true);
-  const [rooms, setData] = useState([]);
+  	const [rooms, setData] = useState([]);
+  	const [profilePic, setProfilePic] = useState('');
 
 	const getRooms = async () => {
 		try {
@@ -72,8 +73,35 @@ export default function HomeScreen({ navigation }) {
 		}
 	}
 
+	const getProfilePic = async () => {
+		const token = await getValueFor('bearer');
+		const userID = await getValueFor('_id');
+
+		let auth = ('Bearer ' + token).replace(/"/g, '');
+		let userIdParam = userID.replace(/"/g, '');
+
+		const response = await fetch(`https://mtaa-backend.herokuapp.com/users/${userIdParam}`, {
+		method: 'GET',
+		headers: {
+			Accept: 'application/json',
+			'Authorization': auth
+		}
+		});
+
+		const user = await response.json();
+
+		if(user.profile_pic){
+		setProfilePic({uri: user.profile_pic});
+		}
+		else{
+		let defaultPic = require('../assets/images/Avatar.png');
+		setProfilePic(defaultPic);
+		}
+	}
+
 	useEffect(() => {
 		getRooms();
+		getProfilePic();
 	}, []);
 
 	//console.log(rooms)
@@ -99,7 +127,7 @@ export default function HomeScreen({ navigation }) {
 					<Text style={[styles.heading, textStyle.h1]}>Welcome</Text>
 					<Text style={[styles.subHeading, textStyle.h2]}>Available today</Text>
 				</View>
-				<ProfileIcon image={require('../assets/images/Avatar.png')} action={() => {navigation.navigate('Profile')}}/> 
+				<ProfileIcon image={profilePic} action={() => {navigation.navigate('Profile')}}/> 
 			</View>
 			{isLoading || rooms == null ? <ActivityIndicator size='large' style={styles.activityIndicator} /> : (
 				<FlatList

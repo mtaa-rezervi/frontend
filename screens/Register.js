@@ -122,7 +122,7 @@ function RegisterScreen({ navigation }) {
             />
       </View>
 
-      <View style={styles.email}>
+      <View style={styles.password}>
         <Input
             placeholder="Password"
             value={password}
