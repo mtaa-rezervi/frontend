@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { StyleSheet, Text, SafeAreaView, View, TouchableOpacity, TextInput } from 'react-native';
+//import * as ImagePicker from 'expo-image-picker';
 
 import { getValueFor } from '../utils/SecureStore';
 
@@ -19,8 +20,9 @@ export default function EditProfileScreen({ navigation }) {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
-  const [profilePicURL, setProfilePicURL] = useState('')
-  
+  const [profilePicURL, setProfilePicURL] = useState({})
+  const [newProfilePic, setNewProfilePic] = useState(null);
+
   const getCredentials = async () => {
     const token = await getValueFor('bearer');
     const userID = await getValueFor('_id');
@@ -44,22 +46,57 @@ export default function EditProfileScreen({ navigation }) {
     setUserName(user.credentials.username);
     setEmail(user.credentials.email);
     
-    if(user.profile_pic){
-      setProfilePicURL({uri: user.profile_pic});
-    }
-    else{
-      let defaultPic = require('../assets/images/Avatar.png');
-      setProfilePicURL(defaultPic);
-    }
+    let picURL = user.profile_pic ? { uri: user.profile_pic } : require('../assets/images/Avatar.png');
+		setProfilePicURL({ pic: picURL });
   }
 
   const saveCredentials = async () => {
     const token = await getValueFor('bearer');
     const userID = await getValueFor('_id');
 
+    let auth = ('Bearer ' + token).replace(/"/g, '');
+    let userIdParam = userID.replace(/"/g, '');
+
+    // try {
+    //   const response = await fetch(`https://mtaa-backend.herokuapp.com/users/${userIdParam}`, {      
+    //   method: 'PUT',
+    //       headers: {
+    //         Accept: 'application/json',
+    //         'Content-Type': 'application/json',
+    //         'Authorization': auth
+    //       },
+    //       body: JSON.stringify({
+    //         first_name: firstName,
+    //         last_name: lastName,
+    //         username: username,
+    //         email: email,
+    //         password: password
+    //       })
+    //   });
+    //   const json = await response.json();
+      
+    // } catch (error) {
+    //   console.error(error);
+    // }
+
     console.log(userID);
 
   }
+
+  // const pickImage = async () => {
+  //   let result = await ImagePicker.launchImageLibraryAsync({
+  //     mediaTypes: ImagePicker.MediaTypeOptions.Images,
+  //     allowsEditing: true,
+  //     aspect: [4, 3],
+  //     quality: 1,
+  //   });
+
+  //   console.log(result);
+
+  //   if (!result.cancelled) {
+  //     setNewProfilePic(result.uri);
+  //   }
+  // }
 
   useEffect(() => {
 		getCredentials();
@@ -76,7 +113,7 @@ export default function EditProfileScreen({ navigation }) {
         </View>
         <View style={styles.iconView}>
           <EditImageIcon
-            image={profilePicURL}
+            image={profilePicURL.pic}
             action={()=>{}}
             />
         </View>

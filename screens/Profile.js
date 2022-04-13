@@ -14,7 +14,7 @@ export default function ProfileScreen({ navigation }) {
   const [userName, setUserName] = useState('')
   const [firstName, setFirstName] = useState('')
   const [lastName, setLastName] = useState('')
-  const [profilePicURL, setProfilePicURL] = useState('')
+  const [profilePicURL, setProfilePicURL] = useState({})
 
   const [activeReservations, setActiveReservations] = useState([])
 
@@ -39,13 +39,9 @@ export default function ProfileScreen({ navigation }) {
     setFirstName(user.name.first_name);
     setLastName(user.name.last_name);
 
-    if(user.profile_pic){
-      setProfilePicURL({uri: user.profile_pic});
-    }
-    else{
-      let defaultPic = require('../assets/images/Avatar.png');
-      setProfilePicURL(defaultPic);
-    }
+    let picURL = user.profile_pic ? { uri: user.profile_pic } : require('../assets/images/Avatar.png');
+		setProfilePicURL({ pic: picURL });
+
   }
   
   const getActiveReservations = async () => {
@@ -84,7 +80,7 @@ export default function ProfileScreen({ navigation }) {
           onPress={() => navigation.navigate('EditProfile')}>
 
           <ProfileIcon
-                image={profilePicURL}
+                image={profilePicURL.pic}
                 action={() => navigation.navigate('EditProfile')}       
           />
           <View style={{flexDirection: 'column'}}>

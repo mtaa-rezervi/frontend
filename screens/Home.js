@@ -45,7 +45,7 @@ export default function HomeScreen({ navigation }) {
 	// console.log(selectedId)
 	const [isLoading, setLoading] = useState(true);
   	const [rooms, setData] = useState([]);
-  	const [profilePic, setProfilePic] = useState('');
+  	const [profilePicURL, setProfilePicURL] = useState({});
 
 	const getRooms = async () => {
 		try {
@@ -89,19 +89,9 @@ export default function HomeScreen({ navigation }) {
 		});
 
 		const user = await response.json();
-
-		console.log("pic: "+user.profile_pic);
-		if(user.profile_pic){
-			console.log(`picc: '${user.profilePic}'`);
-		}
-
-		if(user.profile_pic){
-			setProfilePic({uri: user.profile_pic});
-		}
-		else{
-			let defaultPic = require('../assets/images/Avatar.png');
-			setProfilePic(defaultPic);
-		}
+		let picURL = user.profile_pic ? { uri: user.profile_pic } : require('../assets/images/Avatar.png');
+  		
+		setProfilePicURL({ pic: picURL });
 	}
 
 	useEffect(() => {
@@ -132,7 +122,7 @@ export default function HomeScreen({ navigation }) {
 					<Text style={[styles.heading, textStyle.h1]}>Welcome</Text>
 					<Text style={[styles.subHeading, textStyle.h2]}>Available today</Text>
 				</View>
-				<ProfileIcon image={profilePic} action={() => {navigation.navigate('Profile')}}/> 
+				<ProfileIcon image={profilePicURL.pic} action={() => {navigation.navigate('Profile')}}/> 
 			</View>
 			{isLoading || rooms == null ? <ActivityIndicator size='large' style={styles.activityIndicator} /> : (
 				<FlatList
