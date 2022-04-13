@@ -11,6 +11,8 @@ import textStyle from '../styles/text';
 // Screen
 export default function NotiScreen({ navigation }) {
   const [isLoading, setLoading] = useState(true);
+  const [isRefreshing, setRefreshing] = useState(false)
+
   const [notis, setData] = useState([]);
 
   // Fetch user's notifications
@@ -39,8 +41,14 @@ export default function NotiScreen({ navigation }) {
         alert('Something went wrong');
     } finally {
       setLoading(false);
+      setRefreshing(false);
     }
   }
+
+  const onRefresh = () => {
+    setRefreshing(true);
+    getNotis();
+  };
 
   useEffect(() => {
     getNotis();
@@ -71,6 +79,8 @@ export default function NotiScreen({ navigation }) {
           style={styles.noti}
           data={notis}
           renderItem={renderNotis}
+          onRefresh={onRefresh}
+          refreshing={isRefreshing}
           keyExtractor={(item, index) => index}
           contentContainerStyle={styles.notiContainer}
         />

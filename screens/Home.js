@@ -14,6 +14,8 @@ import Listing from "../components/Listing";
 // Screen
 export default function HomeScreen({ navigation }) {
   const [isLoading, setLoading] = useState(true);
+  const [isRefreshing, setRefreshing] = useState(false)
+
   const [rooms, setData] = useState([]);
 
   // Fetch rooms displayed on the screen
@@ -46,8 +48,14 @@ export default function HomeScreen({ navigation }) {
         alert('Something went wrong');
     } finally {
       setLoading(false);
+      setRefreshing(false);
     }
-  }
+  };
+
+  const onRefresh = () => {
+    setRefreshing(true);
+    getRooms();
+  };
 
   useEffect(() => {
     getRooms();
@@ -82,6 +90,8 @@ export default function HomeScreen({ navigation }) {
         <FlatList
           data={rooms}
           renderItem={renderRooms}
+          onRefresh={onRefresh}
+          refreshing={isRefreshing}
           keyExtractor={item => item._id}
           contentContainerStyle={styles.listingContainer}
         />

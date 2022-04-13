@@ -34,6 +34,8 @@ const getRequestHeaders = async () => {
 // Screen
 export default function ProfileScreen({ navigation }) {
   const [isLoading, setLoading] = useState(true);
+  const [isRefreshing, setRefreshing] = useState(false)
+  
   const [userName, setUserName] = useState({});
   const [rooms, setRooms] = useState([])
 
@@ -104,7 +106,13 @@ export default function ProfileScreen({ navigation }) {
       alert('Something went wrong');
     } finally {
       //setLoading(false);
+      setRefreshing(false);
     }
+  };
+
+  const onRefresh = () => {
+    setRefreshing(true);
+    getActiveReservations();
   };
 
   useEffect(() => {
@@ -163,6 +171,8 @@ export default function ProfileScreen({ navigation }) {
           <FlatList
             data={rooms}
             renderItem={renderReservations}
+            onRefresh={onRefresh}
+            refreshing={isRefreshing}
             keyExtractor={(item, index) => index}
             contentContainerStyle={styles.activeReservationsContainer}
           />
