@@ -18,7 +18,6 @@ const SmallButton = ({ title, action }) => {
 
 const ImageCarousel = ({ data }) => {
   const [index, setIndex] = React.useState(0)
-  //let data = room.image_urls
 
   // When there are no images, render lightBlue rectangles
   if (data[0] == '') {
@@ -161,7 +160,7 @@ const styles = StyleSheet.create({
     marginLeft: 30
   },
   header: {
-    marginTop: 8,
+    //marginTop: 8,
     marginLeft: 30
   },
   carousel: {

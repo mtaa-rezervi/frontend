@@ -9,7 +9,7 @@ export default function ProfileButton({ title, color, action }) {
       onPress={action}
     >
       <Text style={[styles.buttonText, textStyle.h2]}>{title || 'Button'}</Text>
-      <Entypo style={styles.chevron} name="chevron-right" size={24} color={colors.blue} />
+      <Entypo style={styles.chevron} name="chevron-right" size={36} color={colors.blue} />
     </TouchableOpacity>
   );
 }
@@ -17,7 +17,7 @@ export default function ProfileButton({ title, color, action }) {
 const styles = StyleSheet.create({
   button: {
     width: 330,
-    height: 49,
+    height: 60,
     borderRadius: 10,
     justifyContent: 'space-between',
     alignItems: 'center',
