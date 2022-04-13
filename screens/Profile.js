@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { StyleSheet, Text, SafeAreaView, View, TouchableOpacity, TextInput } from 'react-native';
+import { StyleSheet, Text, SafeAreaView, View, TouchableOpacity, FlatList, ActivityIndicator } from 'react-native';
 import { Entypo } from '@expo/vector-icons';
 import { getValueFor } from '../utils/SecureStore';
 
@@ -8,102 +8,166 @@ import textStyle from '../styles/text';
 
 import ProfileButton from '../components/ProfileButton';
 import ProfileIcon from '../components/Profile';
+import Listing from '../components/Listing';
 
+// Load data stored in SecureStore 
+const loadSecure = async () => {
+  const token = await getValueFor('bearer');
+  const userID = await getValueFor('_id');
+  let auth = ('Bearer ' + token).replace(/"/g, '');
+  let userIdParam = userID.replace(/"/g, '');
+
+  return { auth: auth, userID: userIdParam };
+};
+
+// Generate request headers
+const getRequestHeaders = async () => {
+  const auth = (await loadSecure()).auth;
+
+  let requestHeaders = new Headers();
+  requestHeaders.append('Accept', 'application/json');
+  requestHeaders.append('Authorization', auth);
+
+  return requestHeaders;
+};
+
+// Screen
 export default function ProfileScreen({ navigation }) {
+  const [isLoading, setLoading] = useState(true);
+  const [userName, setUserName] = useState({});
+  const [rooms, setRooms] = useState([])
 
-  const [userName, setUserName] = useState('')
-  const [firstName, setFirstName] = useState('')
-  const [lastName, setLastName] = useState('')
-
-  const [activeReservations, setActiveReservations] = useState([])
-
+  // Fetch user credentials
   const getCredentials = async () => {
-    const token = await getValueFor('bearer');
-    const userID = await getValueFor('_id');
+    const userIdParam = (await loadSecure()).userID;
+    const requestHeaders = await getRequestHeaders();
+    try {
+      const response = await fetch(`https://mtaa-backend.herokuapp.com/users/${userIdParam}`, {
+        method: 'GET',
+        headers:requestHeaders
+      });
 
-    let auth = ('Bearer ' + token).replace(/"/g, '');
-    let userIdParam = userID.replace(/"/g, '');
+      const user = await response.json();
+      setUserName({
+        username: user.credentials.username, 
+        first: user.name.first_name,
+        last: user.name.last_name
+      });
+    } catch (error) {
+      console.error(error);
+      alert('Something went wrong');
+    } finally {
+      //setLoading(false);
+    }
+  };
 
-    const response = await fetch(`https://mtaa-backend.herokuapp.com/users/${userIdParam}`, {
-      method: 'GET',
-      headers: {
-          Accept: 'application/json',
-          'Authorization': auth
-      }
-    });
+  // Fetch rooms displayed under Your active reservations 
+  const getRooms = async (reservations) => {
+    const requestHeaders = await getRequestHeaders();
+    try {
+      //setLoading(true)
+      let roomsIDs = reservations.map((res) => res.room_id);
+      roomsIDs = roomsIDs.map((id) => `id[]=${id}`);
+      const query = roomsIDs.join('&');
 
-    const user = await response.json();
+      const response = await fetch(`https://mtaa-backend.herokuapp.com/rooms?${query}`, {
+        method: 'GET',
+        headers: requestHeaders
+      });
 
-    setUserName(user.credentials.username);
-    setFirstName(user.name.first_name);
-    setLastName(user.name.last_name);
-  }
+      const responseJson = await response.json();
+      setRooms(responseJson);
+    } catch (error) {
+      console.error(error);
+      alert('Something went wrong');
+    } finally {
+      setLoading(false);
+    }
+  };
   
+  // Fetch user's active reservations
   const getActiveReservations = async () => {
-    const token = await getValueFor('bearer');
-    const userID = await getValueFor('_id');
+    const userIdParam = (await loadSecure()).userID;
+    const requestHeaders = await getRequestHeaders();
+    try {
+      //setLoading(true)
+      const response = await fetch(`https://mtaa-backend.herokuapp.com/users/${userIdParam}/active-reservations`, {
+        method: 'GET',
+        headers: requestHeaders
+      });
 
-    let auth = ('Bearer ' + token).replace(/"/g, '');
-    let userIdParam = userID.replace(/"/g, '');
-
-    const response = await fetch(`https://mtaa-backend.herokuapp.com/users/${userIdParam}/active-reservations`, {
-      method: 'GET',
-      headers: {
-          Accept: 'application/json',
-          'Authorization': auth
-      }
-    });
-
-    const activeReservations = await response.json();
-
-    console.log(activeReservations.active_reservations)
-    //setActiveReservations(activeReservations.active_reservations);
-  }
+      const responseJson = await response.json();
+      const activeReservations = responseJson.active_reservations;
+      if (activeReservations) getRooms(activeReservations, requestHeaders);
+    } catch (error) {
+      console.error(error);
+      alert('Something went wrong');
+    } finally {
+      //setLoading(false);
+    }
+  };
 
   useEffect(() => {
 		getCredentials();
     getActiveReservations();
 	}, []);
 
+  const renderReservations = ({ item }) => (
+    <View style={styles.activeReservation}>
+      <Listing 
+        roomName={item.name}
+        image={{uri: item.thumbnail_url}}
+        info={item.info}
+        numSeats={item.number_of_seats}
+        amenities={item.amenities.join(', ')} 
+        buttonTitle='Cancel'
+        buttonAction={() => { 
+          navigation.navigate('Room', { _id: item._id, name: item.name })
+        }} 
+      />
+    </View>
+  );
+
   return (
     <SafeAreaView style={styles.container}>
-
-      <View style={styles.profileButtonsContainer}>
-        
-        <TouchableOpacity
-          style={styles.mainProfileButton}
-          onPress={() => navigation.navigate('EditProfile')}>
-
-          <ProfileIcon
+      {isLoading || userName === {} && rooms.size() == 0 ? <ActivityIndicator size='large' style={styles.activityIndicator} /> : (
+        <>
+          <View style={styles.profileButtonsContainer}>
+            <TouchableOpacity
+              style={styles.mainProfileButton}
+              onPress={() => navigation.navigate('EditProfile')}>
+              <ProfileIcon
                 image={require('../assets/images/Avatar.png')}        
-          />
-          <View style={{flexDirection: 'column'}}>
-            <Text style={[styles.buttonText, textStyle.h2]}>{firstName} {lastName}</Text>
-            <Text style={[styles.subtitle, textStyle.h3]}>{userName}</Text>
+              />
+              <View style={{flexDirection: 'column'}}>
+                <Text style={[styles.buttonText, textStyle.h2]}>{userName.first} {userName.last}</Text>
+                <Text style={[styles.subtitle, textStyle.h3]}>{userName.username}</Text>
+              </View>
+              <Entypo style={styles.chevron} name="chevron-right" size={36} color={colors.blue} />
+            </TouchableOpacity>
+            <ProfileButton
+              title={"Logout"}
+              action={() => navigation.navigate('Login')}
+              color={colors.lightBlue}
+            />
+            <ProfileButton
+              title={"Reservation history"}
+              //action={() => navigation.navigate('ReservationHistory')}
+            />
+            <ProfileButton
+              title={"Your listings"}
+              //action={() => navigation.navigate('ListedRooms')}
+            />
           </View>
-          <Entypo style={styles.chevron} name="chevron-right" size={24} color={colors.blue} />
-        </TouchableOpacity>
-        
-        
-
-        <ProfileButton
-          title={"Logout"}
-          action={() => navigation.navigate('Login')}
-          color={colors.lightBlue}
-        />
-        <ProfileButton
-          title={"Reservation history"}
-          //action={() => navigation.navigate('ReservationHistory')}
-        />
-        <ProfileButton
-          title={"Your listings"}
-          //action={() => navigation.navigate('ListedRooms')}
-        />
-
-      </View>
-        
-      
-      
+          <Text style={[styles.activeReservationsHeading, textStyle.h2]}>Your active reservations:</Text>
+          <FlatList
+            data={rooms}
+            renderItem={renderReservations}
+            keyExtractor={(item, index) => index}
+            contentContainerStyle={styles.activeReservationsContainer}
+          />
+        </>
+      )}
     </SafeAreaView>
   );
 }
@@ -117,13 +181,13 @@ const styles = StyleSheet.create({
     height: 300,
     alignItems: 'center',
     justifyContent: 'space-evenly',
-    marginTop: 31
+    marginTop: 26
   },
   mainProfileButton: {
     width: 330,
     height: 83,
     backgroundColor: colors.lightGrey,
-    borderRadius: 10,
+    borderRadius: 15,
     justifyContent: 'space-between',
     alignItems: 'center',
     flexDirection: 'row',
@@ -142,12 +206,21 @@ const styles = StyleSheet.create({
     color: colors.grey,
   },
   activeReservationsContainer: {
-    flex: 1,
-    backgroundColor: colors.lightGrey,
-    alignSelf: 'center',
-    width: 330,
+    marginTop: 10,
+    marginLeft: 30,
+    marginRight: 30,
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center'
   },
-  activeReservations: {
-    alignItems: 'center',
+  activeReservationsHeading: {
+    marginLeft: 30,
+    marginTop: 24,
+  },
+  activeReservation: {
+    marginBottom: 20,
+  },
+   activityIndicator: {
+    flex: 1
   }
 });

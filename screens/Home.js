@@ -11,12 +11,12 @@ import textStyle from "../styles/text";
 import ProfileIcon from "../components/Profile";
 import Listing from "../components/Listing";
 
+// Screen
 export default function HomeScreen({ navigation }) {
-  // const [selectedId, setSelectedId] = useState(null);
-  // console.log(selectedId)
   const [isLoading, setLoading] = useState(true);
   const [rooms, setData] = useState([]);
 
+  // Fetch rooms displayed on the screen
   const getRooms = async () => {
     try {
       const token = await getValueFor('bearer');
@@ -53,7 +53,7 @@ export default function HomeScreen({ navigation }) {
     getRooms();
   }, []);
 
-  const renderItem = ({ item }) => (
+  const renderRooms = ({ item }) => (
     <View style={styles.listing}>
       <Listing 
         roomName={item.name}
@@ -81,7 +81,7 @@ export default function HomeScreen({ navigation }) {
       {isLoading || rooms == null ? <ActivityIndicator size='large' style={styles.activityIndicator} /> : (
         <FlatList
           data={rooms}
-          renderItem={renderItem}
+          renderItem={renderRooms}
           keyExtractor={item => item._id}
           contentContainerStyle={styles.listingContainer}
         />

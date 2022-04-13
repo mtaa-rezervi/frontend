@@ -14,7 +14,7 @@ export default function Listing({ roomName, image, info, numSeats, amenities, bu
 
   return (
     <View style={styles.card}>
-      { image == '' || image.uri == '' ? 
+      { !image || image == '' || image.uri == '' ? 
         <View style={[styles.image, {backgroundColor: colors.lightBlue}]}/> : (
         <Image style={styles.image} source={image} />
       )}

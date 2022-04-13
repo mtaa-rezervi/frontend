@@ -8,10 +8,12 @@ import ProfileIcon from '../components/Profile';
 import colors from '../styles/colors';
 import textStyle from '../styles/text';
 
+// Screen
 export default function NotiScreen({ navigation }) {
   const [isLoading, setLoading] = useState(true);
   const [notis, setData] = useState([]);
 
+  // Fetch user's notifications
   const getNotis = async () => {
     try {
       const token = await getValueFor('bearer');
@@ -29,7 +31,7 @@ export default function NotiScreen({ navigation }) {
         method: 'GET',
         headers: requestHeaders
       });
-      
+
       const notis = await response.json();
       setData(notis.notifications);
     } catch (error) {
@@ -44,7 +46,7 @@ export default function NotiScreen({ navigation }) {
     getNotis();
   }, []);
 
-  const renderItem = ({ item }) => (
+  const renderNotis = ({ item }) => (
     <View style={styles.noti}>
       <Notification
         type={item.type}
@@ -68,7 +70,7 @@ export default function NotiScreen({ navigation }) {
         <FlatList
           style={styles.noti}
           data={notis}
-          renderItem={renderItem}
+          renderItem={renderNotis}
           keyExtractor={(item, index) => index}
           contentContainerStyle={styles.notiContainer}
         />
