@@ -90,12 +90,17 @@ export default function HomeScreen({ navigation }) {
 
 		const user = await response.json();
 
+		console.log("pic: "+user.profile_pic);
 		if(user.profile_pic){
-		setProfilePic({uri: user.profile_pic});
+			console.log(`picc: '${user.profilePic}'`);
+		}
+
+		if(user.profile_pic){
+			setProfilePic({uri: user.profile_pic});
 		}
 		else{
-		let defaultPic = require('../assets/images/Avatar.png');
-		setProfilePic(defaultPic);
+			let defaultPic = require('../assets/images/Avatar.png');
+			setProfilePic(defaultPic);
 		}
 	}
 

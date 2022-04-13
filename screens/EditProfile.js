@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { StyleSheet, Text, SafeAreaView, View, TouchableOpacity, TextInput } from 'react-native';
 
 import { getValueFor } from '../utils/SecureStore';
@@ -13,12 +13,13 @@ import StandardButton from '../components/StandardButton';
 
 export default function EditProfileScreen({ navigation }) {
 
-  const [firstName, setFirstName] = useState('first')
-  const [lastName, setLastName] = useState('last')
-  const [userName, setUserName] = useState('username')
-  const [email, setEmail] = useState('email')
+  const [firstName, setFirstName] = useState('')
+  const [lastName, setLastName] = useState('')
+  const [userName, setUserName] = useState('')
+  const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-  const [newPassword, setNewPassword] = useState('')
+  const [confirmPassword, setConfirmPassword] = useState('')
+  const [profilePicURL, setProfilePicURL] = useState('')
   
   const getCredentials = async () => {
     const token = await getValueFor('bearer');
@@ -37,9 +38,19 @@ export default function EditProfileScreen({ navigation }) {
 
     const user = await response.json();
 
-    setUserName(user.credentials.username);
+    
     setFirstName(user.name.first_name);
     setLastName(user.name.last_name);
+    setUserName(user.credentials.username);
+    setEmail(user.credentials.email);
+    
+    if(user.profile_pic){
+      setProfilePicURL({uri: user.profile_pic});
+    }
+    else{
+      let defaultPic = require('../assets/images/Avatar.png');
+      setProfilePicURL(defaultPic);
+    }
   }
 
   const saveCredentials = async () => {
@@ -49,6 +60,10 @@ export default function EditProfileScreen({ navigation }) {
     console.log(userID);
 
   }
+
+  useEffect(() => {
+		getCredentials();
+	}, []);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -61,7 +76,7 @@ export default function EditProfileScreen({ navigation }) {
         </View>
         <View style={styles.iconView}>
           <EditImageIcon
-            image={require('../assets/images/Avatar.png')}
+            image={profilePicURL}
             action={()=>{}}
             />
         </View>
@@ -103,6 +118,7 @@ export default function EditProfileScreen({ navigation }) {
         <View>
           <Input
               placeholder="New password"
+              value={password}
               onChangeText={text => setPassword(text)}
               secureTextEntry={true}
               />
@@ -111,7 +127,8 @@ export default function EditProfileScreen({ navigation }) {
         <View>
           <Input
               placeholder="Confirm password"
-              onChangeText={text => setNewPassword(text)}
+              value={confirmPassword}
+              onChangeText={text => setConfirmPassword(text)}
               secureTextEntry={true}
               />
         </View>
