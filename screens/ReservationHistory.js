@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { StyleSheet, Text, SafeAreaView, View, ActivityIndicator, FlatList } from 'react-native';
 
-import { getValueFor } from "../utils/SecureStore";
+import { getValueFor } from "../utils/secureStore";
 
 import colors from '../styles/colors';
 import textStyle from '../styles/text';

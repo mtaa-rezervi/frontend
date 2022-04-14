@@ -147,7 +147,8 @@ function RegisterScreen({ navigation }) {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1
+    flex: 1,
+    backgroundColor: colors.white
   },
   createAnAccount: {
     fontFamily: "roboto-bold",

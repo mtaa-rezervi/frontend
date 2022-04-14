@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { StyleSheet, Text, SafeAreaView, View, ActivityIndicator, FlatList, Alert } from 'react-native';
 
-import { getValueFor } from "../utils/SecureStore";
+import { getValueFor } from "../utils/secureStore";
 
 import colors from '../styles/colors';
 import textStyle from '../styles/text';
@@ -40,7 +40,7 @@ export default function UserListing({ navigation }) {
       //setData(responseJson.active_listings);
     } catch (error) {
         console.error(error);
-        alert('Something went wrong');
+        Alert.alert('Something went wrong');
     } finally {
       setLoading(false);
       setRefreshing(false);
@@ -108,7 +108,7 @@ export default function UserListing({ navigation }) {
           <Text style={[textStyle.h1, styles.heading]}>Your listed rooms</Text>
         </View>
       </View>
-      {isLoading || rooms == null ? <ActivityIndicator size='large' style={styles.activityIndicator} /> : (
+      {isLoading || rooms.length === 0 ? <ActivityIndicator size='large' style={styles.activityIndicator} /> : (
         <FlatList
           data={rooms}
           renderItem={renderRooms}
@@ -119,7 +119,7 @@ export default function UserListing({ navigation }) {
         />
       )}
       <View style={styles.listingButton}>
-        <ProfileButton title='List a new room'/>
+        <ProfileButton title='List a new room' action={() => navigation.navigate('RoomCreation')}/>
       </View>
     </SafeAreaView>
   );

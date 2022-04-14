@@ -1,4 +1,4 @@
-import { saveKeyValue } from "./SecureStore";
+import { saveKeyValue } from "./secureStore";
 
 export default async function userLogin(user, pass, navigation){
     try {
