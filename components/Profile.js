@@ -1,10 +1,12 @@
-import { StyleSheet, TouchableOpacity, Image } from 'react-native';
+import { StyleSheet, TouchableOpacity, Image, View } from 'react-native';
 
-export default function ProfileIcon({ image, action }) {
+export default function ProfileIcon({ image, action, style }) {
   return (
-    <TouchableOpacity style={styles.button} onPress={action}>
-      <Image style={styles.image} source={image} />
-    </TouchableOpacity>
+    <View style={style}>
+      <TouchableOpacity style={styles.button} onPress={action}>
+        <Image style={styles.image} source={image} />
+      </TouchableOpacity>
+    </View>
   );
 }
 

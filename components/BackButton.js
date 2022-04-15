@@ -1,13 +1,15 @@
-import { StyleSheet, TouchableOpacity } from 'react-native';
+import { StyleSheet, TouchableOpacity, View } from 'react-native';
 import { Feather } from '@expo/vector-icons'; 
 
 import colors from '../styles/colors';
 
-export default function BackButton({ action }) {
+export default function BackButton({ action, style }) {
   return (
-    <TouchableOpacity onPress={action} style={styles.arrow}>
-      <Feather name="arrow-left" size={30} color={colors.blue} />
-    </TouchableOpacity>
+    <View style={style}>
+      <TouchableOpacity onPress={action} style={styles.arrow}>
+        <Feather name="arrow-left" size={30} color={colors.blue} />
+      </TouchableOpacity>
+    </View>
   );
 }
 

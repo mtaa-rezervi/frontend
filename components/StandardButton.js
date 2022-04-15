@@ -1,12 +1,14 @@
-import { StyleSheet, Text, TouchableOpacity } from 'react-native';
+import { View, StyleSheet, Text, TouchableOpacity } from 'react-native';
 import colors from '../styles/colors';
 import textStyle from '../styles/text';
 
-export default function StandardButton({ title, action }) {
+export default function StandardButton({ title, action, style }) {
   return (
-    <TouchableOpacity style={styles.button} onPress={action}>
-      <Text style={[styles.buttonText, textStyle.small]}>{title || 'Button'}</Text>
-    </TouchableOpacity>
+    <View style={style}>
+      <TouchableOpacity style={styles.button} onPress={action}>
+        <Text style={[styles.buttonText, textStyle.small]}>{title || 'Button'}</Text>
+      </TouchableOpacity>
+    </View>
   );
 }
 
