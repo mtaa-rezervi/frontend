@@ -63,7 +63,10 @@ export default function HomeScreen({ navigation }) {
       buttonTitle='View'
       buttonAction={() => { 
         navigation.navigate('Room', { _id: item._id, name: item.name })
-      }} 
+      }}
+      cardAction={() => { 
+        navigation.navigate('Room', { _id: item._id, name: item.name })
+      }}
     />
   );
 

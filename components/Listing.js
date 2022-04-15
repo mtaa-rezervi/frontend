@@ -9,12 +9,12 @@ const SmallButton = ({ title, action }) => {
     </TouchableOpacity>
 )};
 
-export default function Listing({ style, roomName, image, info, numSeats, amenities, buttonTitle, buttonAction }) {
+export default function Listing({ style, roomName, image, info, numSeats, amenities, buttonTitle, buttonAction, cardAction }) {
   //image == '' || image.uri == '' ? image = require('../assets/images/room1.jpg') : image = image;
 
   return (
     <View style={style}>
-      <View style={styles.card}>
+      <TouchableOpacity style={styles.card} onPress={cardAction} >
         { !image || image == '' || image.uri == '' ? 
           <View style={[styles.image, {backgroundColor: colors.lightBlue}]}/> : (
           <Image style={styles.image} source={image} />
@@ -28,7 +28,7 @@ export default function Listing({ style, roomName, image, info, numSeats, amenit
           </View>
           <SmallButton title={buttonTitle} action={buttonAction} />
         </View>
-      </View>
+      </TouchableOpacity>
     </View>
   );
 }
