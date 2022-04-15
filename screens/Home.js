@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { ActivityIndicator, ScrollView, FlatList, StyleSheet, SafeAreaView, View, Text} from "react-native";
 
-import { getValueFor } from "../utils/SecureStore";
+import { getRequestHeaders } from '../utils/api';
 
 import colors from '../styles/colors';
 import textStyle from "../styles/text";
@@ -18,15 +18,8 @@ export default function HomeScreen({ navigation }) {
 
   // Fetch rooms displayed on the screen
   const getRooms = async () => {
+    const requestHeaders = await getRequestHeaders();
     try {
-      const token = await getValueFor('bearer');
-
-      let requestHeaders = new Headers();
-      requestHeaders.append('Accept', 'application/json');
-
-      let auth = ('Bearer ' + token).replace(/"/g, '');
-      requestHeaders.append('Authorization', auth);
-      
       const endpoint = 'https://mtaa-backend.herokuapp.com/rooms';
 
       const today = new Date()

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { ActivityIndicator, Image, StyleSheet, Text, SafeAreaView, View, TouchableOpacity, TextInput } from 'react-native';
 import Carousel, { Pagination } from 'react-native-snap-carousel'
-import { getValueFor } from "../utils/SecureStore";
+import { getValueFor } from "../utils/secureStore";
 
 import BackButton from '../components/BackButton';
 import StandardButton from "../components/StandardButton";

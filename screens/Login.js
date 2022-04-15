@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { StyleSheet, SafeAreaView, View, Text, Image } from "react-native";
-import { saveKeyValue } from "../utils/SecureStore";
+import { saveKeyValue } from "../utils/secureStore";
 import { useFonts } from 'expo-font';
 import AppLoading from 'expo-app-loading';
 

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { StyleSheet, Text, SafeAreaView, View, ActivityIndicator, FlatList } from 'react-native';
-import { getValueFor } from '../utils/SecureStore';
+import { loadSecure } from '../utils/secureStore';
+import { getRequestHeaders } from '../utils/api';
 
 import Notification from '../components/Notification';
 import ProfileIcon from '../components/Profile';
@@ -17,18 +18,10 @@ export default function NotiScreen({ navigation }) {
 
   // Fetch user's notifications
   const getNotis = async () => {
-    try {
-      const token = await getValueFor('bearer');
-      let id = await getValueFor('_id');
-      id = id.replace(/"/g, '');
-
-      let requestHeaders = new Headers();
-      requestHeaders.append('Accept', 'application/json');
-
-      let auth = ('Bearer ' + token).replace(/"/g, '');
-      requestHeaders.append('Authorization', auth);
-      
-      const endpoint = `https://mtaa-backend.herokuapp.com/users/${id}/notifications`;
+    const userID = (await loadSecure()).userID;
+    const requestHeaders = await getRequestHeaders();
+    try {    
+      const endpoint = `https://mtaa-backend.herokuapp.com/users/${userID}/notifications`;
       const response = await fetch(endpoint, {
         method: 'GET',
         headers: requestHeaders
@@ -114,7 +107,7 @@ const styles = StyleSheet.create({
     marginTop: 2
   },
   noti: {
-    paddingBottom: 22
+    paddingBottom: 11
   },
   activityIndicator: {
     flex: 1

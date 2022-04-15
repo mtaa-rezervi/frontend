@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import { StyleSheet, Text, SafeAreaView, View, TouchableOpacity, FlatList, ActivityIndicator } from 'react-native';
 import { Entypo } from '@expo/vector-icons';
-import { getValueFor } from '../utils/SecureStore';
+import { loadSecure } from '../utils/secureStore';
+import { getRequestHeaders } from '../utils/api';
 
 import colors from '../styles/colors';
 import textStyle from '../styles/text';
@@ -9,27 +10,6 @@ import textStyle from '../styles/text';
 import ProfileButton from '../components/ProfileButton';
 import ProfileIcon from '../components/Profile';
 import Listing from '../components/Listing';
-
-// Load data stored in SecureStore 
-const loadSecure = async () => {
-  const token = await getValueFor('bearer');
-  const userID = await getValueFor('_id');
-  let auth = ('Bearer ' + token).replace(/"/g, '');
-  let userIdParam = userID.replace(/"/g, '');
-
-  return { auth: auth, userID: userIdParam };
-};
-
-// Generate request headers
-const getRequestHeaders = async () => {
-  const auth = (await loadSecure()).auth;
-
-  let requestHeaders = new Headers();
-  requestHeaders.append('Accept', 'application/json');
-  requestHeaders.append('Authorization', auth);
-
-  return requestHeaders;
-};
 
 // Screen
 export default function ProfileScreen({ navigation }) {
