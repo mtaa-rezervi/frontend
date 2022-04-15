@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { TouchableOpacity, Alert, ActivityIndicator, ScrollView, FlatList, StyleSheet, SafeAreaView, View, Text, Button, Image, Platform } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import { loadSecure } from '../utils/secureStore';
@@ -12,7 +12,6 @@ import BackButton from '../components/BackButton';
 import StandardButton from '../components/StandardButton';
 import Input from '../components/Input';
 import Tag from '../components/Tag';
-
 
 // Ask for camera permissions
 const cameraPermissions = async () => {
@@ -43,6 +42,7 @@ export default function RoomCreation({ navigation }) {
   const [images, setImage] = useState([]);
   const [thumbnail, setThumbnail] = useState(null);
 
+  // Create a new room in the database
   const createRoom = async () => {
     const userID = (await loadSecure()).userID;
     const requestHeaders = await getRequestHeaders();
@@ -86,12 +86,14 @@ export default function RoomCreation({ navigation }) {
     }
   };
 
+  // Add new amenity
   const selectAmenity = (amenity) => {
     amenities.includes(amenity) ? 
       setAmenities(amenities.filter(a => (a !== amenity))) :
       setAmenities([...amenities, amenity])
   };
 
+  // Select image from camera roll
   const selectImage = async () => {
     await cameraPermissions();
     let result = await ImagePicker.launchImageLibraryAsync({
@@ -117,18 +119,21 @@ export default function RoomCreation({ navigation }) {
     return image;
   };
 
+  // Add selected image as thumbnail
   const pickThumbnail = async () => {
     let image = await selectImage();
     if (image === null) return;
     setThumbnail(image);
   };
   
+  // Add selected image to other images
   const pickImage = async () => {
     let image = await selectImage();
     if (image === null) return;
     setImage([...images, image]);
   };
 
+  // Render item (image) for FlatList
   const renderImage = ({ item }) => (
     <View>
       <Image source={{ uri: item.uri }} style={styles.image} />
