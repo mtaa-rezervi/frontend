@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { Alert, ActivityIndicator, ScrollView, FlatList, StyleSheet, SafeAreaView, View, Text, Button, Image, Platform } from "react-native";
+import { TouchableOpacity, Alert, ActivityIndicator, ScrollView, FlatList, StyleSheet, SafeAreaView, View, Text, Button, Image, Platform } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import { loadSecure } from '../utils/secureStore';
 import { getRequestHeaders } from '../utils/api';
+import { Feather } from '@expo/vector-icons'; 
 
 import colors from '../styles/colors';
 import textStyle from '../styles/text';
@@ -11,6 +12,7 @@ import BackButton from '../components/BackButton';
 import StandardButton from '../components/StandardButton';
 import Input from '../components/Input';
 import Tag from '../components/Tag';
+
 
 // Ask for camera permissions
 const cameraPermissions = async () => {
@@ -66,11 +68,8 @@ export default function RoomCreation({ navigation }) {
       })
     );
 
-    //console.log(formData);
-    
     try {
-      // https://mtaa-backend.herokuapp.com/rooms
-      const response = await fetch('http://192.168.1.194:3000/rooms', {
+      const response = await fetch('https://mtaa-backend.herokuapp.com/rooms', {
         method: 'POST',
         headers: requestHeaders,
         body: formData
@@ -85,18 +84,6 @@ export default function RoomCreation({ navigation }) {
     } finally {
       setLoading(false);
     }
-    // console.log(roomName);
-    // console.log(numberOfSeats);
-    // console.log(roomNumber); 
-    // console.log(floor);
-    // console.log(description);
-    // console.log();
-    // console.log(city);
-    // console.log(street);
-    // console.log(state); 
-    // console.log(zip);
-    // console.log()
-    // console.log(amenities);
   };
 
   const selectAmenity = (amenity) => {
@@ -113,7 +100,7 @@ export default function RoomCreation({ navigation }) {
       quality: 1,
     });
 
-    let image = {};
+    let image = null;
 
     if (!result.cancelled) {
       const uri = result.uri;
@@ -132,16 +119,28 @@ export default function RoomCreation({ navigation }) {
 
   const pickThumbnail = async () => {
     let image = await selectImage();
+    if (image === null) return;
     setThumbnail(image);
   };
   
   const pickImage = async () => {
     let image = await selectImage();
+    if (image === null) return;
     setImage([...images, image]);
   };
 
   const renderImage = ({ item }) => (
-    <Image source={{ uri: item.uri }} style={styles.image} />
+    <View>
+      <Image source={{ uri: item.uri }} style={styles.image} />
+      <View style={{position: 'absolute', opacity: 0.8, alignSelf: 'flex-end', paddingRight: 30, paddingTop: 10}}>
+      {/* setAmenities(amenities.filter(a => (a !== amenity))) */}
+        <TouchableOpacity style={styles.removeButton} 
+          onPress={ () => setImage(images.filter(i => (i !== item))) }
+        >
+          <Feather name='x' size={20} color={colors.black}  />
+        </TouchableOpacity>
+      </View>
+    </View>
   );
 
   return (
@@ -151,119 +150,115 @@ export default function RoomCreation({ navigation }) {
         <Text style={[textStyle.h1, styles.heading]}>Create listing</Text>
       </View>
       <ScrollView style={styles.scrollView}>
-          {/* General information */}
-          <Text style={[styles.subheading, textStyle.h2]}>General information</Text>
-          <View style={styles.inputHorizontal} >
-            <Input placeholder='Room name'
-              value={roomName} 
-              onChangeText={text => setRoomName(text)}
-              width={160} 
-            />
-            <View style={{ flexDirection: 'row', alignItems: 'center', marginLeft: 10, width: 160 }}>
-              <Input placeholder='Num' 
-                value={numberOfSeats}
-                onChangeText={text => setNumberOfSeats(text)}
-                width={108}
-              />
-              <Text style={[textStyle.small, { marginLeft: 10}]}>seats</Text>
-            </View>
-          </View>
-          <View style={styles.inputHorizontal} >
-            <Input placeholder='Room number' 
-              value={roomNumber}
-              onChangeText={text => setRoomNumber(text)}
-              width={160} 
-            />
-            <Input style={{ marginLeft: 10 }}
-              placeholder='Floor' 
-              value={floor}
-              onChangeText={text => setFloor(text)}
-              width={160} 
-            />
-          </View>
-          <Input style={{marginBottom: 10, alignSelf: 'center'}}
-            placeholder='Some description of the room'
-            value={description} 
-            onChangeText={text => setDescription(text)}
+        {/* General information */}
+        <Text style={[styles.subheading, textStyle.h2]}>General information</Text>
+        <View style={styles.inputHorizontal} >
+          <Input placeholder='Room name'
+            value={roomName} 
+            onChangeText={text => setRoomName(text)}
+            width={160} 
           />
-          {/* Address */}
-          <Text style={[styles.subheading, textStyle.h2]}>General information</Text>
-          <Input style={{ marginBottom: 10, alignSelf: 'center' }}
-            placeholder='City' 
-            value={city}
-            onChangeText={text => setCity(text)}
+          <View style={{ flexDirection: 'row', alignItems: 'center', marginLeft: 10, width: 160 }}>
+            <Input placeholder='Num' 
+              value={numberOfSeats}
+              onChangeText={text => setNumberOfSeats(text)}
+              width={108}
+            />
+            <Text style={[textStyle.small, { marginLeft: 10}]}>seats</Text>
+          </View>
+        </View>
+        <View style={styles.inputHorizontal} >
+          <Input placeholder='Room number' 
+            value={roomNumber}
+            onChangeText={text => setRoomNumber(text)}
+            width={160} 
           />
-          <Input style={{ marginBottom: 10, alignSelf: 'center' }}
-            placeholder='Street'
-            value={street}
-            onChangeText={text => setStreet(text)}
+          <Input style={{ marginLeft: 10 }}
+            placeholder='Floor' 
+            value={floor}
+            onChangeText={text => setFloor(text)}
+            width={160} 
           />
-          <View style={styles.inputHorizontal} >
-            <Input placeholder='State' 
-              value={state}
-              onChangeText={text => setState(text)}
-              width={208} 
-            />
-            <Input style={{ marginLeft: 10 }}
-              placeholder='Zip code'
-              value={zip}
-              onChangeText={text => setZip(text)}
-              width={111} 
-            />
-          </View>
-          {/* Amenities */}
-          <Text style={[styles.subheading, textStyle.h2]}>Amenities</Text>
-          <View style={styles.tagContainer}>
-            <Tag style={styles.tag} title='projector' 
-              action={() => selectAmenity('protocol')} 
-            />
-            <Tag style={styles.tag} title='whiteboard' 
-              action={() => selectAmenity('whiteboard')}
-            />
-            <Tag style={styles.tag} title='ac' 
-              action={() => selectAmenity('ac')}
-            /> 
-          </View>
-          <View style={styles.tagContainer}>
-            <Tag style={styles.tag} title='ethernet' 
-              action={() => selectAmenity('ethernet')}
-            />
-            <Tag style={styles.tag} title='wifi' 
-              action={() => selectAmenity('wifi')}
-            />
-          </View>
-          {/* Thumbnail */}
-          <View>
-            <Text style={[styles.subheading, textStyle.h2]}>Thumbnail</Text>
-            { thumbnail === null ? 
-              <>
-                <View style={styles.singleImage}/>
-                <Button style={styles.button} title="Pick an image from camera roll" onPress={pickThumbnail} />   
-              </> :
-              <>
-                <Image source={{ uri: thumbnail.uri }} style={styles.singleImage} />
-                <Button style={styles.button} title="Pick another image from camera roll" onPress={pickThumbnail} /> 
-              </>
-            }
-          </View>
-          {/* Other images */}
-          <View>
-            <Text style={[styles.subheading, textStyle.h2]}>Other room images</Text>
-            <FlatList
-              data={images}
-              horizontal
-              renderItem={renderImage}
-              keyExtractor={(item, index) => index}
-              ListEmptyComponent={
-                <View style={[styles.image, {backgroundColor: colors.lightBlue}]}/>
-              }
-              contentContainerStyle={styles.imageContainer}
-            />
-            { images.length === 0 ? 
-              <Button style={styles.button} title="Pick an image from camera roll" onPress={pickImage} />   :
-              <Button style={styles.button} title="Pick another image from camera roll" onPress={pickImage} /> 
-            }
-          </View>
+        </View>
+        <Input style={{marginBottom: 10, alignSelf: 'center'}}
+          placeholder='Some description of the room'
+          value={description} 
+          onChangeText={text => setDescription(text)}
+        />
+        {/* Address */}
+        <Text style={[styles.subheading, textStyle.h2]}>General information</Text>
+        <Input style={{ marginBottom: 10, alignSelf: 'center' }}
+          placeholder='City' 
+          value={city}
+          onChangeText={text => setCity(text)}
+        />
+        <Input style={{ marginBottom: 10, alignSelf: 'center' }}
+          placeholder='Street'
+          value={street}
+          onChangeText={text => setStreet(text)}
+        />
+        <View style={styles.inputHorizontal} >
+          <Input placeholder='State' 
+            value={state}
+            onChangeText={text => setState(text)}
+            width={208} 
+          />
+          <Input style={{ marginLeft: 10 }}
+            placeholder='Zip code'
+            value={zip}
+            onChangeText={text => setZip(text)}
+            width={111} 
+          />
+        </View>
+        {/* Amenities */}
+        <Text style={[styles.subheading, textStyle.h2]}>Amenities</Text>
+        <View style={styles.tagContainer}>
+          <Tag style={styles.tag} title='projector' 
+            action={() => selectAmenity('protocol')} 
+          />
+          <Tag style={styles.tag} title='whiteboard' 
+            action={() => selectAmenity('whiteboard')}
+          />
+          <Tag style={styles.tag} title='ac' 
+            action={() => selectAmenity('ac')}
+          /> 
+        </View>
+        <View style={styles.tagContainer}>
+          <Tag style={styles.tag} title='ethernet' 
+            action={() => selectAmenity('ethernet')}
+          />
+          <Tag style={styles.tag} title='wifi' 
+            action={() => selectAmenity('wifi')}
+          />
+        </View>
+        {/* Thumbnail */}
+        <Text style={[styles.subheading, textStyle.h2]}>Thumbnail</Text>
+        { thumbnail === null ? 
+          <>
+            <View style={styles.singleImage}/>
+            <Button style={styles.button} title="Pick an image from camera roll" onPress={pickThumbnail} />   
+          </> :
+          <>
+            <Image source={{ uri: thumbnail.uri }} style={styles.singleImage} />
+            <Button style={styles.button} title="Pick another image from camera roll" onPress={pickThumbnail} /> 
+          </>
+        }
+        {/* Other images */}
+        <Text style={[styles.subheading, textStyle.h2]}>Other room images</Text>
+        <FlatList
+          data={images}
+          horizontal
+          renderItem={renderImage}
+          keyExtractor={(item, index) => index}
+          ListEmptyComponent={
+            <View style={[styles.image, { backgroundColor: colors.lightBlue}]}/>
+          }
+          contentContainerStyle={styles.imageContainer}
+        />
+        { images.length === 0 ? 
+          <Button style={styles.button} title="Pick an image from camera roll" onPress={pickImage} />   :
+          <Button style={styles.button} title="Pick another image from camera roll" onPress={pickImage} /> 
+        }
         {/* Button */}
         <StandardButton style={{alignSelf: 'center', marginTop: 30 }} 
           title='List this room' 
@@ -271,15 +266,13 @@ export default function RoomCreation({ navigation }) {
         />
       </ScrollView>
       { isLoading && 
-      <View style={styles.loading}>
+      <View style={styles.activityIndicator}>
         <ActivityIndicator size='large' />
       </View> }
     </SafeAreaView>
   );
 }
 
-// images.length === 1 ? styles.singleImage : styles.imageContainer
-// { flexDirection: 'row', alignItems: 'flex-start', justifyContent: 'space-evenly', flexWrap: 'wrap', marginHorizontal: 30 }
 const styles = StyleSheet.create({
 	container: {
 		flex: 1,
@@ -304,7 +297,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    //marginRight: 30,
     marginBottom: 10
   },
   tagContainer: {
@@ -322,10 +314,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center'
   },
   imageContainer: {
-    //marginTop: 10,
-    //marginHorizontal: 30,
-    //paddingHorizontal: 30,
-    paddingLeft: 40,
+    paddingLeft: 50,
     paddingBottom: 8,
     flexDirection: 'row',
     alignItems: 'center',
@@ -335,7 +324,6 @@ const styles = StyleSheet.create({
     width: 310, 
     height: 150,
     borderRadius: 20,
-    //marginTop: 10,
     marginBottom: 8,
     alignSelf: 'center',
     backgroundColor: colors.lightBlue
@@ -346,7 +334,15 @@ const styles = StyleSheet.create({
     height: 150,
     borderRadius: 20
   },
-  loading: {
+  removeButton: {
+    backgroundColor: colors.white, 
+    borderRadius: 40, 
+    width: 30, 
+    height: 30, 
+    alignItems: 'center', 
+    justifyContent: 'center'
+  },
+  activityIndicator: {
     position: 'absolute',
     left: 0,
     right: 0,
