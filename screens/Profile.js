@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { StyleSheet, Text, SafeAreaView, View, TouchableOpacity, FlatList, ActivityIndicator } from 'react-native';
+import { Alert, StyleSheet, Text, SafeAreaView, View, TouchableOpacity, FlatList, ActivityIndicator } from 'react-native';
 import { Entypo } from '@expo/vector-icons';
 import { loadSecure } from '../utils/secureStore';
 import { getRequestHeaders } from '../utils/api';
@@ -17,7 +17,19 @@ export default function ProfileScreen({ navigation }) {
   const [isRefreshing, setRefreshing] = useState(false)
   
   const [userName, setUserName] = useState({});
-  const [rooms, setRooms] = useState([])
+  const [activeReservation, setActiveReservations] = useState([])
+
+  const cancelReservationDialog = (reservation) => {
+    return (
+      Alert.alert('Cancel reservation', `Are you sure you want to cancel your reservation for ${reservation.room_name}?`, [
+        {
+          text: 'Cancel',
+          style: 'cancel',
+        },
+        { text: 'Yes', onPress: () => cancelReservation(reservation._id) },
+      ])
+    )
+  };  
 
   // Fetch user credentials
   const getCredentials = async () => {
@@ -43,7 +55,7 @@ export default function ProfileScreen({ navigation }) {
     }
   };
 
-  // Fetch rooms displayed under Your active reservations 
+  // Fetch rooms displayed under "Your active reservations"
   const getRooms = async (reservations) => {
     const requestHeaders = await getRequestHeaders();
     try {
@@ -57,8 +69,29 @@ export default function ProfileScreen({ navigation }) {
         headers: requestHeaders
       });
 
-      const responseJson = await response.json();
-      setRooms(responseJson);
+      let tmpRes = reservations.map(res => { 
+        const tmp = {};
+        const reserved_from = new Date(res.reserved_from);
+        const reserved_to = new Date(res.reserved_to);
+        tmp._id = res._id;
+        tmp.room_id = res.room_id;
+        tmp.date = reserved_from.toLocaleDateString();
+        tmp.from = reserved_from.toLocaleTimeString([], {timeStyle: 'short'});
+        tmp.until = reserved_to.toLocaleTimeString([], {timeStyle: 'short'});
+        return tmp;
+      });
+
+      const rooms = await response.json();
+      rooms.forEach(room => {
+        tmpRes.forEach(res => {
+          if (res.room_id === room._id) {
+            res.room_name = room.name;
+            res.thumbnail_url = room.thumbnail_url;
+          }
+        })
+      });
+
+      setActiveReservations(tmpRes);
     } catch (error) {
       console.error(error);
       alert('Something went wrong');
@@ -90,6 +123,24 @@ export default function ProfileScreen({ navigation }) {
     }
   };
 
+  // Delete specified reservation
+  const cancelReservation = async (reservationID) => {
+    const requestHeaders = await getRequestHeaders();
+    try {
+      const response = await fetch(`https://mtaa-backend.herokuapp.com/reservations/${reservationID}`, {
+        method: 'DELETE',
+        headers: requestHeaders
+      });
+      //const responseJson = await response.json();
+      if (response.status === 204) alert('Successfully deleted your reservation!');
+    } catch (error) {
+      console.error(error);
+      alert('Something went wrong');
+    } finally {
+      onRefresh();
+    }
+  };
+
   const onRefresh = () => {
     setRefreshing(true);
     getActiveReservations();
@@ -103,21 +154,22 @@ export default function ProfileScreen({ navigation }) {
   const renderReservations = ({ item }) => (
     <Listing 
       style={styles.activeReservation}
-      roomName={item.name}
+      roomName={item.room_name}
       image={{uri: item.thumbnail_url}}
-      info={item.info}
-      numSeats={item.number_of_seats}
-      amenities={item.amenities.join(', ')} 
+      text1={`Date: ${item.date}`}
+      text2={`From: ${item.from}`}
+      text3={`Until: ${item.until}`} 
       buttonTitle='Cancel'
-      buttonAction={() => { 
-        navigation.navigate('Room', { _id: item._id, name: item.name })
+      buttonAction={() => cancelReservationDialog(item)}
+      cardAction={() => { 
+        navigation.navigate('Room', { _id: item.room_id, name: item.name })
       }} 
     />
   );
 
   return (
     <SafeAreaView style={styles.container}>
-      {isLoading || userName === {} && rooms.size() == 0 ? <ActivityIndicator size='large' style={styles.activityIndicator} /> : (
+      { isLoading || userName === {} && activeReservation.size() == 0 ? <ActivityIndicator size='large' style={styles.activityIndicator} /> : (
         <>
           <View style={styles.profileButtonsContainer}>
             <TouchableOpacity
@@ -148,11 +200,11 @@ export default function ProfileScreen({ navigation }) {
           </View>
           <Text style={[styles.activeReservationsHeading, textStyle.h2]}>Your active reservations:</Text>
           <FlatList
-            data={rooms}
+            data={activeReservation}
             renderItem={renderReservations}
             onRefresh={onRefresh}
             refreshing={isRefreshing}
-            keyExtractor={(item, index) => index}
+            keyExtractor={item => item._id}
             contentContainerStyle={styles.activeReservationsContainer}
           />
         </>
@@ -195,7 +247,6 @@ const styles = StyleSheet.create({
     color: colors.grey,
   },
   activeReservationsContainer: {
-    marginTop: 10,
     marginLeft: 30,
     marginRight: 30,
     flexDirection: 'column',
@@ -205,6 +256,7 @@ const styles = StyleSheet.create({
   activeReservationsHeading: {
     marginLeft: 30,
     marginTop: 24,
+    marginBottom: 10
   },
   activeReservation: {
     marginBottom: 20,

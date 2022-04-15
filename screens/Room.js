@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { ActivityIndicator, Image, StyleSheet, Text, SafeAreaView, View, TouchableOpacity, TextInput } from 'react-native';
 import Carousel, { Pagination } from 'react-native-snap-carousel'
 import { getValueFor } from "../utils/secureStore";
+import { getRequestHeaders } from '../utils/api';
 
 import BackButton from '../components/BackButton';
 import StandardButton from "../components/StandardButton";
@@ -84,25 +85,17 @@ export default function RoomScreen({ navigation, route }) {
   const [room, setData] = useState([]);
 
   const getRoom = async () => {
+    const requestHeaders = await getRequestHeaders();
     try {
-      const token = await getValueFor('bearer');
-      //console.log(token);
-
-      let requestHeaders = new Headers();
-      requestHeaders.append('Accept', 'application/json');
-
-      let auth = ('Bearer ' + token).replace(/"/g, '');
-      requestHeaders.append('Authorization', auth);
-
-      const endpoint = `https://mtaa-backend.herokuapp.com/rooms/${route.params._id}`;
       //checkVacancy(route.params._id, token)
-
+      const endpoint = `https://mtaa-backend.herokuapp.com/rooms/${route.params._id}`;
       const response = await fetch(endpoint, {
         method: 'GET',
         headers: requestHeaders
       });
 
       const room = await response.json();
+      console.log(room)
       room.address = `${room.address.street}, ${room.address.city} ${room.address.zip}, ${room.address.state}`
       room.image_urls.splice(0, 0, room.thumbnail_url)
       setData(room);
@@ -123,7 +116,7 @@ export default function RoomScreen({ navigation, route }) {
       {isLoading || room == null ? <ActivityIndicator size='large' style={styles.activityIndicator} /> : (
         <>
           <BackButton action={() => navigation.goBack()}/>
-          <Text style={[textStyle.h1, styles.header]}>{route.params.name}</Text>
+          <Text style={[textStyle.h1, styles.header]}>{room.name}</Text>
           <ImageCarousel data={room.image_urls} />
           <View style={styles.info}>
             <View style={styles.textContainer}>
@@ -132,7 +125,7 @@ export default function RoomScreen({ navigation, route }) {
               <Text style={[styles.text, textStyle.small]}>{room.number_of_seats} seats</Text>
               <Text style={[styles.text, textStyle.small]}>{room.amenities.join(', ')}</Text>
             </View>
-            <SmallButton title={'Call owner'} />
+            <SmallButton title={'Call owner'} action={() => console.log('calling')} />
           </View>
           <View style={styles.address}>
             <Text style={[styles.heading, textStyle.h2]}>Address</Text>
@@ -142,7 +135,7 @@ export default function RoomScreen({ navigation, route }) {
             <Text style={[styles.heading, textStyle.h2]}>Available time</Text>
             <Text style={[styles.text, textStyle.small]}>Available today from 10:00</Text>
           </View>
-          <StandardButton style={styles.button} title={'Book this room '} />
+          <StandardButton style={styles.button} title={'Book this room '} action={() => console.log('booking') } />
         </>
       )}
     </SafeAreaView>

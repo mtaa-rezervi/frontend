@@ -57,9 +57,9 @@ export default function HomeScreen({ navigation }) {
       style={styles.listing}
       roomName={item.name}
       image={{uri: item.thumbnail_url}}
-      info={item.info}
-      numSeats={item.number_of_seats}
-      amenities={item.amenities.join(', ')} 
+      text1={item.info}
+      text2={`${item.number_of_seats} seats`}
+      text3={item.amenities.join(', ')} 
       buttonTitle='View'
       buttonAction={() => { 
         navigation.navigate('Room', { _id: item._id, name: item.name })

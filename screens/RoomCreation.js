@@ -42,6 +42,18 @@ export default function RoomCreation({ navigation }) {
   const [images, setImage] = useState([]);
   const [thumbnail, setThumbnail] = useState(null);
 
+  const createRoomDialog = () => {
+    return (
+      Alert.alert('New listing', `Do you want to list this room?`, [
+        {
+          text: 'Cancel',
+          style: 'cancel',
+        },
+        { text: 'Yes', onPress: () => { setLoading(true); createRoom() }},
+      ])
+    )
+  };  
+
   // Create a new room in the database
   const createRoom = async () => {
     const userID = (await loadSecure()).userID;
@@ -75,8 +87,8 @@ export default function RoomCreation({ navigation }) {
         body: formData
       });
       const responseJson = await response.json();
-      console.log(responseJson);
-      if (response.status === 201) Alert.alert('Successfully create new room!');
+      //console.log(responseJson);
+      if (response.status === 201) Alert.alert('Successfully created new room!');
       else if (response.status === 422) Alert.alert(responseJson.errors[0].message);
     } catch (error) {
       console.error(error);
@@ -267,7 +279,7 @@ export default function RoomCreation({ navigation }) {
         {/* Button */}
         <StandardButton style={{alignSelf: 'center', marginTop: 30 }} 
           title='List this room' 
-          action={() => {setLoading(true); createRoom()}} 
+          action={() => { createRoomDialog() }} 
         />
       </ScrollView>
       { isLoading && 
