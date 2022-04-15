@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react'
 import { StyleSheet, Text, SafeAreaView, View, Alert } from 'react-native';
 import { launchImageLibraryAsync, MediaTypeOptions } from 'expo-image-picker';
+import { useIsFocused } from '@react-navigation/native';
 
-import { getValueFor } from '../utils/SecureStore';
+import { getRequestHeaders } from '../utils/api';
+import { loadSecure } from '../utils/secureStore';
 
 import colors from '../styles/colors';
 import textStyle from '../styles/text';
@@ -11,7 +13,6 @@ import BackButton from '../components/BackButton';
 import Input from '../components/Input';
 import EditImageIcon from '../components/EditImageIcon';
 import StandardButton from '../components/StandardButton';
-import { useIsFocused } from '@react-navigation/native';
 
 export default function EditProfileScreen({ navigation }) {
 
@@ -27,18 +28,13 @@ export default function EditProfileScreen({ navigation }) {
   const [newProfilePic, setNewProfilePic] = useState(null);
 
   const getCredentials = async () => {
-    const token = await getValueFor('bearer');
-    const userID = await getValueFor('_id');
-
-    let auth = ('Bearer ' + token).replace(/"/g, '');
-    let userIdParam = userID.replace(/"/g, '');
+    
+    const userIdParam =  (await loadSecure()).userID;
+    const requestHeaders = await getRequestHeaders();
 
     const response = await fetch(`https://mtaa-backend.herokuapp.com/users/${userIdParam}`, {
       method: 'GET',
-      headers: {
-          Accept: 'application/json',
-          'Authorization': auth
-      }
+      headers: requestHeaders
     });
 
     const user = await response.json();
@@ -66,12 +62,6 @@ export default function EditProfileScreen({ navigation }) {
       return;
     }
 
-    const token = await getValueFor('bearer');
-    const userID = await getValueFor('_id');
-
-    let auth = ('Bearer ' + token).replace(/"/g, '');
-    let userIdParam = userID.replace(/"/g, '');
-
     const data = new FormData();
     
     const credentials = {
@@ -90,6 +80,9 @@ export default function EditProfileScreen({ navigation }) {
     if(newProfilePic){
       data.append('image', newProfilePic);
     }
+
+    const userIdParam =  (await loadSecure()).userID;
+    const auth = (await loadSecure()).auth;
 
     try {
       const response = await fetch(`https://mtaa-backend.herokuapp.com/users/${userIdParam}`, {

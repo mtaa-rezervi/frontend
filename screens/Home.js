@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { ActivityIndicator, ScrollView, FlatList, StyleSheet, SafeAreaView, View, Text} from "react-native";
 
 import { getRequestHeaders } from '../utils/api';
+import { loadSecure } from "../utils/secureStore";
 
 import colors from '../styles/colors';
 import textStyle from "../styles/text";
@@ -48,18 +49,12 @@ export default function HomeScreen({ navigation }) {
 
 	// Fetch and set user's profile picture
   const getProfilePic = async () => {
-		const token = await getValueFor('bearer');
-		const userID = await getValueFor('_id');
-
-		let auth = ('Bearer ' + token).replace(/"/g, '');
-		let userIdParam = userID.replace(/"/g, '');
+		const userIdParam =  (await loadSecure()).userID;
+    const requestHeaders = await getRequestHeaders();
 
 		const response = await fetch(`https://mtaa-backend.herokuapp.com/users/${userIdParam}`, {
 		method: 'GET',
-		headers: {
-			Accept: 'application/json',
-			'Authorization': auth
-		}
+		headers: requestHeaders
 		});
 
 		const user = await response.json();
