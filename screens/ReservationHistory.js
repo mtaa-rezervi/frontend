@@ -55,19 +55,18 @@ export default function ReservationHistory({ navigation }) {
   }, []);
 
   const renderRooms = ({ item }) => (
-    <View style={styles.listing}>
-      <Listing 
-        roomName={item.name}
-        image={{uri: item.thumbnail_url}}
-        info={item.info}
-        numSeats={item.number_of_seats}
-        amenities={item.amenities.join(', ')} 
-        buttonTitle='View'
-        buttonAction={() => { 
-          navigation.navigate('Room', { _id: item._id, name: item.name })
-        }} 
-      />
-    </View>
+    <Listing 
+      style={styles.reservation}
+      roomName={item.name}
+      image={{uri: item.thumbnail_url}}
+      info={item.info}
+      numSeats={item.number_of_seats}
+      amenities={item.amenities.join(', ')} 
+      buttonTitle='View'
+      buttonAction={() => { 
+        navigation.navigate('Room', { _id: item._id, name: item.name })
+      }} 
+    />
   );
 
   return (
@@ -117,7 +116,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center'
   },
-  listing: {
+  reservation: {
     marginBottom: 20,
   },
   activityIndicator: {

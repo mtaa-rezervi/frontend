@@ -1,16 +1,18 @@
-import { StyleSheet, Text, TouchableOpacity } from 'react-native';
+import { View, StyleSheet, Text, TouchableOpacity } from 'react-native';
 import colors from '../styles/colors';
 import textStyle from '../styles/text';
 import { Entypo } from '@expo/vector-icons'; 
 
-export default function ProfileButton({ title, color, action }) {
+export default function ProfileButton({ title, color, action, style }) {
   return (
-    <TouchableOpacity style={[styles.button, { backgroundColor: color || colors.lightGrey }]}
-      onPress={action}
-    >
-      <Text style={[styles.buttonText, textStyle.h2]}>{title || 'Button'}</Text>
-      <Entypo style={styles.chevron} name="chevron-right" size={36} color={colors.blue} />
-    </TouchableOpacity>
+    <View style={style}>
+      <TouchableOpacity style={[styles.button, { backgroundColor: color || colors.lightGrey }]}
+        onPress={action}
+      >
+        <Text style={[styles.buttonText, textStyle.h2]}>{title || 'Button'}</Text>
+        <Entypo style={styles.chevron} name="chevron-right" size={36} color={colors.blue} />
+      </TouchableOpacity>
+    </View>
   );
 }
 

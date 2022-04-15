@@ -87,17 +87,16 @@ export default function UserListing({ navigation }) {
   }, []);
 
   const renderRooms = ({ item }) => (
-    <View style={styles.listing}>
-      <Listing 
-        roomName={item.name}
-        image={{uri: item.thumbnail_url}}
-        info={item.info}
-        numSeats={item.number_of_seats}
-        amenities={item.amenities.join(', ')} 
-        buttonTitle='Remove'
-        buttonAction={ () => deleteRoom(item._id) } 
-      />
-    </View>
+    <Listing 
+      style={styles.listing}
+      roomName={item.name}
+      image={{uri: item.thumbnail_url}}
+      info={item.info}
+      numSeats={item.number_of_seats}
+      amenities={item.amenities.join(', ')} 
+      buttonTitle='Remove'
+      buttonAction={ () => deleteRoom(item._id) } 
+    />
   );
 
   return (
@@ -118,9 +117,7 @@ export default function UserListing({ navigation }) {
           contentContainerStyle={styles.listingContainer}
         />
       )}
-      <View style={styles.listingButton}>
-        <ProfileButton title='List a new room' action={() => navigation.navigate('RoomCreation')}/>
-      </View>
+      <ProfileButton style={styles.listingButton} title='List a new room' action={() => navigation.navigate('RoomCreation')}/>
     </SafeAreaView>
   );
 }
@@ -153,7 +150,7 @@ const styles = StyleSheet.create({
   },
   listingButton: {
     alignSelf: 'center',
-    marginBottom: 10,
+    //marginBottom: 10,
   },
   activityIndicator: {
     flex: 1

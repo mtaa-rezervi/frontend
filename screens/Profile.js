@@ -101,19 +101,18 @@ export default function ProfileScreen({ navigation }) {
 	}, []);
 
   const renderReservations = ({ item }) => (
-    <View style={styles.activeReservation}>
-      <Listing 
-        roomName={item.name}
-        image={{uri: item.thumbnail_url}}
-        info={item.info}
-        numSeats={item.number_of_seats}
-        amenities={item.amenities.join(', ')} 
-        buttonTitle='Cancel'
-        buttonAction={() => { 
-          navigation.navigate('Room', { _id: item._id, name: item.name })
-        }} 
-      />
-    </View>
+    <Listing 
+      style={styles.activeReservation}
+      roomName={item.name}
+      image={{uri: item.thumbnail_url}}
+      info={item.info}
+      numSeats={item.number_of_seats}
+      amenities={item.amenities.join(', ')} 
+      buttonTitle='Cancel'
+      buttonAction={() => { 
+        navigation.navigate('Room', { _id: item._id, name: item.name })
+      }} 
+    />
   );
 
   return (

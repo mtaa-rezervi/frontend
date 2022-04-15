@@ -53,19 +53,18 @@ export default function HomeScreen({ navigation }) {
   }, []);
 
   const renderRooms = ({ item }) => (
-    <View style={styles.listing}>
-      <Listing 
-        roomName={item.name}
-        image={{uri: item.thumbnail_url}}
-        info={item.info}
-        numSeats={item.number_of_seats}
-        amenities={item.amenities.join(', ')} 
-        buttonTitle='View'
-        buttonAction={() => { 
-          navigation.navigate('Room', { _id: item._id, name: item.name })
-        }} 
-      />
-    </View>
+    <Listing 
+      style={styles.listing}
+      roomName={item.name}
+      image={{uri: item.thumbnail_url}}
+      info={item.info}
+      numSeats={item.number_of_seats}
+      amenities={item.amenities.join(', ')} 
+      buttonTitle='View'
+      buttonAction={() => { 
+        navigation.navigate('Room', { _id: item._id, name: item.name })
+      }} 
+    />
   );
 
   return (

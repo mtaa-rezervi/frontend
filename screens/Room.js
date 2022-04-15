@@ -142,9 +142,7 @@ export default function RoomScreen({ navigation, route }) {
             <Text style={[styles.heading, textStyle.h2]}>Available time</Text>
             <Text style={[styles.text, textStyle.small]}>Available today from 10:00</Text>
           </View>
-          <View style={styles.button}>
-            <StandardButton title={'Book this room '} />
-          </View>
+          <StandardButton style={styles.button} title={'Book this room '} />
         </>
       )}
     </SafeAreaView>

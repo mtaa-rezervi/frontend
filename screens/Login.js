@@ -32,31 +32,28 @@ export default function LoginScreen({ navigation }) {
         resizeMode="contain"
         style={styles.image}
       />
-      <View style={styles.username}>
-        <Input
-          placeholder="Username"
-          value={username}
-          onChangeText={text => setUsername(text)}
-          />
-      </View>
-      <View style={styles.password}>
-        <Input
-          placeholder="Password"
-          secureTextEntry={true}
-          value={password}
-          onChangeText={text => setPassword(text)}
-          />
-        </View>
+      <Input
+        style={styles.username}
+        placeholder="Username"
+        value={username}
+        onChangeText={text => setUsername(text)}
+        /> 
+      <Input
+        style={styles.password}
+        placeholder="Password"
+        secureTextEntry={true}
+        value={password}
+        onChangeText={text => setPassword(text)}
+        />
         <View style={styles.bottomTextContainer}>
             <Text style={styles.bottomText}>Don&#39;t have an account yet?</Text>
             <Text style={styles.register} onPress={() => navigation.navigate('Register')}>Register</Text>
         </View>
-        <View style={styles.loginButton}>
-          <StandardButton 
-            title='Login' 
-            action={() => userLogin(username, password, navigation)}
-          />
-        </View>
+        <StandardButton 
+          style={styles.loginButton}
+          title='Login' 
+          action={() => userLogin(username, password, navigation)}
+        />
     </SafeAreaView>
   );
 }
