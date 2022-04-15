@@ -44,7 +44,7 @@ export default function RoomCreation({ navigation }) {
 
   const createRoomDialog = () => {
     return (
-      Alert.alert('New listing', `Do you want to list this room?`, [
+      Alert.alert('New listing', `Do you want to create this listing?`, [
         {
           text: 'Cancel',
           style: 'cancel',

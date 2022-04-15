@@ -95,7 +95,7 @@ export default function RoomScreen({ navigation, route }) {
       });
 
       const room = await response.json();
-      console.log(room)
+      //console.log(room)
       room.address = `${room.address.street}, ${room.address.city} ${room.address.zip}, ${room.address.state}`
       room.image_urls.splice(0, 0, room.thumbnail_url)
       setData(room);
