@@ -9,6 +9,8 @@ import textStyle from '../styles/text';
 
 import ProfileButton from '../components/ProfileButton';
 import ProfileIcon from '../components/Profile';
+import { useIsFocused } from '@react-navigation/native';
+
 import Listing from '../components/Listing';
 
 // Screen
@@ -19,6 +21,10 @@ export default function ProfileScreen({ navigation }) {
   const [userName, setUserName] = useState({});
   const [activeReservation, setActiveReservations] = useState([])
 
+  const isFocused = useIsFocused();
+
+  const [profilePicURL, setProfilePicURL] = useState({})
+  
   const cancelReservationDialog = (reservation) => {
     return (
       Alert.alert('Cancel reservation', `Are you sure you want to cancel your reservation for ${reservation.room_name}?`, [
@@ -29,7 +35,7 @@ export default function ProfileScreen({ navigation }) {
         { text: 'Yes', onPress: () => cancelReservation(reservation._id) },
       ])
     )
-  };  
+  };
 
   // Fetch user credentials
   const getCredentials = async () => {
@@ -47,6 +53,10 @@ export default function ProfileScreen({ navigation }) {
         first: user.name.first_name,
         last: user.name.last_name
       });
+      
+      let picURL = user.profile_pic ? { uri: user.profile_pic } : require('../assets/images/Avatar.png');
+      setProfilePicURL({ pic: picURL });
+      
     } catch (error) {
       console.error(error);
       alert('Something went wrong');
@@ -68,7 +78,7 @@ export default function ProfileScreen({ navigation }) {
         method: 'GET',
         headers: requestHeaders
       });
-
+      
       let tmpRes = reservations.map(res => { 
         const tmp = {};
         const reserved_from = new Date(res.reserved_from);
@@ -149,7 +159,7 @@ export default function ProfileScreen({ navigation }) {
   useEffect(() => {
 		getCredentials();
     getActiveReservations();
-	}, []);
+	}, [isFocused]);
 
   const renderReservations = ({ item }) => (
     <Listing 
@@ -176,7 +186,8 @@ export default function ProfileScreen({ navigation }) {
               style={styles.mainProfileButton}
               onPress={() => navigation.navigate('EditProfile')}>
               <ProfileIcon
-                image={require('../assets/images/Avatar.png')}        
+                image={profilePicURL.pic}
+                action={() => navigation.navigate('EditProfile')}       
               />
               <View style={{flexDirection: 'column'}}>
                 <Text style={[styles.buttonText, textStyle.h2]}>{userName.first} {userName.last}</Text>

@@ -8,13 +8,16 @@ import textStyle from "../styles/text";
 
 import ProfileIcon from "../components/Profile";
 import Listing from "../components/Listing";
+import { useIsFocused } from "@react-navigation/native";
 
 // Screen
 export default function HomeScreen({ navigation }) {
+  const isFocused = useIsFocused();
   const [isLoading, setLoading] = useState(true);
-  const [isRefreshing, setRefreshing] = useState(false)
-
+  const [isRefreshing, setRefreshing] = useState(false);
+  
   const [rooms, setData] = useState([]);
+  const [profilePicURL, setProfilePicURL] = useState({});
 
   // Fetch rooms displayed on the screen
   const getRooms = async () => {
@@ -43,14 +46,37 @@ export default function HomeScreen({ navigation }) {
     }
   };
 
+	// Fetch and set user's profile picture
+  const getProfilePic = async () => {
+		const token = await getValueFor('bearer');
+		const userID = await getValueFor('_id');
+
+		let auth = ('Bearer ' + token).replace(/"/g, '');
+		let userIdParam = userID.replace(/"/g, '');
+
+		const response = await fetch(`https://mtaa-backend.herokuapp.com/users/${userIdParam}`, {
+		method: 'GET',
+		headers: {
+			Accept: 'application/json',
+			'Authorization': auth
+		}
+		});
+
+		const user = await response.json();
+		let picURL = user.profile_pic ? { uri: user.profile_pic } : require('../assets/images/Avatar.png');
+  		
+		setProfilePicURL({ pic: picURL });
+	}
+
   const onRefresh = () => {
     setRefreshing(true);
     getRooms();
   };
-
+  
   useEffect(() => {
-    getRooms();
-  }, []);
+		getRooms();
+		getProfilePic();
+	}, [isFocused]);
 
   const renderRooms = ({ item }) => (
     <Listing 
@@ -77,7 +103,7 @@ export default function HomeScreen({ navigation }) {
           <Text style={[styles.heading, textStyle.h1]}>Welcome</Text>
           <Text style={[styles.subHeading, textStyle.h2]}>Available today</Text>
         </View>
-        <ProfileIcon image={require('../assets/images/Avatar.png')} action={() => {navigation.navigate('Profile')}}/> 
+        <ProfileIcon image={profilePicURL.pic} action={() => {navigation.navigate('Profile')}}/>  
       </View>
       {isLoading || rooms == null ? <ActivityIndicator size='large' style={styles.activityIndicator} /> : (
         <FlatList
