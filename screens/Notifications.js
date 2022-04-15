@@ -48,14 +48,13 @@ export default function NotiScreen({ navigation }) {
   }, []);
 
   const renderNotis = ({ item }) => (
-    <View style={styles.noti}>
-      <Notification
-        type={item.type}
-        time={item.time}
-        text={item.text}
-        action={item.type === 'missed_call' ? () => {console.log('calling user')} : null}
-      />
-    </View>
+    <Notification
+      style={styles.noti}
+      type={item.type}
+      time={item.time}
+      text={item.text}
+      action={item.type === 'missed_call' ? () => {console.log('calling user')} : null}
+    />
   );
 
   return (

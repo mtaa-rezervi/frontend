@@ -4,26 +4,30 @@ import moment from 'moment';
 import colors from '../styles/colors';
 import textStyle from '../styles/text';
 
-export default function Notification({ type, time, text, action }) {
+export default function Notification({ type, time, text, action, style }) {
   let component;
   const timeElapsed = moment(time).fromNow();
 
   if (type === 'missed_call') {
     component = (
-      <View style={styles.container}>
-        <Text style={[styles.time, textStyle.smaller]}>{timeElapsed}</Text>
-        <View style={styles.notification}>
-          <Text style={[styles.text, textStyle.small]}>{text}</Text>
-          <Text style={[styles.text, textStyle.small, styles.clickableText]} onPress={action}>Call them back?</Text>
+      <View style={style}>
+        <View style={styles.container}>
+          <Text style={[styles.time, textStyle.smaller]}>{timeElapsed}</Text>
+          <View style={styles.notification}>
+            <Text style={[styles.text, textStyle.small]}>{text}</Text>
+            <Text style={[styles.text, textStyle.small, styles.clickableText]} onPress={action}>Call them back?</Text>
+          </View>
         </View>
       </View>
     );
   } else {
     component = (
-      <View style={styles.container}>
-        <Text style={[styles.time, textStyle.smaller]}>{timeElapsed}</Text>
-        <View style={styles.notification}>
-          <Text style={[styles.text, textStyle.small]}>{text}</Text>
+      <View style={style}>
+        <View style={styles.container}>
+          <Text style={[styles.time, textStyle.smaller]}>{timeElapsed}</Text>
+          <View style={styles.notification}>
+            <Text style={[styles.text, textStyle.small]}>{text}</Text>
+          </View>
         </View>
       </View>
     );

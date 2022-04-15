@@ -13,6 +13,7 @@ import { useFonts } from 'expo-font';
 import AppLoading from 'expo-app-loading';
 
 import colors from '../styles/colors';
+import textStyle from "../styles/text";
 
 import Input from "../components/Input";
 import StandardButton from "../components/StandardButton";
@@ -20,18 +21,16 @@ import BackButton from "../components/BackButton";
 import userLogin from "../utils/userLogin";
 
 function RegisterScreen({ navigation }) {
-
   const [firstName, setFirstName] = useState('')
   const [lastName, setLastName] = useState('')
   const [username, setUsername] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   
-
   const sendRegistration = async (firstName, lastName, username, email, password) => {
     try {
       const response = await fetch('https://mtaa-backend.herokuapp.com/users/register', {      
-      method: 'POST',
+        method: 'POST',
           headers: {
             Accept: 'application/json',
             'Content-Type': 'application/json'
@@ -47,15 +46,15 @@ function RegisterScreen({ navigation }) {
       const json = await response.json();
       
       if(response.status == 201){
-          console.log("account created");
-          Alert.alert(
-            'Success',
-            'Account created successfully!',
-            [{
-              text: 'OK',
-              onPress: async () => await userLogin(username, password, navigation)
-            }]
-          )
+        console.log("account created");
+        Alert.alert(
+          'Success',
+          'Account created successfully!',
+          [{
+            text: 'OK',
+            onPress: async () => await userLogin(username, password, navigation)
+          }]
+        )
       }
       else if(response.status == 409){
         Alert.alert(
@@ -84,63 +83,54 @@ function RegisterScreen({ navigation }) {
     return <AppLoading />;
   }
 
-    
   return (
     <SafeAreaView style={styles.container}>
-      <BackButton action={() => navigation.goBack()}/>
-      <Text style={styles.createAnAccount}>Create an account</Text>
-      
-      <View style={styles.firstName}>
-        <Input
-            placeholder="First name"
-            value={firstName}
-            onChangeText={text => setFirstName(text)}
-            />
+      <View style={styles.header}>
+        <BackButton action={() => navigation.goBack()}/>
+        <Text style={[textStyle.h1, styles.heading]}>Create an account</Text>
       </View>
-
-      <View style={styles.lastName}>
+      <View style={styles.inputs}>
         <Input
-            placeholder="Last name"
-            value={lastName}
-            onChangeText={text => setLastName(text)}
-            />
-      </View>
-
-      <View style={styles.username}>
+          style={styles.input}
+          placeholder="First name"
+          value={firstName}
+          onChangeText={text => setFirstName(text)}
+        />
         <Input
-            placeholder="Username"
-            value={username}
-            onChangeText={text => setUsername(text)}
-            />
-      </View>
-
-      <View style={styles.email}>
+          style={styles.input}
+          placeholder="Last name"
+          value={lastName}
+          onChangeText={text => setLastName(text)}
+        />
         <Input
-            placeholder="Email"
-            value={email}
-            onChangeText={text => setEmail(text)}
-            />
-      </View>
-
-      <View style={styles.email}>
+          style={styles.input}
+          placeholder="Username"
+          value={username}
+          onChangeText={text => setUsername(text)}
+        />
         <Input
-            placeholder="Password"
-            value={password}
-            onChangeText={text => setPassword(text)}
-            secureTextEntry={true}
-            />
+          style={styles.input}
+          placeholder="Email"
+          value={email}
+          onChangeText={text => setEmail(text)}
+        />
+        <Input
+          style={styles.input}
+          placeholder="Password"
+          value={password}
+          onChangeText={text => setPassword(text)}
+          secureTextEntry={true}
+        />
       </View>
-
       <View style={styles.hasAccountStack}>
         <Text style={styles.hasAccount}>Already have an account?</Text>
         <Text style={styles.logIn} onPress={() => navigation.navigate('Login')}>Log in</Text>
       </View>
-      <View style={styles.button}>
-          <StandardButton 
-            title='Register' 
-            action={() => sendRegistration(firstName, lastName, username, email, password)}
-          />
-        </View>
+      <StandardButton 
+        style={styles.button}
+        title='Register' 
+        action={() => sendRegistration(firstName, lastName, username, email, password)}
+      />
     </SafeAreaView>
   );
 }
@@ -148,78 +138,33 @@ function RegisterScreen({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: colors.white
+    backgroundColor: colors.white,
   },
-  createAnAccount: {
-    fontFamily: "roboto-bold",
-    color: "#121212",
-    fontSize: 33,
-    height: 39,
-    width: 294,
-    //marginTop: 72,
-    marginLeft: 30
+  header: {
+    marginBottom: 10
   },
-  firstName: {
-    fontFamily: "roboto-regular",
-    color: "rgba(151,151,151,1)",
-    height: 48,
-    width: 330,
-    backgroundColor: "rgba(235,235,235,1)",
-    borderRadius: 10,
-    marginTop: 80,
-    marginLeft: 23,
-    paddingLeft: 10
+  heading: {
+    marginRight: 30,
+    marginLeft: 30,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
   },
-  lastName: {
-    fontFamily: "roboto-regular",
-    color: "rgba(151,151,151,1)",
-    height: 48,
-    width: 330,
-    backgroundColor: "rgba(235,235,235,1)",
-    borderRadius: 10,
-    marginTop: 15,
-    marginLeft: 23,
-    paddingLeft: 10
+  inputs: {
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: 70
   },
-  username: {
-    fontFamily: "roboto-regular",
-    color: "rgba(151,151,151,1)",
-    height: 48,
-    width: 330,
-    backgroundColor: "rgba(235,235,235,1)",
-    borderRadius: 10,
-    marginTop: 15,
-    marginLeft: 23,
-    paddingLeft: 10
-  },
-  email: {
-    fontFamily: "roboto-regular",
-    color: "rgba(151,151,151,1)",
-    height: 48,
-    width: 330,
-    backgroundColor: "rgba(235,235,235,1)",
-    borderRadius: 10,
-    marginTop: 15,
-    marginLeft: 23,
-    paddingLeft: 10
-  },
-  password: {
-    fontFamily: "roboto-regular",
-    color: "rgba(151,151,151,1)",
-    height: 48,
-    width: 330,
-    backgroundColor: "rgba(235,235,235,1)",
-    borderRadius: 10,
-    marginTop: 15,
-    marginLeft: 23,
-    paddingLeft: 10
+  input: {
+    paddingBottom: 20
   },
   hasAccount: {
     top: 0,
     left: 0,
     position: "absolute",
     fontFamily: "roboto-regular",
-    color: "#121212",
+    color: colors.black,
     height: 17,
     width: 172
   },
@@ -228,13 +173,13 @@ const styles = StyleSheet.create({
     left: 165,
     position: "absolute",
     fontFamily: "roboto-regular",
-    color: "rgba(54,110,255,1)",
+    color: colors.blue,
     textDecorationLine: "underline"
   },
   hasAccountStack: {
     width: 202,
     height: 17,
-    marginTop: 80,
+    marginTop: 38,
     marginLeft: 45
   },
   button: {
@@ -246,14 +191,6 @@ const styles = StyleSheet.create({
     backgroundColor: colors.blue,
     justifyContent: "center"
   },
-  register: {
-    color: "#fff",
-    fontSize: 14,
-    height: 17,
-    width: 55,
-    textAlign: "center",
-    alignSelf: "center"
-  }
 });
 
 export default RegisterScreen;

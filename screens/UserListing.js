@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { StyleSheet, Text, SafeAreaView, View, ActivityIndicator, FlatList, Alert } from 'react-native';
 
 import { getValueFor } from "../utils/secureStore";
+import { getRequestHeaders } from '../utils/api';
 
 import colors from '../styles/colors';
 import textStyle from '../styles/text';
@@ -16,18 +17,23 @@ export default function UserListing({ navigation }) {
 
   const [rooms, setData] = useState([]);
 
+  const deleteRoomDialog = (room) => {
+    return (
+      Alert.alert('Remove room', `Are you sure you want to remove ${room.name}?`, [
+        {
+          text: 'Cancel',
+          style: 'cancel',
+        },
+        { text: 'Yes', onPress: () => deleteRoom(room._id) },
+      ])
+    )
+  };  
+
+  // Delete specified room 
   const deleteRoom = async (roomID) => {
-    console.log(roomID);
+    const requestHeaders = await getRequestHeaders();
     try {
-      const token = await getValueFor('bearer');
-      const auth = ('Bearer ' + token).replace(/"/g, '');
-
-      let requestHeaders = new Headers();
-      requestHeaders.append('Accept', 'application/json');
-      requestHeaders.append('Authorization', auth);
-      
       const endpoint = `https://mtaa-backend.herokuapp.com/rooms/${roomID}`;
-
       const response = await fetch(endpoint, {
         method: 'DELETE',
         headers: requestHeaders
@@ -42,8 +48,9 @@ export default function UserListing({ navigation }) {
         console.error(error);
         Alert.alert('Something went wrong');
     } finally {
-      setLoading(false);
-      setRefreshing(false);
+      onRefresh()
+      // setLoading(false);
+      // setRefreshing(false);
     }
   };
 
@@ -87,17 +94,19 @@ export default function UserListing({ navigation }) {
   }, []);
 
   const renderRooms = ({ item }) => (
-    <View style={styles.listing}>
-      <Listing 
-        roomName={item.name}
-        image={{uri: item.thumbnail_url}}
-        info={item.info}
-        numSeats={item.number_of_seats}
-        amenities={item.amenities.join(', ')} 
-        buttonTitle='Remove'
-        buttonAction={ () => deleteRoom(item._id) } 
-      />
-    </View>
+    <Listing 
+      style={styles.listing}
+      roomName={item.name}
+      image={{uri: item.thumbnail_url}}
+      text1={item.info}
+      text2={`${item.number_of_seats} seats`}
+      text3={item.amenities.join(', ')} 
+      buttonTitle='Remove'
+      buttonAction={ () => deleteRoomDialog(item) } 
+      cardAction={() => { 
+        navigation.navigate('Room', { _id: item._id, name: item.name })
+      }}
+    />
   );
 
   return (
@@ -108,7 +117,7 @@ export default function UserListing({ navigation }) {
           <Text style={[textStyle.h1, styles.heading]}>Your listed rooms</Text>
         </View>
       </View>
-      {isLoading || rooms.length === 0 ? <ActivityIndicator size='large' style={styles.activityIndicator} /> : (
+      {isLoading || rooms.length === null ? <ActivityIndicator size='large' style={styles.activityIndicator} /> : (
         <FlatList
           data={rooms}
           renderItem={renderRooms}
@@ -118,9 +127,7 @@ export default function UserListing({ navigation }) {
           contentContainerStyle={styles.listingContainer}
         />
       )}
-      <View style={styles.listingButton}>
-        <ProfileButton title='List a new room' action={() => navigation.navigate('RoomCreation')}/>
-      </View>
+      <ProfileButton style={styles.listingButton} title='List a new room' action={() => navigation.navigate('RoomCreation')}/>
     </SafeAreaView>
   );
 }
@@ -153,7 +160,7 @@ const styles = StyleSheet.create({
   },
   listingButton: {
     alignSelf: 'center',
-    marginBottom: 10,
+    //marginBottom: 10,
   },
   activityIndicator: {
     flex: 1

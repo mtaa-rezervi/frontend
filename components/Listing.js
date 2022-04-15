@@ -9,24 +9,26 @@ const SmallButton = ({ title, action }) => {
     </TouchableOpacity>
 )};
 
-export default function Listing({ roomName, image, info, numSeats, amenities, buttonTitle, buttonAction }) {
+export default function Listing({ style, roomName, image, text1, text2, text3, buttonTitle, buttonAction, cardAction }) {
   //image == '' || image.uri == '' ? image = require('../assets/images/room1.jpg') : image = image;
 
   return (
-    <View style={styles.card}>
-      { !image || image == '' || image.uri == '' ? 
-        <View style={[styles.image, {backgroundColor: colors.lightBlue}]}/> : (
-        <Image style={styles.image} source={image} />
-      )}
-      <View style={styles.container}>
-        <View style={styles.textContainer}>
-          <Text style={[styles.heading, textStyle.small, { fontFamily: 'roboto-bold' }]}>{roomName || 'Room name'}</Text>
-          <Text style={[styles.text, textStyle.smaller]}>{info}</Text>
-          <Text style={[styles.text, textStyle.smaller]}>{numSeats} seats</Text>
-          <Text style={[styles.text, textStyle.smaller]}>{amenities}</Text>
+    <View style={style}>
+      <TouchableOpacity style={styles.card} onPress={cardAction} >
+        { !image || image == '' || image.uri == '' ? 
+          <View style={[styles.image, {backgroundColor: colors.lightBlue}]}/> : (
+          <Image style={styles.image} source={image} />
+        )}
+        <View style={styles.container}>
+          <View style={styles.textContainer}>
+            <Text style={[styles.heading, textStyle.small, { fontFamily: 'roboto-bold' }]}>{roomName || 'Room name'}</Text>
+            <Text style={[styles.text, textStyle.smaller]}>{text1}</Text>
+            <Text style={[styles.text, textStyle.smaller]}>{text2}</Text>
+            <Text style={[styles.text, textStyle.smaller]}>{text3}</Text>
+          </View>
+          <SmallButton title={buttonTitle} action={buttonAction} />
         </View>
-        <SmallButton title={buttonTitle} action={buttonAction} />
-      </View>
+      </TouchableOpacity>
     </View>
   );
 }
