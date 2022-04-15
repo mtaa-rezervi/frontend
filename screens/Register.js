@@ -13,6 +13,7 @@ import { useFonts } from 'expo-font';
 import AppLoading from 'expo-app-loading';
 
 import colors from '../styles/colors';
+import textStyle from "../styles/text";
 
 import Input from "../components/Input";
 import StandardButton from "../components/StandardButton";
@@ -84,8 +85,10 @@ function RegisterScreen({ navigation }) {
 
   return (
     <SafeAreaView style={styles.container}>
-      <BackButton action={() => navigation.goBack()}/>
-      <Text style={styles.createAnAccount}>Create an account</Text>
+      <View style={styles.header}>
+        <BackButton action={() => navigation.goBack()}/>
+        <Text style={[textStyle.h1, styles.heading]}>Create an account</Text>
+      </View>
       <View style={styles.inputs}>
         <Input
           style={styles.input}
@@ -137,6 +140,16 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: colors.white,
   },
+  header: {
+    marginBottom: 10
+  },
+  heading: {
+    marginRight: 30,
+    marginLeft: 30,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
   inputs: {
     flexDirection: 'column',
     alignItems: 'center',
@@ -145,15 +158,6 @@ const styles = StyleSheet.create({
   },
   input: {
     paddingBottom: 20
-  },
-  createAnAccount: {
-    fontFamily: "roboto-bold",
-    color: colors.black,
-    fontSize: 33,
-    height: 39,
-    width: 294,
-    //marginTop: 72,
-    marginLeft: 30
   },
   hasAccount: {
     top: 0,
@@ -175,7 +179,7 @@ const styles = StyleSheet.create({
   hasAccountStack: {
     width: 202,
     height: 17,
-    marginTop: 49,
+    marginTop: 38,
     marginLeft: 45
   },
   button: {
