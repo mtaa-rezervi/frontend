@@ -8,8 +8,11 @@ import textStyle from '../styles/text';
 
 import ProfileButton from '../components/ProfileButton';
 import ProfileIcon from '../components/Profile';
+import { useIsFocused } from '@react-navigation/native';
 
 export default function ProfileScreen({ navigation }) {
+
+  const isFocused = useIsFocused();
 
   const [userName, setUserName] = useState('')
   const [firstName, setFirstName] = useState('')
@@ -68,7 +71,7 @@ export default function ProfileScreen({ navigation }) {
   useEffect(() => {
 		getCredentials();
     getActiveReservations();
-	}, []);
+	}, [isFocused]);
 
   return (
     <SafeAreaView style={styles.container}>

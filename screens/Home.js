@@ -10,6 +10,7 @@ import textStyle from "../styles/text";
 
 import ProfileIcon from "../components/Profile";
 import Listing from "../components/Listing";
+import { useIsFocused } from "@react-navigation/native";
 
 // const data = [
 // 	{
@@ -41,6 +42,8 @@ import Listing from "../components/Listing";
 let i = 0;
 
 export default function HomeScreen({ navigation }) {
+
+	const isFocused = useIsFocused();
 	// const [selectedId, setSelectedId] = useState(null);
 	// console.log(selectedId)
 	const [isLoading, setLoading] = useState(true);
@@ -97,7 +100,7 @@ export default function HomeScreen({ navigation }) {
 	useEffect(() => {
 		getRooms();
 		getProfilePic();
-	}, []);
+	}, [isFocused]);
 
 	//console.log(rooms)
 

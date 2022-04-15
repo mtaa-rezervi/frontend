@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
-import { StyleSheet, Text, SafeAreaView, View, TouchableOpacity, TextInput } from 'react-native';
-//import * as ImagePicker from 'expo-image-picker';
+import { StyleSheet, Text, SafeAreaView, View, Alert } from 'react-native';
+import { launchImageLibraryAsync, MediaTypeOptions } from 'expo-image-picker';
 
 import { getValueFor } from '../utils/SecureStore';
 
@@ -11,8 +11,11 @@ import BackButton from '../components/BackButton';
 import Input from '../components/Input';
 import EditImageIcon from '../components/EditImageIcon';
 import StandardButton from '../components/StandardButton';
+import { useIsFocused } from '@react-navigation/native';
 
 export default function EditProfileScreen({ navigation }) {
+
+  const isFocused = useIsFocused();
 
   const [firstName, setFirstName] = useState('')
   const [lastName, setLastName] = useState('')
@@ -51,56 +54,112 @@ export default function EditProfileScreen({ navigation }) {
   }
 
   const saveCredentials = async () => {
+
+    if(password != confirmPassword){
+      Alert.alert(
+        'Error',
+        'Passwords do not match.',
+        [{
+          text: 'OK'
+        }]
+      )
+      return;
+    }
+
     const token = await getValueFor('bearer');
     const userID = await getValueFor('_id');
 
     let auth = ('Bearer ' + token).replace(/"/g, '');
     let userIdParam = userID.replace(/"/g, '');
 
-    // try {
-    //   const response = await fetch(`https://mtaa-backend.herokuapp.com/users/${userIdParam}`, {      
-    //   method: 'PUT',
-    //       headers: {
-    //         Accept: 'application/json',
-    //         'Content-Type': 'application/json',
-    //         'Authorization': auth
-    //       },
-    //       body: JSON.stringify({
-    //         first_name: firstName,
-    //         last_name: lastName,
-    //         username: username,
-    //         email: email,
-    //         password: password
-    //       })
-    //   });
-    //   const json = await response.json();
-      
-    // } catch (error) {
-    //   console.error(error);
-    // }
+    const data = new FormData();
+    
+    const credentials = {
+      first_name: firstName,
+      last_name: lastName,
+      username: userName,
+      email: email
+    }
+    if(password){
+      credentials.password = password;
+    }
 
-    console.log(userID);
+    const jsonData = JSON.stringify(credentials);
+    data.append('json', jsonData);
+
+    if(newProfilePic){
+      data.append('image', newProfilePic);
+    }
+
+    try {
+      const response = await fetch(`https://mtaa-backend.herokuapp.com/users/${userIdParam}`, {
+        method: 'PUT',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'multipart/form-data',
+          'Authorization': auth
+        },
+        body: data
+      });
+      const json = await response.json();
+
+      if(response.status == 200){
+        getCredentials();
+        Alert.alert(
+          'Success',
+          'Profile updated successfully.',
+          [{
+            text: 'OK'
+          }]
+        )
+      }
+      else{
+        var errorMessage = "";        
+        for(const err of json.errors){
+          errorMessage += `${err.message}\n`;
+        }
+
+        Alert.alert(
+          'Error',
+          errorMessage,
+          [{
+            text: 'OK'
+          }]
+        )
+      }
+    } catch (error) {
+      console.error(error);
+    }
 
   }
 
-  // const pickImage = async () => {
-  //   let result = await ImagePicker.launchImageLibraryAsync({
-  //     mediaTypes: ImagePicker.MediaTypeOptions.Images,
-  //     allowsEditing: true,
-  //     aspect: [4, 3],
-  //     quality: 1,
-  //   });
+  const pickImage = async () => {
+    let result = await launchImageLibraryAsync({
+      mediaTypes: MediaTypeOptions.Images,
+      allowsEditing: true,
+      aspect: [1, 1],
+      quality: 1,
+    });
 
-  //   console.log(result);
+    if (!result.cancelled) {
+      const uri = result.uri;
+      const uriParts = uri.split('.');
+      const filename = uri.split('/').pop();
+      const type = `image/${uriParts[uriParts.length - 1]}`;
+      let image = {
+        uri: uri,
+        name: filename,
+        type: type
+      };
 
-  //   if (!result.cancelled) {
-  //     setNewProfilePic(result.uri);
-  //   }
-  // }
+      setNewProfilePic(image);
+		  setProfilePicURL({ pic: { uri: uri } });
+    }
+  }
 
   useEffect(() => {
 		getCredentials();
-	}, []);
+	}, [isFocused]);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -114,7 +173,7 @@ export default function EditProfileScreen({ navigation }) {
         <View style={styles.iconView}>
           <EditImageIcon
             image={profilePicURL.pic}
-            action={()=>{}}
+            action={() => pickImage()}
             />
         </View>
       </View>
