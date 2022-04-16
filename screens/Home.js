@@ -47,21 +47,21 @@ export default function HomeScreen({ navigation }) {
     }
   };
 
-	// Fetch and set user's profile picture
+  // Fetch and set user's profile picture
   const getProfilePic = async () => {
-		const userIdParam =  (await loadSecure()).userID;
+    const userIdParam =  (await loadSecure()).userID;
     const requestHeaders = await getRequestHeaders();
 
-		const response = await fetch(`https://mtaa-backend.herokuapp.com/users/${userIdParam}`, {
+    const response = await fetch(`https://mtaa-backend.herokuapp.com/users/${userIdParam}`, {
       method: 'GET',
       headers: requestHeaders
-		});
+    });
 
-		const user = await response.json();
-		let picURL = user.profile_pic ? { uri: user.profile_pic } : require('../assets/images/Avatar.png');
-  		
-		setProfilePicURL({ pic: picURL });
-	};
+    const user = await response.json();
+    let picURL = user.profile_pic ? { uri: user.profile_pic } : require('../assets/images/Avatar.png');
+      
+    setProfilePicURL({ pic: picURL });
+  };
 
   const onRefresh = () => {
     setRefreshing(true);
@@ -69,9 +69,9 @@ export default function HomeScreen({ navigation }) {
   };
   
   useEffect(() => {
-		getRooms();
-		getProfilePic();
-	}, [isFocused]);
+    getRooms();
+    getProfilePic();
+  }, [isFocused]);
 
   const renderRooms = ({ item }) => (
     <Listing 
