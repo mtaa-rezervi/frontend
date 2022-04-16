@@ -172,63 +172,44 @@ export default function EditProfileScreen({ navigation }) {
       </View>
 
       <View style={styles.inputsContainer}>
-        <View>
-          <Input
-              placeholder="First name"
-              value={firstName}
-              onChangeText={text => setFirstName(text)}
-              />
-        </View>
-
-        <View>
-          <Input
-              placeholder="Last name"
-              value={lastName}
-              onChangeText={text => setLastName(text)}
-              />
-        </View>
-
-        <View>
-          <Input
-              placeholder="Username"
-              value={userName}
-              onChangeText={text => setUserName(text)}
-              />
-        </View>
-
-        <View>
-          <Input
-              placeholder="Email"
-              value={email}
-              onChangeText={text => setEmail(text)}
-              />
-        </View>
-
-        <View>
-          <Input
-              placeholder="New password"
-              value={password}
-              onChangeText={text => setPassword(text)}
-              secureTextEntry={true}
-              />
-        </View>
-
-        <View>
-          <Input
-              placeholder="Confirm password"
-              value={confirmPassword}
-              onChangeText={text => setConfirmPassword(text)}
-              secureTextEntry={true}
-              />
-        </View>
+        <Input
+            placeholder="First name"
+            value={firstName}
+            onChangeText={text => setFirstName(text)}
+            />
+        <Input
+            placeholder="Last name"
+            value={lastName}
+            onChangeText={text => setLastName(text)}
+            />
+        <Input
+            placeholder="Username"
+            value={userName}
+            onChangeText={text => setUserName(text)}
+            />
+        <Input
+            placeholder="Email"
+            value={email}
+            onChangeText={text => setEmail(text)}
+          />
+        <Input
+            placeholder="New password"
+            value={password}
+            onChangeText={text => setPassword(text)}
+            secureTextEntry={true}
+            />
+        <Input
+            placeholder="Confirm password"
+            value={confirmPassword}
+            onChangeText={text => setConfirmPassword(text)}
+            secureTextEntry={true}
+            />
       </View>
-
-      <View style={styles.saveButton}>
-        <StandardButton
-          title={'Save changes'}
-          action={() => {  setLoading(true); saveCredentials() }}
-        />
-      </View>
+      <StandardButton
+        style={styles.saveButton}
+        title={'Save changes'}
+        action={() => {  setLoading(true); saveCredentials() }}
+      />
       { isLoading && 
       <View style={styles.activityIndicator}>
         <ActivityIndicator size='large' />
@@ -252,15 +233,18 @@ const styles = StyleSheet.create({
     //alignItems: 'center'
   },
   inputsContainer:{
-    marginLeft: 30,
+    //marginLeft: 30,
     justifyContent: 'space-evenly',
-    height: 370,
+    height: 388,
+    flexDirection: 'column',
+    alignItems: 'center'
   },
   iconView: {
     marginTop: 50
   },
   saveButton: {
-    marginLeft: 30,
+    //marginLeft: 30,
+    alignSelf: 'center',
     marginTop: 60
   },
   activityIndicator: {
