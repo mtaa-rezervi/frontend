@@ -90,10 +90,8 @@ export default function ReservationHistory({ navigation, route }) {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
-        <View>
-          <BackButton action={() => navigation.goBack()}/>
-          <Text style={[textStyle.h1, styles.heading]}>Your reservation history</Text>
-        </View>
+        <BackButton action={() => navigation.goBack()}/>
+        <Text style={[textStyle.h1, styles.heading]}>Your reservation history</Text>
       </View>
       {isLoading || reservationHistory == null ? <ActivityIndicator size='large' style={styles.activityIndicator} /> : (
         <FlatList
@@ -130,6 +128,7 @@ const styles = StyleSheet.create({
   listingContainer: {
     marginLeft: 30,
     marginRight: 30,
+    //marginTop: 14,
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center'

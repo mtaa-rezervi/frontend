@@ -127,8 +127,6 @@ export default function ProfileScreen({ navigation }) {
       let active = [];
       let history = [];
       reservations.forEach((reservation) => (new Date(reservation.reserved_to) > new Date() ? active : history).push(reservation));
-      // console.log('Active: ', active);
-      // console.log('History: ', history);
       setReservationHistory(history);
       if (reservations) getRooms(active, requestHeaders);
 

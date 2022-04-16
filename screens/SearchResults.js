@@ -100,7 +100,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   listingContainer: {
-    marginTop: 14,
+    //marginTop: 14,
     marginLeft: 30,
     marginRight: 30,
     flexDirection: 'column',
