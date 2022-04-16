@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { StyleSheet, Text, SafeAreaView, View, ActivityIndicator, FlatList } from 'react-native';
 
-import { getValueFor } from "../utils/secureStore";
+import { getRequestHeaders } from '../utils/api';
 
 import colors from '../styles/colors';
 import textStyle from '../styles/text';
@@ -9,36 +9,53 @@ import textStyle from '../styles/text';
 import Listing from "../components/Listing";
 import BackButton from '../components/BackButton';
 
-export default function ReservationHistory({ navigation }) {
+export default function ReservationHistory({ navigation, route }) {
   const [isLoading, setLoading] = useState(true);
   const [isRefreshing, setRefreshing] = useState(false)
 
-  const [rooms, setData] = useState([]);
+  const [reservationHistory, setReservationHistory] = useState([])
 
-  // Fetch rooms displayed on the screen
+  // Fetch rooms for coresponding reservations 
+  // and create reservation object displayed on the screen
   const getRooms = async () => {
+    const requestHeaders = await getRequestHeaders();
+    const reservations = route.params.history;
     try {
-      const token = await getValueFor('bearer');
-      const userID = await getValueFor('_id');
-      const auth = ('Bearer ' + token).replace(/"/g, '');
-      const userIdParam = userID.replace(/"/g, '');
+      //setLoading(true)
+      let roomsIDs = reservations.map((res) => res.room_id);
+      roomsIDs = roomsIDs.map((id) => `id[]=${id}`);
+      const query = roomsIDs.join('&');
 
-      let requestHeaders = new Headers();
-      requestHeaders.append('Accept', 'application/json');
-      requestHeaders.append('Authorization', auth);
-      
-      const endpoint = `https://mtaa-backend.herokuapp.com/users/${userIdParam}/history`;
-
-      const response = await fetch(endpoint, {
+      const response = await fetch(`https://mtaa-backend.herokuapp.com/rooms?${query}`, {
         method: 'GET',
         headers: requestHeaders
       });
+      
+      let tmpRes = reservations.map(res => { 
+        const tmp = {};
+        const reserved_from = new Date(res.reserved_from);
+        const reserved_to = new Date(res.reserved_to);
+        tmp._id = res._id;
+        tmp.room_id = res.room_id;
+        tmp.date = reserved_from.toLocaleDateString();
+        tmp.from = reserved_from.toLocaleTimeString([], {timeStyle: 'short'});
+        tmp.until = reserved_to.toLocaleTimeString([], {timeStyle: 'short'});
+        return tmp;
+      });
 
       const rooms = await response.json();
-      setData(rooms);
+      rooms.forEach(room => {
+        tmpRes.forEach(res => {
+          if (res.room_id === room._id) {
+            res.room_name = room.name;
+            res.thumbnail_url = room.thumbnail_url;
+          }
+        })
+      });
+      setReservationHistory(tmpRes);
     } catch (error) {
-        console.error(error);
-        alert('Something went wrong');
+      console.error(error);
+      alert('Something went wrong');
     } finally {
       setLoading(false);
       setRefreshing(false);
@@ -54,17 +71,18 @@ export default function ReservationHistory({ navigation }) {
     getRooms();
   }, []);
 
-  const renderRooms = ({ item }) => (
+  const renderReservations = ({ item }) => (
     <Listing 
       style={styles.reservation}
-      roomName={item.name}
+      roomName={item.room_name}
       image={{uri: item.thumbnail_url}}
-      info={item.info}
-      numSeats={item.number_of_seats}
-      amenities={item.amenities.join(', ')} 
-      buttonTitle='View'
-      buttonAction={() => { 
-        navigation.navigate('Room', { _id: item._id, name: item.name })
+      text1={`Date: ${item.date}`}
+      text2={`From: ${item.from}`}
+      text3={`Until: ${item.until}`} 
+      buttonTitle='Book again'
+      buttonAction={() => console.log('Book again!')}
+      cardAction={() => { 
+        navigation.navigate('Room', { _id: item.room_id, name: item.name })
       }} 
     />
   );
@@ -77,10 +95,10 @@ export default function ReservationHistory({ navigation }) {
           <Text style={[textStyle.h1, styles.heading]}>Your reservation history</Text>
         </View>
       </View>
-      {isLoading || rooms == null ? <ActivityIndicator size='large' style={styles.activityIndicator} /> : (
+      {isLoading || reservationHistory == null ? <ActivityIndicator size='large' style={styles.activityIndicator} /> : (
         <FlatList
-          data={rooms}
-          renderItem={renderRooms}
+          data={reservationHistory}
+          renderItem={renderReservations}
           onRefresh={onRefresh}
           refreshing={isRefreshing}
           keyExtractor={item => item._id}
@@ -92,10 +110,10 @@ export default function ReservationHistory({ navigation }) {
 }
 
 const styles = StyleSheet.create({
-	container: {
-		flex: 1,
-		backgroundColor: colors.white
-	},
+  container: {
+    flex: 1,
+    backgroundColor: colors.white
+  },
   heading: {
     width: 330,
     marginRight: 30,
