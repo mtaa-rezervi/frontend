@@ -1,4 +1,4 @@
-import React, { Component, useState } from "react";
+import React, { useState } from "react";
 import {
   StyleSheet,
   View,
@@ -6,7 +6,8 @@ import {
   TextInput,
   TouchableOpacity,
   SafeAreaView,
-  Alert
+  Alert,
+  ActivityIndicator
 } from "react-native";
 
 import { useFonts } from 'expo-font';
@@ -21,6 +22,8 @@ import BackButton from "../components/BackButton";
 import userLogin from "../utils/userLogin";
 
 function RegisterScreen({ navigation }) {
+  const [isLoading, setLoading] = useState(false);
+
   const [firstName, setFirstName] = useState('')
   const [lastName, setLastName] = useState('')
   const [username, setUsername] = useState('')
@@ -45,7 +48,7 @@ function RegisterScreen({ navigation }) {
       });
       const json = await response.json();
       
-      if(response.status == 201){
+      if(response.status == 201) {
         console.log("account created");
         Alert.alert(
           'Success',
@@ -71,6 +74,8 @@ function RegisterScreen({ navigation }) {
 
     } catch (error) {
       console.error(error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -129,8 +134,12 @@ function RegisterScreen({ navigation }) {
       <StandardButton 
         style={styles.button}
         title='Register' 
-        action={() => sendRegistration(firstName, lastName, username, email, password)}
+        action={() => { setLoading(true); sendRegistration(firstName, lastName, username, email, password) }}
       />
+      { isLoading && 
+      <View style={styles.activityIndicator}>
+        <ActivityIndicator size='large' />
+      </View> }
     </SafeAreaView>
   );
 }
@@ -191,6 +200,19 @@ const styles = StyleSheet.create({
     backgroundColor: colors.blue,
     justifyContent: "center"
   },
+  activityIndicator: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    top: 0,
+    bottom: 0,
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: '100%',
+    height: '100%',
+    backgroundColor: colors.white,
+    opacity: 0.8
+  }
 });
 
 export default RegisterScreen;

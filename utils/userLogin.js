@@ -16,7 +16,7 @@ export default async function userLogin(user, pass, navigation){
       const json = await response.json();
       
       if(response.status == 200){
-        console.log(json.token, typeof json.token);
+        //console.log(json.token, typeof json.token);
 
         var storeTokenKey = 'bearer';
         var storeTokenValue = JSON.stringify(json.token);

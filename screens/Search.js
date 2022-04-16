@@ -1,5 +1,8 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { ActivityIndicator, StyleSheet, Text, SafeAreaView, View, ScrollView } from 'react-native';
+import { useIsFocused } from '@react-navigation/native';
+import { loadSecure } from '../utils/secureStore';
+import { getRequestHeaders } from '../utils/api';
 
 import colors from '../styles/colors';
 import textStyle from '../styles/text';
@@ -11,6 +14,8 @@ import Tag from '../components/Tag';
 import ProfileIcon from '../components/Profile';
 
 export default function SearchScreen({ navigation }) {
+  const isFocused = useIsFocused();
+  const [profilePicURL, setProfilePicURL] = useState({});
   const [roomName, setRoomName] = useState('');
   const [city, setCity] = useState('');
   const [street, setStreet] = useState('');
@@ -21,6 +26,22 @@ export default function SearchScreen({ navigation }) {
   const [seatsLTE, setSeatsLTE] = useState('');
 
   const [amenities, setAmenities] = useState([]);
+
+  // Fetch and set user's profile picture
+  const getProfilePic = async () => {
+		const userIdParam =  (await loadSecure()).userID;
+    const requestHeaders = await getRequestHeaders();
+
+		const response = await fetch(`https://mtaa-backend.herokuapp.com/users/${userIdParam}`, {
+      method: 'GET',
+      headers: requestHeaders
+		});
+
+		const user = await response.json();
+		let picURL = user.profile_pic ? { uri: user.profile_pic } : require('../assets/images/Avatar.png');
+  		
+		setProfilePicURL({ pic: picURL });
+	};
 
   // Generate search query
   const generateQuery = () => {
@@ -68,6 +89,10 @@ export default function SearchScreen({ navigation }) {
     return validated;
   };
 
+  useEffect(() => {
+		getProfilePic();
+	}, [isFocused]);
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
@@ -75,7 +100,7 @@ export default function SearchScreen({ navigation }) {
           <Text style={[styles.heading, textStyle.h1]}>Search</Text>
           <Text/>
         </View>
-        <ProfileIcon image={require('../assets/images/Avatar.png')} action={() => {navigation.navigate('Profile')}}/> 
+        <ProfileIcon image={profilePicURL.pic} action={() => {navigation.navigate('Profile')}}/> 
       </View>
       <ScrollView style={styles.scrollView}>
         {/* Room name */}
@@ -86,7 +111,7 @@ export default function SearchScreen({ navigation }) {
           onChangeText={text => setRoomName(text)}
         />
         {/* Address */}
-        <Text style={[styles.subheading, textStyle.h2]}>General information</Text>
+        <Text style={[styles.subheading, textStyle.h2]}>Address</Text>
         <Input style={{ marginBottom: 10, alignSelf: 'center' }}
           placeholder='City' 
           value={city}
@@ -133,7 +158,7 @@ export default function SearchScreen({ navigation }) {
         </View>
         {/* Number of seats */}
         <Text style={[styles.subheading, textStyle.h2]}>Number of seats</Text>
-        <View style={{ alignSelf: 'center' }}>
+        <View style={{ alignSelf: 'center', marginBottom: 5 }}>
           <View style={{ width: 330 ,flexDirection: 'row', alignItems: 'center', marginHorizontal: 30, justifyContent: 'space-evenly' }}>
             <Text style={[textStyle.small, { marginRight: 16 }]}>from</Text>
             <Input placeholder='Num' 
