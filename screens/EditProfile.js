@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { StyleSheet, Text, SafeAreaView, View, Alert } from 'react-native';
+import { ActivityIndicator, StyleSheet, Text, SafeAreaView, View, Alert } from 'react-native';
 import { launchImageLibraryAsync, MediaTypeOptions } from 'expo-image-picker';
 import { useIsFocused } from '@react-navigation/native';
 
@@ -15,7 +15,7 @@ import EditImageIcon from '../components/EditImageIcon';
 import StandardButton from '../components/StandardButton';
 
 export default function EditProfileScreen({ navigation }) {
-
+  const [isLoading, setLoading] = useState(false);
   const isFocused = useIsFocused();
 
   const [firstName, setFirstName] = useState('')
@@ -38,7 +38,6 @@ export default function EditProfileScreen({ navigation }) {
     });
 
     const user = await response.json();
-
     
     setFirstName(user.name.first_name);
     setLastName(user.name.last_name);
@@ -46,7 +45,7 @@ export default function EditProfileScreen({ navigation }) {
     setEmail(user.credentials.email);
     
     let picURL = user.profile_pic ? { uri: user.profile_pic } : require('../assets/images/Avatar.png');
-		setProfilePicURL({ pic: picURL });
+    setProfilePicURL({ pic: picURL });
   }
 
   const saveCredentials = async () => {
@@ -122,8 +121,9 @@ export default function EditProfileScreen({ navigation }) {
       }
     } catch (error) {
       console.error(error);
+    } finally {
+      setLoading(false);
     }
-
   }
 
   const pickImage = async () => {
@@ -146,13 +146,13 @@ export default function EditProfileScreen({ navigation }) {
       };
 
       setNewProfilePic(image);
-		  setProfilePicURL({ pic: { uri: uri } });
+      setProfilePicURL({ pic: { uri: uri } });
     }
   }
 
   useEffect(() => {
-		getCredentials();
-	}, [isFocused]);
+    getCredentials();
+  }, [isFocused]);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -226,18 +226,22 @@ export default function EditProfileScreen({ navigation }) {
       <View style={styles.saveButton}>
         <StandardButton
           title={'Save changes'}
-          action={() => saveCredentials()}
+          action={() => {  setLoading(true); saveCredentials() }}
         />
       </View>
+      { isLoading && 
+      <View style={styles.activityIndicator}>
+        <ActivityIndicator size='large' />
+      </View> }
     </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-	container: {
-		flex: 1,
-		backgroundColor: colors.white
-	},
+  container: {
+    flex: 1,
+    backgroundColor: colors.white
+  },
   heading: {
     marginLeft: 30
   },
@@ -258,5 +262,18 @@ const styles = StyleSheet.create({
   saveButton: {
     marginLeft: 30,
     marginTop: 60
+  },
+  activityIndicator: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    top: 0,
+    bottom: 0,
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: '100%',
+    height: '100%',
+    backgroundColor: colors.white,
+    opacity: 0.8
   }
 });
