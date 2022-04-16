@@ -11,9 +11,9 @@ import BackButton from '../components/BackButton';
 
 export default function ReservationHistory({ navigation, route }) {
   const [isLoading, setLoading] = useState(true);
-  const [isRefreshing, setRefreshing] = useState(false)
+  const [isRefreshing, setRefreshing] = useState(false);
 
-  const [reservationHistory, setReservationHistory] = useState([])
+  const [reservationHistory, setReservationHistory] = useState([]);
 
   // Fetch rooms for coresponding reservations 
   // and create reservation object displayed on the screen

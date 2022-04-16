@@ -26,6 +26,7 @@ import UserListing from './screens/UserListing';
 import ReservationHistory from './screens/ReservationHistory';
 import RoomCreation from './screens/RoomCreation';
 import SearchResults from './screens/SearchResults';
+import RoomAgenda from './screens/RoomAgenda';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -75,6 +76,7 @@ export default function App() {
         screenOptions={{
           headerShown: false
         }}>
+        <Stack.Screen name='RoomAgenda' component={RoomAgenda} />
         <Stack.Screen name='Login' component={LoginScreen} />
         <Stack.Screen name='Register' component={RegisterScreen} />
         <Stack.Screen name='TabNavigator' component={TabNavigator} />
