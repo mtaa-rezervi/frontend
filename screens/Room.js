@@ -3,7 +3,6 @@ import React, { useState, useEffect } from "react";
 import { ActivityIndicator, Image, StyleSheet, Text, SafeAreaView, View, TouchableOpacity, Button, TextInput, ScrollView} from 'react-native';
 
 import Carousel, { Pagination } from 'react-native-snap-carousel'
-import { getValueFor } from "../utils/secureStore";
 import { getRequestHeaders } from '../utils/api';
 
 import BackButton from '../components/BackButton';
@@ -11,7 +10,6 @@ import StandardButton from "../components/StandardButton";
 
 import textStyle from '../styles/text';
 import colors from '../styles/colors';
-import { ScrollView } from "react-native-gesture-handler";
 
 const SmallButton = ({ title, action }) => (
     <TouchableOpacity style={ styles.smallButton } onPress={action}>
