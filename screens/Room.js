@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { ActivityIndicator, Image, StyleSheet, Text, SafeAreaView, View, TouchableOpacity, Button } from 'react-native';
+
+import { ActivityIndicator, Image, StyleSheet, Text, SafeAreaView, View, TouchableOpacity, Button, TextInput, ScrollView} from 'react-native';
+
 import Carousel, { Pagination } from 'react-native-snap-carousel'
 import { getValueFor } from "../utils/secureStore";
 import { getRequestHeaders } from '../utils/api';
@@ -116,7 +118,11 @@ export default function RoomScreen({ navigation, route }) {
               }} 
             />
           </View>
-          <StandardButton style={styles.button} title={'Book this room '} action={() => console.log('booking') } />
+          <StandardButton
+            style={styles.button}
+            title={'Book this room '}
+            action={() => navigation.navigate('RoomBooking', { _id: room._id, name: room.name }) }
+          />
         </ScrollView>
       )}
     </SafeAreaView>

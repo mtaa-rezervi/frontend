@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { StyleSheet, Text, SafeAreaView, View, ActivityIndicator, FlatList } from 'react-native';
 import { loadSecure } from '../utils/secureStore';
 import { getRequestHeaders } from '../utils/api';
+import { useIsFocused } from '@react-navigation/native';
 
 import Notification from '../components/Notification';
 import ProfileIcon from '../components/Profile';
@@ -12,10 +13,12 @@ import textStyle from '../styles/text';
 
 // Screen
 export default function NotiScreen({ navigation }) {
+  const isFocused = useIsFocused();
   const [isLoading, setLoading] = useState(true);
   const [isRefreshing, setRefreshing] = useState(false)
 
   const [notis, setData] = useState([]);
+  const [profilePicURL, setProfilePicURL] = useState({});
 
   // Fetch user's notifications
   const getNotis = async () => {
@@ -39,6 +42,21 @@ export default function NotiScreen({ navigation }) {
     }
   }
 
+  const getProfilePic = async () => {
+		const userIdParam =  (await loadSecure()).userID;
+    const requestHeaders = await getRequestHeaders();
+
+		const response = await fetch(`https://mtaa-backend.herokuapp.com/users/${userIdParam}`, {
+		method: 'GET',
+		headers: requestHeaders
+		});
+
+		const user = await response.json();
+		let picURL = user.profile_pic ? { uri: user.profile_pic } : require('../assets/images/Avatar.png');
+  		
+		setProfilePicURL({ pic: picURL });
+	}
+
   const onRefresh = () => {
     setRefreshing(true);
     getNotis();
@@ -47,6 +65,10 @@ export default function NotiScreen({ navigation }) {
   useEffect(() => {
     getNotis();
   }, []);
+
+  useEffect(() => {
+    getProfilePic();
+  }, [isFocused]);
 
   const renderNotis = ({ item }) => (
     <Notification
@@ -65,7 +87,7 @@ export default function NotiScreen({ navigation }) {
           <Text style={[styles.heading, textStyle.h1]}>Notifications</Text>
           <Text/>
         </View>
-        <ProfileIcon image={require('../assets/images/Avatar.png')} action={() => {navigation.navigate('Profile')}}/> 
+        <ProfileIcon image={profilePicURL.pic} action={() => {navigation.navigate('Profile')}}/> 
       </View>
       <FlatList
         style={styles.noti}
