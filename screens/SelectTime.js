@@ -12,7 +12,7 @@ import StandardButton from "../components/StandardButton";
 
 const SmallButton = ({ title, action }) => (
     <TouchableOpacity style={ styles.smallButton } onPress={action}>
-    <Text style={[textStyle.small, { color: colors.white}]}>{ title || 'Button' }</Text>
+        <Text style={[textStyle.small, { color: colors.white}]}>{ title || 'Button' }</Text>
     </TouchableOpacity>
 );
 
@@ -62,7 +62,7 @@ export default function SelectTime({ navigation, route }) {
                             mode="date"
                             minimumDate={new Date()}
                             is24Hour={true}
-                            display={'inline'}
+                            display={isIOS ? 'inline' : 'default'}
                             style={{width: 330, alignSelf:'center'}}
                             onChange={(event, date) => {
                                 setDay(event, date)
@@ -91,7 +91,7 @@ export default function SelectTime({ navigation, route }) {
                                 mode="time"
                                 is24Hour={true}
                                 locale="en-UK"
-                                display={'spinner'}
+                                display={isIOS ? 'spinner' : 'default'}
                                 onChange={(event, date) => {
                                     setTimeFrom(event, date)
                                 }}
@@ -120,7 +120,7 @@ export default function SelectTime({ navigation, route }) {
                             mode="time"
                             is24Hour={true}
                             locale="en-UK"
-                            display={'spinner'}
+                            display={isIOS ? 'spinner' : 'default'}
                             onChange={setTimeUntil}
                         />)
                     }, [viewTimeUntil])}
