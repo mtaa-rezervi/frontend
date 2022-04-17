@@ -58,7 +58,7 @@ export default function SelectTime({ navigation, route }) {
                 {React.useMemo(() => {
                     return dayModalVisible && (
                         <DateTimePicker
-                            value={new Date()}
+                            value={new Date(selectedDate)}
                             mode="date"
                             minimumDate={new Date()}
                             is24Hour={true}
@@ -87,7 +87,7 @@ export default function SelectTime({ navigation, route }) {
                     {React.useMemo(() => {
                         return viewTimeFrom && (
                             <DateTimePicker
-                                value={new Date()}
+                                value={new Date(selectedTimeFrom)}
                                 mode="time"
                                 is24Hour={true}
                                 locale="en-UK"
@@ -116,7 +116,7 @@ export default function SelectTime({ navigation, route }) {
                     {React.useMemo(() => {
                     return viewTimeUntil && (
                         <DateTimePicker
-                            value={new Date()}
+                            value={new Date(selectedTimeUntil)}
                             mode="time"
                             is24Hour={true}
                             locale="en-UK"
@@ -140,19 +140,18 @@ export default function SelectTime({ navigation, route }) {
                         />
                     </View>
 
-                    <StandardButton style={{alignSelf:'center', marginTop: 50}} title={'Check current reservations'}
+                    <StandardButton style={{alignSelf:'center', marginTop: 50, marginBottom: 100}} title={'Check current reservations'}
                         action={() => navigation.navigate('RoomAgenda', { _id: route.params._id, name: route.params.name })} 
-                    />
-
-                    <StandardButton
-                        title={"Confirm"}
-                        action={()=> {
-                            console.log(selectedDate + " -- " + selectedTimeFrom + " -- " + selectedTimeUntil);
-                            navigation.navigate('RoomBooking', {_id: route.params._id, day: selectedDate, timeFrom: selectedTimeFrom, timeUntil: selectedTimeUntil})}}
-                        style={styles.confirmButton}
                     />
                 </View>
             </ScrollView>
+            <StandardButton
+                title={"Confirm"}
+                action={()=> {
+                    console.log(selectedDate + " -- " + selectedTimeFrom + " -- " + selectedTimeUntil);
+                    navigation.navigate('RoomBooking', {_id: route.params._id, day: selectedDate, timeFrom: selectedTimeFrom, timeUntil: selectedTimeUntil})}}
+                style={styles.confirmButton}
+            />
         </SafeAreaView>
     );
 }
@@ -203,6 +202,7 @@ const styles = StyleSheet.create({
         alignItems: 'center'
     },
     confirmButton: {
-        marginTop: 120
+        marginTop: 20,
+        alignSelf: 'center'
     }
 });
