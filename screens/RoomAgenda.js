@@ -42,12 +42,11 @@ export default function RoomAgenda({ navigation, route }) {
         headers: requestHeaders
       });
       const reservations = await response.json();
-
-      if (reservations.length === 0) {
+      const active = reservations.filter((reservation) => new Date(reservation.reserved_to) > new Date);
+      if (active.length === 0) {
         alert('There are no current reservations for this room');
         return;
       }
-      const active = reservations.filter((reservation) => new Date(reservation.reserved_to) > new Date);
       
       let items = [];
       let section = { title: null, data: [] };

@@ -80,10 +80,9 @@ export default function ReservationHistory({ navigation, route }) {
       text2={`From: ${item.from}`}
       text3={`Until: ${item.until}`} 
       buttonTitle='Book again'
-      buttonAction={() => console.log('Book again!')}
-      cardAction={() => { 
-        navigation.navigate('Room', { _id: item.room_id, name: item.name })
-      }} 
+      //buttonAction={() => console.log('Book again!')}
+      buttonAction={() => navigation.navigate('RoomBooking', { _id: item.room_id, name: item.name })}
+      cardAction={() => navigation.navigate('Room', { _id: item.room_id, name: item.name })} 
     />
   );
 

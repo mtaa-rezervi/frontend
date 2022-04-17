@@ -141,9 +141,7 @@ export default function SelectTime({ navigation, route }) {
                     </View>
 
                     <StandardButton style={{alignSelf:'center', marginTop: 50}} title={'Check current reservations'}
-                        action={() => {
-                            navigation.navigate('RoomAgenda', { _id: route.params._id, name: route.params.name }) 
-                          }} 
+                        action={() => navigation.navigate('RoomAgenda', { _id: route.params._id, name: route.params.name })} 
                     />
 
                     <StandardButton

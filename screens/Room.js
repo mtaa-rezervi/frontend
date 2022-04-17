@@ -111,9 +111,7 @@ export default function RoomScreen({ navigation, route }) {
               }} 
             /> */}
             <StandardButton style={[styles.button, { marginBottom: 10 }]} title={'Check current reservations'} 
-              action={() => {
-                navigation.navigate('RoomAgenda', { _id: room._id, name: room.name }) 
-              }} 
+              action={() => navigation.navigate('RoomAgenda', { _id: room._id, name: room.name })} 
             />
           </View>
           <StandardButton
