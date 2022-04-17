@@ -1,18 +1,19 @@
 import React, { useState, useEffect } from 'react'
-import { StyleSheet, Text, SafeAreaView, View, FlatList, ActivityIndicator } from 'react-native';
+import { StyleSheet, Text, SafeAreaView, View, FlatList, ActivityIndicator, Image } from 'react-native';
 import { getRequestHeaders } from '../utils/api';
 
 import BackButton from '../components/BackButton';
 import Listing from '../components/Listing';
+import EmptyList from '../components/EmptyList';
 
 import textStyle from '../styles/text';
 import colors from '../styles/colors';
 
 export default function SearchResults({ navigation, route }) {
   const [isRefreshing, setRefreshing] = useState(false);
-  const [isLoading, setLoading] = useState(false);
+  const [isLoading, setLoading] = useState(true);
 
-  const [rooms, setData] = useState([]);
+  const [data, setData] = useState([]);
 
   // Fetch rooms displayed on the screen
   const getRooms = async () => {
@@ -26,6 +27,7 @@ export default function SearchResults({ navigation, route }) {
 
       const rooms = await response.json();
       setData(rooms);
+      if (rooms.length === 0) alert('No matching rooms found');
     } catch (error) {
       console.error(error);
       alert('Something went wrong');
@@ -69,14 +71,15 @@ export default function SearchResults({ navigation, route }) {
         <Text style={[textStyle.h1, styles.heading]}>Search results</Text>
       </View>
       <FlatList
-        data={rooms}
+        data={data}
         renderItem={renderRooms}
         onRefresh={onRefresh}
         refreshing={isRefreshing}
         keyExtractor={item => item._id}
         contentContainerStyle={styles.listingContainer}
+        ListEmptyComponent={ !isLoading && <EmptyList/> } 
       />
-      { isLoading && 
+      { isLoading && data.length === 0 && 
       <View style={styles.activityIndicator}>
         <ActivityIndicator size='large' />
       </View> }

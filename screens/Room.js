@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { ActivityIndicator, Image, StyleSheet, Text, SafeAreaView, View, TouchableOpacity, TextInput } from 'react-native';
+import { ActivityIndicator, Image, StyleSheet, Text, SafeAreaView, View, TouchableOpacity, Button } from 'react-native';
 import Carousel, { Pagination } from 'react-native-snap-carousel'
 import { getValueFor } from "../utils/secureStore";
 import { getRequestHeaders } from '../utils/api';
@@ -9,13 +9,13 @@ import StandardButton from "../components/StandardButton";
 
 import textStyle from '../styles/text';
 import colors from '../styles/colors';
+import { ScrollView } from "react-native-gesture-handler";
 
-const SmallButton = ({ title, action }) => {
-  return (
+const SmallButton = ({ title, action }) => (
     <TouchableOpacity style={ styles.smallButton } onPress={action}>
       <Text style={[textStyle.small, { color: colors.white}]}>{ title || 'Button' }</Text>
     </TouchableOpacity>
-)};
+);
 
 const ImageCarousel = ({ data }) => {
   const [index, setIndex] = React.useState(0)
@@ -50,35 +50,7 @@ const ImageCarousel = ({ data }) => {
       />
     </View>
   );
-}
-
-// TODO: - Check when is the room available 
-//       - Needs to be changed in the backend aswel
-/*
-const checkVacancy = async (id, token) => {
-  //const endpoint = 'https://mtaa-backend.herokuapp.com/rooms';
-  const endpoint = 'http://192.168.1.194:3000/rooms';
-
-  let requestHeaders = new Headers();
-  requestHeaders.append('Accept', 'application/json');
-
-  let auth = ('Bearer ' + token).replace(/"/g, '');
-  requestHeaders.append('Authorization', auth);
-
-  const today = new Date()
-  let dateFrom;
-  let dateTo;
-  if (today.getHours() + 1 >= 20) {
-    dateFrom = new Date(today.getFullYear(), today.getMonth(), today.getUTCDate()+1, 8).toISOString()
-    dateTo = new Date(today.getFullYear(), today.getMonth(), today.getUTCDate()+1, 9).toISOString()
-  } else {
-    dateFrom = new Date(today.getFullYear(), today.getMonth(), today.getUTCDate(), today.getHours()+1).toISOString()
-    //dateTo = new Date(today.getFullYear(), today.getMonth(), today.getUTCDate()).toISOString()
-  }
-  const query = endpoint+`?vacant_from=${dateFrom}&vacant_to=${dateTo}`
-  console.log(query)
 };
-*/
 
 export default function RoomScreen({ navigation, route }) {
   const [isLoading, setLoading] = useState(true);
@@ -105,7 +77,7 @@ export default function RoomScreen({ navigation, route }) {
     } finally {
       setLoading(false);
     }
-  }
+  };
 
   useEffect(() => {
     getRoom();
@@ -114,7 +86,7 @@ export default function RoomScreen({ navigation, route }) {
   return (
     <SafeAreaView style={styles.container}>
       {isLoading || room == null ? <ActivityIndicator size='large' style={styles.activityIndicator} /> : (
-        <>
+        <ScrollView>
           <BackButton action={() => navigation.goBack()}/>
           <Text style={[textStyle.h1, styles.header]}>{room.name}</Text>
           <ImageCarousel data={room.image_urls} />
@@ -133,10 +105,19 @@ export default function RoomScreen({ navigation, route }) {
           </View>
           <View style={styles.available}>
             <Text style={[styles.heading, textStyle.h2]}>Available time</Text>
-            <Text style={[styles.text, textStyle.small]}>Available today from 10:00</Text>
+            {/* <Button style={styles.button} title={'Check current reservations'} 
+              onPress={() => {
+                navigation.navigate('RoomAgenda', { _id: room._id, name: room.name }) 
+              }} 
+            /> */}
+            <StandardButton style={[styles.button, { marginBottom: 10 }]} title={'Check current reservations'} 
+              action={() => {
+                navigation.navigate('RoomAgenda', { _id: room._id, name: room.name }) 
+              }} 
+            />
           </View>
           <StandardButton style={styles.button} title={'Book this room '} action={() => console.log('booking') } />
-        </>
+        </ScrollView>
       )}
     </SafeAreaView>
   );
@@ -212,12 +193,12 @@ const styles = StyleSheet.create({
     marginRight: 30, 
     marginLeft: 30,
     marginTop: 17,
-    marginBottom: 30,
+    marginBottom: 20,
   },
   button: {
     marginLeft: 30,
     marginRight: 30,
-    marginBottom: 60,
+    marginTop: 5,
     alignSelf: 'center'
   },
   activityIndicator: {

@@ -26,6 +26,7 @@ import UserListing from './screens/UserListing';
 import ReservationHistory from './screens/ReservationHistory';
 import RoomCreation from './screens/RoomCreation';
 import SearchResults from './screens/SearchResults';
+import RoomAgenda from './screens/RoomAgenda';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -80,11 +81,12 @@ export default function App() {
         <Stack.Screen name='TabNavigator' component={TabNavigator} />
         <Stack.Screen name='Room' component={RoomScreen} />
         <Stack.Screen name='Profile' component={ProfileScreen} />
-        <Stack.Screen name='EditProfile' component={EditProfileScreen}/>
-        <Stack.Screen name='ReservationHistory' component={ReservationHistory}/>
-        <Stack.Screen name='UserListing' component={UserListing}/>
-        <Stack.Screen name='RoomCreation' component={RoomCreation}/>
-        <Stack.Screen name='SearchResults' component={SearchResults}/>
+        <Stack.Screen name='EditProfile' component={EditProfileScreen} />
+        <Stack.Screen name='ReservationHistory' component={ReservationHistory} />
+        <Stack.Screen name='UserListing' component={UserListing} />
+        <Stack.Screen name='RoomCreation' component={RoomCreation} />
+        <Stack.Screen name='SearchResults' component={SearchResults} />
+        <Stack.Screen name='RoomAgenda' component={RoomAgenda} />
       </Stack.Navigator>
     </NavigationContainer>
   );

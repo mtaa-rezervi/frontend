@@ -87,8 +87,8 @@ export default function ProfileScreen({ navigation }) {
         tmp._id = res._id;
         tmp.room_id = res.room_id;
         tmp.date = reserved_from.toLocaleDateString();
-        tmp.from = reserved_from.toLocaleTimeString([], {timeStyle: 'short'});
-        tmp.until = reserved_to.toLocaleTimeString([], {timeStyle: 'short'});
+        tmp.from = reserved_from.toLocaleTimeString([], { timeStyle: 'short' });
+        tmp.until = reserved_to.toLocaleTimeString([], { timeStyle: 'short' });
         return tmp;
       });
 
