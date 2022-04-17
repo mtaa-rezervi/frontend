@@ -1,4 +1,4 @@
-import { StyleSheet, SafeAreaView, View, Text, TouchableOpacity} from "react-native";
+import { StyleSheet, SafeAreaView, View, Text, TouchableOpacity, Platform, Button, ScrollView } from "react-native";
 import BackButton from "../components/BackButton";
 import React, { useState } from 'react';
 
@@ -10,16 +10,15 @@ import textStyle from "../styles/text";
 import colors from "../styles/colors";
 import StandardButton from "../components/StandardButton";
 
-export default function SelectTime({ navigation, route }) {
-    
-    const SmallButton = ({ title, action }) => {
-        return (
-          <TouchableOpacity style={ styles.smallButton } onPress={action}>
-            <Text style={[textStyle.small, { color: colors.white}]}>{ title || 'Button' }</Text>
-          </TouchableOpacity>
-        )
-    };
-    
+const SmallButton = ({ title, action }) => (
+    <TouchableOpacity style={ styles.smallButton } onPress={action}>
+    <Text style={[textStyle.small, { color: colors.white}]}>{ title || 'Button' }</Text>
+    </TouchableOpacity>
+);
+
+export default function SelectTime({ navigation, route }) {    
+    const isIOS = Platform.OS === 'ios' ? true : false;
+
     const [selectedDate, setSelectedDate] = useState(new Date().toISOString());
     const [selectedTimeFrom, setSelectedTimeFrom] = useState(new Date().toISOString());
     const [selectedTimeUntil, setSelectedTimeUntil] = useState(new Date().toISOString());
@@ -31,123 +30,151 @@ export default function SelectTime({ navigation, route }) {
     const setDay = (event, date) => {
         var day = Moment(date).format();
         setSelectedDate(day);
-        setDayModalVisible(false);
+        if (!isIOS) setDayModalVisible(false);
     };
 
     const setTimeFrom = (event, date) => {
         var timeFrom = Moment(date).format();
         setSelectedTimeFrom(timeFrom);
-        setViewTimeFrom(false);
+        if (!isIOS) setViewTimeFrom(false);
     };
 
     const setTimeUntil = (event, date) => {
         var timeUntil = Moment(date).format();
         setSelectedTimeUntil(timeUntil);
-        setViewTimeUntil(false);
+        if (!isIOS) setViewTimeUntil(false);
     };
 
     return(
         <SafeAreaView>
-            <BackButton action={() => navigation.goBack()}/>
-			<View style={styles.container}>
-				<Text style={[textStyle.h1, styles.header]}>Select time</Text>
+            <View style={styles.header}>
+                <BackButton action={() => navigation.goBack()}/>
+                <Text style={[textStyle.h1, styles.heading]}>Select time</Text>
             </View>
+            <ScrollView>
+                { isIOS && dayModalVisible && (
+                    <Button color={colors.green} title='Confirm date' onPress={() => setDayModalVisible(false)} /> 
+                )}
+                {React.useMemo(() => {
+                    return dayModalVisible && (
+                        <DateTimePicker
+                            value={new Date()}
+                            mode="date"
+                            minimumDate={new Date()}
+                            is24Hour={true}
+                            display={'inline'}
+                            style={{width: 330, alignSelf:'center'}}
+                            onChange={(event, date) => {
+                                setDay(event, date)
+                            }}
+                    />)
+                }, [dayModalVisible])}
 
-            {React.useMemo(() => {
-                return dayModalVisible && (
-                    <DateTimePicker
-                        value={new Date()}
-                        mode="date"
-                        minimumDate={new Date()}
-                        is24Hour={true}
-                        onChange={(event, date) => {
-                            setDay(event, date)
-                        }}
-                />)
-            }, [dayModalVisible])}            
-
-            {React.useMemo(() => {
-                return viewTimeFrom && (
-                    <DateTimePicker
-                        value={new Date()}
-                        mode="time"
-                        is24Hour={true}
-                        onChange={(event, date) => {
-                            setTimeFrom(event, date)
-                        }}
-                />)
-            }, [viewTimeFrom])}
-            
-            
-            {React.useMemo(() => {
-                return viewTimeUntil && (
-                    <DateTimePicker
-                        value={new Date()}
-                        mode="time"
-                        is24Hour={true}
-                        onChange={setTimeUntil}
-                />)
-            }, [viewTimeUntil])}
-
-            
-            <View style={styles.container}>
-                <View style={styles.dateRow}>
-                    <View>
-                        <Text style={textStyle.h2}>Date</Text>
-                        <Text style={[textStyle.h3, styles.date]}>{Moment(selectedDate).format('DD.MM.YYYY')}</Text>
+                <View style={styles.container}>
+                    <View style={styles.dateRow}>
+                        <View>
+                            <Text style={textStyle.h2}>Date</Text>
+                            <Text style={[textStyle.h3, styles.date]}>{Moment(selectedDate).format('DD.MM.YYYY')}</Text>
+                        </View>
+                        <SmallButton
+                            title={"Change date"}
+                            action={() => setDayModalVisible(true)}
+                        />
                     </View>
-                    <SmallButton
-                        title={"Change date"}
-                        action={() => setDayModalVisible(true)}
+
+                    <Text style={[textStyle.h2, styles.timeTitle]}>Time</Text>
+
+                    {React.useMemo(() => {
+                        return viewTimeFrom && (
+                            <DateTimePicker
+                                value={new Date()}
+                                mode="time"
+                                is24Hour={true}
+                                locale="en-UK"
+                                display={'spinner'}
+                                onChange={(event, date) => {
+                                    setTimeFrom(event, date)
+                                }}
+                            />)
+                        }, [viewTimeFrom])}
+                    
+                    { isIOS && viewTimeFrom && (
+                        <Button color={colors.green} title='Confirm time' onPress={() => setViewTimeFrom(false)} /> 
+                    )}
+
+                    <View style={styles.timeRow}>
+                        <View>
+                            <Text style={[textStyle.h3, styles.times]}>From</Text>
+                            <Text style={[textStyle.h3, styles.date]}>{Moment(selectedTimeFrom).format('HH:mm')}</Text>
+                        </View>
+                        <SmallButton
+                            title={"Change time from"}
+                            action={() => setViewTimeFrom(true)}
+                        />
+                    </View>
+
+                    {React.useMemo(() => {
+                    return viewTimeUntil && (
+                        <DateTimePicker
+                            value={new Date()}
+                            mode="time"
+                            is24Hour={true}
+                            locale="en-UK"
+                            display={'spinner'}
+                            onChange={setTimeUntil}
+                        />)
+                    }, [viewTimeUntil])}
+
+                    { isIOS && viewTimeUntil && (
+                        <Button color={colors.green} title='Confirm time' onPress={() => setViewTimeUntil(false)} /> 
+                    )}
+
+                    <View style={styles.timeRow}>
+                        <View>
+                            <Text style={[textStyle.h3, styles.times]}>Until</Text>
+                            <Text style={[textStyle.h3, styles.date]}>{Moment(selectedTimeUntil).format('HH:mm')}</Text>
+                        </View>
+                        <SmallButton
+                            title={"Change time until"}
+                            action={() => setViewTimeUntil(true)}
+                        />
+                    </View>
+
+                    <StandardButton style={{alignSelf:'center', marginTop: 50}} title={'Check current reservations'}
+                        action={() => {
+                            navigation.navigate('RoomAgenda', { _id: route.params._id, name: route.params.name }) 
+                          }} 
+                    />
+
+                    <StandardButton
+                        title={"Confirm"}
+                        action={()=> {
+                            console.log(selectedDate + " -- " + selectedTimeFrom + " -- " + selectedTimeUntil);
+                            navigation.navigate('RoomBooking', {_id: route.params._id, day: selectedDate, timeFrom: selectedTimeFrom, timeUntil: selectedTimeUntil})}}
+                        style={styles.confirmButton}
                     />
                 </View>
-
-                <Text style={[textStyle.h2, styles.timeTitle]}>Time</Text>
-
-
-                <View style={styles.timeRow}>
-                    <View>
-                        <Text style={[textStyle.h3, styles.times]}>From</Text>
-                        <Text style={[textStyle.h3, styles.date]}>{Moment(selectedTimeFrom).format('HH:mm')}</Text>
-                    </View>
-                    <SmallButton
-                        title={"Change time from"}
-                        action={() => setViewTimeFrom(true)}
-                    />
-                </View>
-
-                <View style={styles.timeRow}>
-                    <View>
-                        <Text style={[textStyle.h3, styles.times]}>Until</Text>
-                        <Text style={[textStyle.h3, styles.date]}>{Moment(selectedTimeUntil).format('HH:mm')}</Text>
-                    </View>
-                    <SmallButton
-                        title={"Change time until"}
-                        action={() => setViewTimeUntil(true)}
-                    />
-                </View>
-
-                <StandardButton
-                    title={"Confirm"}
-                    action={()=> {
-                        console.log(selectedDate + " -- " + selectedTimeFrom + " -- " + selectedTimeUntil);
-                        navigation.navigate('RoomBooking', {_id: route.params._id, day: selectedDate, timeFrom: selectedTimeFrom, timeUntil: selectedTimeUntil})}}
-                    style={styles.confirmButton}
-                />
-
-            </View>
-
-            
-
+            </ScrollView>
         </SafeAreaView>
     );
 }
 
 const styles = StyleSheet.create({
-	container: {
-		marginLeft: 30,
-		width: 330,
-	},
+    container: {
+        //marginLeft: 30,
+        width: 330,
+        alignSelf: 'center'
+    },
+    header: {
+        marginBottom: 30
+    },
+    heading: {
+        marginRight: 30,
+        marginLeft: 30,
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+    },
     smallButton: {
         width: 200,
         marginTop: 5,
@@ -168,15 +195,16 @@ const styles = StyleSheet.create({
     },
     dateRow: {
         flexDirection: 'row',
-        marginTop: 40,
+        //marginTop: 40,
         justifyContent: 'space-between'
     },
     timeRow: {
         flexDirection: 'row',
         marginTop: 10,
-        justifyContent: 'space-between'
+        justifyContent: 'space-between',
+        alignItems: 'center'
     },
     confirmButton: {
-        marginTop: 220
+        marginTop: 120
     }
 });

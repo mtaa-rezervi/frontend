@@ -118,8 +118,8 @@ export default function RoomScreen({ navigation, route }) {
           </View>
           <StandardButton
             style={styles.button}
-            title={'Book this room '}
-            action={() => navigation.navigate('RoomBooking', { _id: room._id, name: room.name }) }
+            title={'Book this room'}
+            action={() => navigation.navigate('RoomBooking', { _id: room._id, name: room.name })}
           />
         </ScrollView>
       )}
