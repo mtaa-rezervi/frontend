@@ -4,16 +4,10 @@ import { getRequestHeaders } from '../utils/api';
 
 import BackButton from '../components/BackButton';
 import Listing from '../components/Listing';
+import EmptyList from '../components/EmptyList';
 
 import textStyle from '../styles/text';
 import colors from '../styles/colors';
-
-// Placeholder for empty list
-const EmptyList = () => (
-    <View style={{flexDirection: 'column', justifyContent:'center', alignItems: 'center' }}>
-      <Image style={{width: 300, height: 300, marginTop: 100}} source={require('../assets/images/empty.png')}/>
-    </View>
-);
 
 export default function SearchResults({ navigation, route }) {
   const [isRefreshing, setRefreshing] = useState(false);

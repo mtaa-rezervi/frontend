@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react'
-import { Image, SectionList, StyleSheet, Text, SafeAreaView, View, ActivityIndicator } from 'react-native';
+import { SectionList, StyleSheet, Text, SafeAreaView, View, ActivityIndicator } from 'react-native';
 import { getRequestHeaders } from '../utils/api';
 
 import BackButton from '../components/BackButton';
+import EmptyList from '../components/EmptyList';
 
 import colors from '../styles/colors';
 import textStyle from '../styles/text';
@@ -24,13 +25,6 @@ const DaySection = ({ day }) => (
       <Text style={[textStyle.h2, { marginLeft: 20 }]}>{ day }</Text>
     </View>
   </View>
-);
-
-// Placeholder for empty list
-const EmptyList = () => (
-    <View style={{flexDirection: 'column', justifyContent:'center', alignItems: 'center' }}>
-      <Image style={{width: 300, height: 300, marginTop: 100}} source={require('../assets/images/empty.png')}/>
-    </View>
 );
 
 export default function RoomAgenda({ navigation, route }) {
@@ -71,7 +65,7 @@ export default function RoomAgenda({ navigation, route }) {
         section.data.push(timeslot);
       });
       items.push(section)
-      
+
       if (items.length === 0) alert('There are no current reservations for this room');
       setActiveReservations(items);
     } catch (error) {
