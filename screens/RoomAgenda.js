@@ -1,46 +1,95 @@
 import React, { useState, useEffect } from 'react'
-import { Alert, SectionList, StyleSheet, Text, SafeAreaView, View, TouchableOpacity, FlatList, ActivityIndicator } from 'react-native';
+import { Image, SectionList, StyleSheet, Text, SafeAreaView, View, ActivityIndicator } from 'react-native';
+import { getRequestHeaders } from '../utils/api';
 
 import BackButton from '../components/BackButton';
 
 import colors from '../styles/colors';
 import textStyle from '../styles/text';
 
-const DATA = [
-  {
-    title: 'April 22',
-    data: [{ from: '10:00', until: '11:00' }, { from: '13:00', until: '15:00' }]
-  },
-  {
-    title: 'April 23',
-    data: [{ from: '10:00', until: '12:00' }]
-  }
-];
-
+// Reservation item
 const Reservation = ({ from, until }) => (
-  <View style={{alignSelf: 'center', marginBottom: 14}}>
+  <View style={{ alignSelf: 'center', marginBottom: 14 }}>
     <View style={styles.reservation}>
-      <Text style={[textStyle.smaller, {marginLeft: 20}]}>From: { from } </Text>
-      <Text style={[textStyle.smaller, {marginLeft: 20}]}>Until: { until } </Text>
+      <Text style={[textStyle.smaller, { marginLeft: 20 }]}>From: { from } </Text>
+      <Text style={[textStyle.smaller, { marginLeft: 20 }]}>Until: { until } </Text>
     </View>
   </View>
 );
 
+// Section item
 const DaySection = ({ day }) => (
-  <View style={{alignSelf: 'center', marginBottom: 14}}>
+  <View style={{ alignSelf: 'center', marginBottom: 14 }}>
     <View style={styles.daySection}>
-      <Text style={[textStyle.h2, {marginLeft: 20}]}>{ day }</Text>
+      <Text style={[textStyle.h2, { marginLeft: 20 }]}>{ day }</Text>
     </View>
   </View>
 );
 
-export default function RoomAgenda({ navigation }) {
+// Placeholder for empty list
+const EmptyList = () => (
+    <View style={{flexDirection: 'column', justifyContent:'center', alignItems: 'center' }}>
+      <Image style={{width: 300, height: 300, marginTop: 100}} source={require('../assets/images/empty.png')}/>
+    </View>
+);
+
+export default function RoomAgenda({ navigation, route }) {
   const [isLoading, setLoading] = useState(true);
   const [isRefreshing, setRefreshing] = useState(false);
 
+  const [activeReservations, setActiveReservations] = useState([]);
+
+  // Fetch reservations and filter out the active ones
+  const getReservations =  async () => {
+    const requestHeaders = await getRequestHeaders();
+    try {
+      const response = await fetch(`https://mtaa-backend.herokuapp.com/reservations?room_id=${route.params._id}`, {
+        method: 'GET',
+        headers: requestHeaders
+      });
+      const reservations = await response.json();
+
+      if (reservations.length === 0) {
+        alert('There are no current reservations for this room');
+        return;
+      }
+      const active = reservations.filter((reservation) => new Date(reservation.reserved_to) > new Date);
+      
+      let items = [];
+      let section = { title: null, data: [] };
+
+      active.forEach(reservation => {
+        let currentSection = new Date(reservation.reserved_to).toLocaleDateString(['en'], { month: 'long', day: 'numeric' });
+        let timeslot = {
+          from: new Date(reservation.reserved_from).toLocaleTimeString([], { timeStyle: 'short' }),
+          until: new Date(reservation.reserved_to).toLocaleTimeString([], { timeStyle: 'short' })
+        };
+        if (currentSection !== section.title) {
+          if (section.title !== null) items.push(section);
+          section = { title: currentSection, data: [] };
+        }
+        section.data.push(timeslot);
+      });
+      items.push(section)
+      
+      if (items.length === 0) alert('There are no current reservations for this room');
+      setActiveReservations(items);
+    } catch (error) {
+      console.error(error);
+      alert('Something went wrong');
+    } finally {
+      setLoading(false);
+      setRefreshing(false);
+    }
+  };
+
+  useEffect(() => {
+    getReservations();
+  }, []);
+
   const onRefresh = () => {
     setRefreshing(true);
-    //getRooms();
+    getReservations();
   };
 
   const renderReservations = ( { item }) => (
@@ -55,18 +104,22 @@ export default function RoomAgenda({ navigation }) {
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
         <BackButton action={() => navigation.goBack()}/>
-        <Text style={[textStyle.h1, styles.heading]}>Room 1 timetable</Text>
+        <Text style={[textStyle.h1, styles.heading]}>{route.params.name}</Text>
+        <Text style={[textStyle.h2, styles.heading, {color: colors.grey}]}>Reservations</Text>
       </View>
-      {/* <DaySection day='April 22' />
-      <Reservation from='10:00' until='11:00' /> */}
       <SectionList
-        sections={DATA}
+        sections={activeReservations}
         keyExtractor={(item, index) => item + index}
-        //onRefresh={onRefresh}
-        //refreshing={isRefreshing}
+        onRefresh={onRefresh}
+        refreshing={isRefreshing}
         renderItem={renderReservations}
         renderSectionHeader={renderSectionHeader}
+        ListEmptyComponent={ !isLoading && <EmptyList/> } 
       />
+      { isLoading && 
+        <View style={styles.activityIndicator}>
+          <ActivityIndicator size='large' />
+        </View> }
     </SafeAreaView>
   );
 }
@@ -77,6 +130,9 @@ const styles = StyleSheet.create({
     backgroundColor: colors.white,
   },
   header: {
+    borderBottomColor: colors.lightGrey,
+    borderBottomWidth: 1,
+    paddingBottom: 5,
     marginBottom: 10
   },
   heading: {
@@ -109,6 +165,19 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 4, height: 4 },
     shadowOpacity: 0.1,
     shadowRadius: 3,  
-    elevation: 3,
+    elevation: 3
+  },
+  activityIndicator: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    top: 0,
+    bottom: 0,
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: '100%',
+    height: '100%',
+    backgroundColor: colors.white,
+    opacity: 0.8
   }
 });

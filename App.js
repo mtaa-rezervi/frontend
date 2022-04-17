@@ -76,17 +76,17 @@ export default function App() {
         screenOptions={{
           headerShown: false
         }}>
-        <Stack.Screen name='RoomAgenda' component={RoomAgenda} />
         <Stack.Screen name='Login' component={LoginScreen} />
         <Stack.Screen name='Register' component={RegisterScreen} />
         <Stack.Screen name='TabNavigator' component={TabNavigator} />
         <Stack.Screen name='Room' component={RoomScreen} />
         <Stack.Screen name='Profile' component={ProfileScreen} />
-        <Stack.Screen name='EditProfile' component={EditProfileScreen}/>
-        <Stack.Screen name='ReservationHistory' component={ReservationHistory}/>
-        <Stack.Screen name='UserListing' component={UserListing}/>
-        <Stack.Screen name='RoomCreation' component={RoomCreation}/>
-        <Stack.Screen name='SearchResults' component={SearchResults}/>
+        <Stack.Screen name='EditProfile' component={EditProfileScreen} />
+        <Stack.Screen name='ReservationHistory' component={ReservationHistory} />
+        <Stack.Screen name='UserListing' component={UserListing} />
+        <Stack.Screen name='RoomCreation' component={RoomCreation} />
+        <Stack.Screen name='SearchResults' component={SearchResults} />
+        <Stack.Screen name='RoomAgenda' component={RoomAgenda} />
       </Stack.Navigator>
     </NavigationContainer>
   );
