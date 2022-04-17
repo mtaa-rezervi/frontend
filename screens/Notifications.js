@@ -6,6 +6,7 @@ import { useIsFocused } from '@react-navigation/native';
 
 import Notification from '../components/Notification';
 import ProfileIcon from '../components/Profile';
+import EmptyList from '../components/EmptyList';
 
 import colors from '../styles/colors';
 import textStyle from '../styles/text';
@@ -88,17 +89,20 @@ export default function NotiScreen({ navigation }) {
         </View>
         <ProfileIcon image={profilePicURL.pic} action={() => {navigation.navigate('Profile')}}/> 
       </View>
-      {isLoading || notis == null ? <ActivityIndicator size='large' style={styles.activityIndicator} /> : (
-        <FlatList
-          style={styles.noti}
-          data={notis}
-          renderItem={renderNotis}
-          onRefresh={onRefresh}
-          refreshing={isRefreshing}
-          keyExtractor={(item, index) => index}
-          contentContainerStyle={styles.notiContainer}
-        />
-      )}
+      <FlatList
+        style={styles.noti}
+        data={notis}
+        renderItem={renderNotis}
+        onRefresh={onRefresh}
+        refreshing={isRefreshing}
+        keyExtractor={(item, index) => index}
+        contentContainerStyle={styles.notiContainer}
+        ListEmptyComponent={ !isLoading && <EmptyList/>}
+      />
+      { isLoading && 
+        <View style={styles.activityIndicator}>
+          <ActivityIndicator size='large' />
+        </View> }
     </SafeAreaView>
   );
 }
@@ -131,6 +135,16 @@ const styles = StyleSheet.create({
     paddingBottom: 11
   },
   activityIndicator: {
-    flex: 1
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    top: 0,
+    bottom: 0,
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: '100%',
+    height: '100%',
+    backgroundColor: colors.white,
+    opacity: 0.8
   }
 });

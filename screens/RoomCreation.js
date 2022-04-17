@@ -231,7 +231,7 @@ export default function RoomCreation({ navigation }) {
         <Text style={[styles.subheading, textStyle.h2]}>Amenities</Text>
         <View style={styles.tagContainer}>
           <Tag style={styles.tag} title='projector' 
-            action={() => selectAmenity('protocol')} 
+            action={() => selectAmenity('projector')} 
           />
           <Tag style={styles.tag} title='whiteboard' 
             action={() => selectAmenity('whiteboard')}
@@ -370,6 +370,6 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
     backgroundColor: colors.white,
-    opacity: 0.7
+    opacity: 0.8
   }
 });

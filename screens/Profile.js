@@ -19,7 +19,8 @@ export default function ProfileScreen({ navigation }) {
   const [isRefreshing, setRefreshing] = useState(false)
   
   const [userName, setUserName] = useState({});
-  const [activeReservation, setActiveReservations] = useState([])
+  const [activeReservations, setActiveReservations] = useState([])
+  const [reservationHistory, setReservationHistory] = useState([])
 
   const isFocused = useIsFocused();
 
@@ -86,8 +87,8 @@ export default function ProfileScreen({ navigation }) {
         tmp._id = res._id;
         tmp.room_id = res.room_id;
         tmp.date = reserved_from.toLocaleDateString();
-        tmp.from = reserved_from.toLocaleTimeString([], {timeStyle: 'short'});
-        tmp.until = reserved_to.toLocaleTimeString([], {timeStyle: 'short'});
+        tmp.from = reserved_from.toLocaleTimeString([], { timeStyle: 'short' });
+        tmp.until = reserved_to.toLocaleTimeString([], { timeStyle: 'short' });
         return tmp;
       });
 
@@ -100,7 +101,6 @@ export default function ProfileScreen({ navigation }) {
           }
         })
       });
-
       setActiveReservations(tmpRes);
     } catch (error) {
       console.error(error);
@@ -122,8 +122,14 @@ export default function ProfileScreen({ navigation }) {
       });
 
       const responseJson = await response.json();
-      const activeReservations = responseJson.active_reservations;
-      if (activeReservations) getRooms(activeReservations, requestHeaders);
+      const reservations = responseJson.active_reservations;
+      
+      let active = [];
+      let history = [];
+      reservations.forEach((reservation) => (new Date(reservation.reserved_to) > new Date() ? active : history).push(reservation));
+      setReservationHistory(history);
+      if (reservations) getRooms(active, requestHeaders);
+
     } catch (error) {
       console.error(error);
       alert('Something went wrong');
@@ -179,7 +185,7 @@ export default function ProfileScreen({ navigation }) {
 
   return (
     <SafeAreaView style={styles.container}>
-      { isLoading || userName === {} && activeReservation.size() == 0 ? <ActivityIndicator size='large' style={styles.activityIndicator} /> : (
+      { isLoading || userName === {} && activeReservations.size() == 0 ? <ActivityIndicator size='large' style={styles.activityIndicator} /> : (
         <>
           <View style={styles.profileButtonsContainer}>
             <TouchableOpacity
@@ -202,7 +208,7 @@ export default function ProfileScreen({ navigation }) {
             />
             <ProfileButton
               title={"Reservation history"}
-              action={() => navigation.navigate('ReservationHistory')}
+              action={() => navigation.navigate('ReservationHistory', { history: reservationHistory })}
             />
             <ProfileButton
               title={"Your listings"}
@@ -211,7 +217,7 @@ export default function ProfileScreen({ navigation }) {
           </View>
           <Text style={[styles.activeReservationsHeading, textStyle.h2]}>Your active reservations:</Text>
           <FlatList
-            data={activeReservation}
+            data={activeReservations}
             renderItem={renderReservations}
             onRefresh={onRefresh}
             refreshing={isRefreshing}

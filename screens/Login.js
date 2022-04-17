@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { StyleSheet, SafeAreaView, View, Text, Image } from "react-native";
+import { ActivityIndicator, StyleSheet, SafeAreaView, View, Text, Image } from "react-native";
 import { saveKeyValue } from "../utils/secureStore";
 import { useFonts } from 'expo-font';
 import AppLoading from 'expo-app-loading';
@@ -11,10 +11,10 @@ import colors from '../styles/colors';
 import userLogin from "../utils/userLogin";
 
 export default function LoginScreen({ navigation }) {
-
-    const [username, setUsername] = useState('')
-    const [password, setPassword] = useState('')
-
+    const [isLoading, setLoading] = useState(false);
+    
+    const [username, setUsername] = useState('');
+    const [password, setPassword] = useState('');
     
     let [fontsLoaded] = useFonts({
         'roboto-bold': require('../assets/fonts/Roboto-Bold.ttf'),
@@ -52,7 +52,16 @@ export default function LoginScreen({ navigation }) {
         <StandardButton 
           style={styles.loginButton}
           title='Login' 
-          action={() => userLogin(username, password, navigation)}
+          action={ async () => {
+            setLoading(true);
+            try {
+              await userLogin(username, password, navigation);
+            } catch (error) {
+              alert('Something went wrong');
+            } finally {
+              setLoading(false);
+            }
+          }}
         />
     </SafeAreaView>
   );

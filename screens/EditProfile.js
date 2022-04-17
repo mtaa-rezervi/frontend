@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { StyleSheet, Text, SafeAreaView, View, Alert } from 'react-native';
+import { ActivityIndicator, StyleSheet, Text, SafeAreaView, View, Alert } from 'react-native';
 import { launchImageLibraryAsync, MediaTypeOptions } from 'expo-image-picker';
 import { useIsFocused } from '@react-navigation/native';
 
@@ -15,7 +15,7 @@ import EditImageIcon from '../components/EditImageIcon';
 import StandardButton from '../components/StandardButton';
 
 export default function EditProfileScreen({ navigation }) {
-
+  const [isLoading, setLoading] = useState(false);
   const isFocused = useIsFocused();
 
   const [firstName, setFirstName] = useState('')
@@ -38,7 +38,6 @@ export default function EditProfileScreen({ navigation }) {
     });
 
     const user = await response.json();
-
     
     setFirstName(user.name.first_name);
     setLastName(user.name.last_name);
@@ -46,7 +45,7 @@ export default function EditProfileScreen({ navigation }) {
     setEmail(user.credentials.email);
     
     let picURL = user.profile_pic ? { uri: user.profile_pic } : require('../assets/images/Avatar.png');
-		setProfilePicURL({ pic: picURL });
+    setProfilePicURL({ pic: picURL });
   }
 
   const saveCredentials = async () => {
@@ -122,8 +121,9 @@ export default function EditProfileScreen({ navigation }) {
       }
     } catch (error) {
       console.error(error);
+    } finally {
+      setLoading(false);
     }
-
   }
 
   const pickImage = async () => {
@@ -146,13 +146,13 @@ export default function EditProfileScreen({ navigation }) {
       };
 
       setNewProfilePic(image);
-		  setProfilePicURL({ pic: { uri: uri } });
+      setProfilePicURL({ pic: { uri: uri } });
     }
   }
 
   useEffect(() => {
-		getCredentials();
-	}, [isFocused]);
+    getCredentials();
+  }, [isFocused]);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -172,72 +172,57 @@ export default function EditProfileScreen({ navigation }) {
       </View>
 
       <View style={styles.inputsContainer}>
-        <View>
-          <Input
-              placeholder="First name"
-              value={firstName}
-              onChangeText={text => setFirstName(text)}
-              />
-        </View>
-
-        <View>
-          <Input
-              placeholder="Last name"
-              value={lastName}
-              onChangeText={text => setLastName(text)}
-              />
-        </View>
-
-        <View>
-          <Input
-              placeholder="Username"
-              value={userName}
-              onChangeText={text => setUserName(text)}
-              />
-        </View>
-
-        <View>
-          <Input
-              placeholder="Email"
-              value={email}
-              onChangeText={text => setEmail(text)}
-              />
-        </View>
-
-        <View>
-          <Input
-              placeholder="New password"
-              value={password}
-              onChangeText={text => setPassword(text)}
-              secureTextEntry={true}
-              />
-        </View>
-
-        <View>
-          <Input
-              placeholder="Confirm password"
-              value={confirmPassword}
-              onChangeText={text => setConfirmPassword(text)}
-              secureTextEntry={true}
-              />
-        </View>
+        <Input
+            placeholder="First name"
+            value={firstName}
+            onChangeText={text => setFirstName(text)}
+            />
+        <Input
+            placeholder="Last name"
+            value={lastName}
+            onChangeText={text => setLastName(text)}
+            />
+        <Input
+            placeholder="Username"
+            value={userName}
+            onChangeText={text => setUserName(text)}
+            />
+        <Input
+            placeholder="Email"
+            value={email}
+            onChangeText={text => setEmail(text)}
+          />
+        <Input
+            placeholder="New password"
+            value={password}
+            onChangeText={text => setPassword(text)}
+            secureTextEntry={true}
+            />
+        <Input
+            placeholder="Confirm password"
+            value={confirmPassword}
+            onChangeText={text => setConfirmPassword(text)}
+            secureTextEntry={true}
+            />
       </View>
-
-      <View style={styles.saveButton}>
-        <StandardButton
-          title={'Save changes'}
-          action={() => saveCredentials()}
-        />
-      </View>
+      <StandardButton
+        style={styles.saveButton}
+        title={'Save changes'}
+        action={() => {  setLoading(true); saveCredentials() }}
+      />
+      { isLoading && 
+      <View style={styles.activityIndicator}>
+        <ActivityIndicator size='large' />
+      </View> }
     </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-	container: {
-		flex: 1,
-		backgroundColor: colors.white
-	},
+  container: {
+    flex: 1,
+    backgroundColor: colors.white
+  },
   heading: {
     marginLeft: 30
   },
@@ -248,15 +233,31 @@ const styles = StyleSheet.create({
     //alignItems: 'center'
   },
   inputsContainer:{
-    marginLeft: 30,
+    //marginLeft: 30,
     justifyContent: 'space-evenly',
-    height: 370,
+    height: 388,
+    flexDirection: 'column',
+    alignItems: 'center'
   },
   iconView: {
     marginTop: 50
   },
   saveButton: {
-    marginLeft: 30,
+    //marginLeft: 30,
+    alignSelf: 'center',
     marginTop: 60
+  },
+  activityIndicator: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    top: 0,
+    bottom: 0,
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: '100%',
+    height: '100%',
+    backgroundColor: colors.white,
+    opacity: 0.8
   }
 });
