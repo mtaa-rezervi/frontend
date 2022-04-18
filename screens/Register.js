@@ -21,7 +21,7 @@ import StandardButton from "../components/StandardButton";
 import BackButton from "../components/BackButton";
 import userLogin from "../utils/userLogin";
 
-function RegisterScreen({ navigation }) {
+export default function RegisterScreen({ navigation }) {
   const [isLoading, setLoading] = useState(false);
 
   const [firstName, setFirstName] = useState('')
@@ -215,4 +215,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default RegisterScreen;
+//export default RegisterScreen;

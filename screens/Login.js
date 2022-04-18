@@ -63,6 +63,10 @@ export default function LoginScreen({ navigation }) {
             }
           }}
         />
+      { isLoading && 
+      <View style={styles.activityIndicator}>
+        <ActivityIndicator size='large' />
+      </View> }
     </SafeAreaView>
   );
 }
@@ -119,5 +123,18 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     marginTop: 70,
     marginLeft: 40
+  },
+  activityIndicator: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    top: 0,
+    bottom: 0,
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: '100%',
+    height: '100%',
+    backgroundColor: colors.white,
+    opacity: 0.8
   }
 });
