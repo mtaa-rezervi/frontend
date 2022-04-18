@@ -1,25 +1,13 @@
 import React, { useState } from "react";
-import {
-  StyleSheet,
-  View,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  SafeAreaView,
-  Alert,
-  ActivityIndicator
-} from "react-native";
+import { StyleSheet, View, Text, SafeAreaView, Alert, ActivityIndicator } from "react-native";
 
-import { useFonts } from 'expo-font';
-import AppLoading from 'expo-app-loading';
+import colors from '../../styles/colors';
+import textStyle from "../../styles/text";
 
-import colors from '../styles/colors';
-import textStyle from "../styles/text";
-
-import Input from "../components/Input";
-import StandardButton from "../components/buttons/StandardButton";
-import BackButton from "../components/buttons/BackButton";
-import userLogin from "../utils/userLogin";
+import Input from "../../components/Input";
+import StandardButton from "../../components/buttons/StandardButton";
+import BackButton from "../../components/buttons/BackButton";
+import userLogin from "../../utils/userLogin";
 
 export default function RegisterScreen({ navigation }) {
   const [isLoading, setLoading] = useState(false);
@@ -78,15 +66,6 @@ export default function RegisterScreen({ navigation }) {
       setLoading(false);
     }
   };
-
-  let [fontsLoaded] = useFonts({
-    'roboto-bold': require('../assets/fonts/Roboto-Bold.ttf'),
-    'roboto-regular': require('../assets/fonts/Roboto-Regular.ttf'),
-  });
-  
-  if (!fontsLoaded) {
-    return <AppLoading />;
-  }
 
   return (
     <SafeAreaView style={styles.container}>

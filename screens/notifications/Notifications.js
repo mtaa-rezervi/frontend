@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from 'react'
 import { StyleSheet, Text, SafeAreaView, View, ActivityIndicator, FlatList } from 'react-native';
-import { loadSecure } from '../utils/secureStore';
-import { getRequestHeaders } from '../utils/api';
+import { loadSecure } from '../../utils/secureStore';
+import { getRequestHeaders } from '../../utils/api';
 import { useIsFocused } from '@react-navigation/native';
 
-import Notification from '../components/cards/Notification';
-import ProfileIcon from '../components/buttons/Profile';
-import EmptyList from '../components/cards/EmptyList';
+import Notification from '../../components/cards/Notification';
+import ProfileIcon from '../../components/buttons/Profile';
+import EmptyList from '../../components/cards/EmptyList';
 
-import colors from '../styles/colors';
-import textStyle from '../styles/text';
+import colors from '../../styles/colors';
+import textStyle from '../../styles/text';
 
 // Screen
 export default function NotiScreen({ navigation }) {
@@ -52,7 +52,7 @@ export default function NotiScreen({ navigation }) {
 		});
 
 		const user = await response.json();
-		let picURL = user.profile_pic ? { uri: user.profile_pic } : require('../assets/images/Avatar.png');
+		let picURL = user.profile_pic ? { uri: user.profile_pic } : require('../../assets/images/Avatar.png');
   		
 		setProfilePicURL({ pic: picURL });
 	}

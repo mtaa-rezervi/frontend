@@ -3,16 +3,16 @@ import { ActivityIndicator, StyleSheet, Text, SafeAreaView, View, Alert } from '
 import { launchImageLibraryAsync, MediaTypeOptions } from 'expo-image-picker';
 import { useIsFocused } from '@react-navigation/native';
 
-import { getRequestHeaders } from '../utils/api';
-import { loadSecure } from '../utils/secureStore';
+import { getRequestHeaders } from '../../utils/api';
+import { loadSecure } from '../../utils/secureStore';
 
-import colors from '../styles/colors';
-import textStyle from '../styles/text';
+import colors from '../../styles/colors';
+import textStyle from '../../styles/text';
 
-import BackButton from '../components/buttons/BackButton';
-import Input from '../components/Input';
-import EditImageIcon from '../components/buttons/EditImageIcon';
-import StandardButton from '../components/buttons/StandardButton';
+import BackButton from '../../components/buttons/BackButton';
+import Input from '../../components/Input';
+import EditImageIcon from '../../components/buttons/EditImageIcon';
+import StandardButton from '../../components/buttons/StandardButton';
 
 export default function EditProfileScreen({ navigation }) {
   const [isLoading, setLoading] = useState(false);
@@ -44,7 +44,7 @@ export default function EditProfileScreen({ navigation }) {
     setUserName(user.credentials.username);
     setEmail(user.credentials.email);
     
-    let picURL = user.profile_pic ? { uri: user.profile_pic } : require('../assets/images/Avatar.png');
+    let picURL = user.profile_pic ? { uri: user.profile_pic } : require('../../assets/images/Avatar.png');
     setProfilePicURL({ pic: picURL });
   }
 

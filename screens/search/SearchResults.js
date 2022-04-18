@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react'
 import { StyleSheet, Text, SafeAreaView, View, FlatList, ActivityIndicator, Image } from 'react-native';
-import { getRequestHeaders } from '../utils/api';
+import { getRequestHeaders } from '../../utils/api';
 
-import BackButton from '../components/buttons/BackButton';
-import Listing from '../components/cards/Listing';
-import EmptyList from '../components/cards/EmptyList';
+import BackButton from '../../components/buttons/BackButton';
+import Listing from '../../components/cards/Listing';
+import EmptyList from '../../components/cards/EmptyList';
 
-import textStyle from '../styles/text';
-import colors from '../styles/colors';
+import textStyle from '../../styles/text';
+import colors from '../../styles/colors';
 
 export default function SearchResults({ navigation, route }) {
   const [isRefreshing, setRefreshing] = useState(false);

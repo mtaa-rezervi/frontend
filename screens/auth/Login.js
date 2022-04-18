@@ -1,34 +1,24 @@
 import React, { useState } from "react";
 import { ActivityIndicator, StyleSheet, SafeAreaView, View, Text, Image } from "react-native";
-import { saveKeyValue } from "../utils/secureStore";
-import { useFonts } from 'expo-font';
-import AppLoading from 'expo-app-loading';
 
-import Input from "../components/Input";
-import StandardButton from "../components/buttons/StandardButton";
+import Input from "../../components/Input";
+import StandardButton from "../../components/buttons/StandardButton";
 
-import colors from '../styles/colors';
-import userLogin from "../utils/userLogin";
+import colors from '../../styles/colors';
+import userLogin from "../../utils/userLogin";
 
 export default function LoginScreen({ navigation }) {
     const [isLoading, setLoading] = useState(false);
     
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
-    
-    let [fontsLoaded] = useFonts({
-        'roboto-bold': require('../assets/fonts/Roboto-Bold.ttf'),
-        'roboto-regular': require('../assets/fonts/Roboto-Regular.ttf'),
-    });
-
-    if (!fontsLoaded) return <AppLoading />;
 
     return (
     <SafeAreaView style={styles.container}>      
       <Text style={styles.title}>Welcome to Rezervi</Text>
       <Text style={styles.subtitle}>workspace reservation app</Text>
       <Image
-        source={require("../assets/images/Meeting.png")}
+        source={require("../../assets/images/Meeting.png")}
         resizeMode="contain"
         style={styles.image}
       />

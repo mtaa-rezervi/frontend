@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react'
 import { StyleSheet, Text, SafeAreaView, View, ActivityIndicator, FlatList } from 'react-native';
 
-import { getRequestHeaders } from '../utils/api';
+import { getRequestHeaders } from '../../utils/api';
 
-import colors from '../styles/colors';
-import textStyle from '../styles/text';
+import colors from '../../styles/colors';
+import textStyle from '../../styles/text';
 
-import Listing from "../components/cards/Listing";
-import BackButton from '../components/buttons/BackButton';
+import Listing from "../../components/cards/Listing";
+import BackButton from '../../components/buttons/BackButton';
 
 export default function ReservationHistory({ navigation, route }) {
   const [isLoading, setLoading] = useState(true);

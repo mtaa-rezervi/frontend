@@ -11,21 +11,21 @@ import { Ionicons } from '@expo/vector-icons';
 
 import colors from './styles/colors';
 
-import LoginScreen from './screens/Login';
-import RegisterScreen from './screens/Register';
+import LoginScreen from './screens/auth/Login';
+import RegisterScreen from './screens/auth/Register';
 import HomeScreen from './screens/Home';
-import SearchScreen from './screens/Search';
-import NotiScreen from './screens/Notifications';
-import ProfileScreen from './screens/Profile';
-import RoomScreen from './screens/Room';
-import EditProfileScreen from './screens/EditProfile';
-import UserListing from './screens/UserListing';
-import ReservationHistory from './screens/ReservationHistory';
-import RoomCreation from './screens/RoomCreation';
-import RoomBooking from './screens/RoomBooking';
-import SelectTime from './screens/SelectTime';
-import SearchResults from './screens/SearchResults';
-import RoomAgenda from './screens/RoomAgenda';
+import SearchScreen from './screens/search/Search';
+import NotiScreen from './screens/notifications/Notifications';
+import ProfileScreen from './screens/profile/Profile';
+import RoomScreen from './screens/room/Room';
+import EditProfileScreen from './screens/profile/EditProfile';
+import UserListing from './screens/profile/UserListing';
+import ReservationHistory from './screens/profile/ReservationHistory';
+import RoomCreation from './screens/profile/RoomCreation';
+import RoomBooking from './screens/room/RoomBooking';
+import SelectTime from './screens/room/SelectTime';
+import SearchResults from './screens/search/SearchResults';
+import RoomAgenda from './screens/room/RoomAgenda';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();

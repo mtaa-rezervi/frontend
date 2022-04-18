@@ -3,13 +3,13 @@ import React, { useState, useEffect } from "react";
 import { ActivityIndicator, Image, StyleSheet, Text, SafeAreaView, View, TouchableOpacity, Button, TextInput, ScrollView} from 'react-native';
 
 import Carousel, { Pagination } from 'react-native-snap-carousel'
-import { getRequestHeaders } from '../utils/api';
+import { getRequestHeaders } from '../../utils/api';
 
-import BackButton from '../components/buttons/BackButton';
-import StandardButton from "../components/buttons/StandardButton";
+import BackButton from '../../components/buttons/BackButton';
+import StandardButton from "../../components/buttons/StandardButton";
 
-import textStyle from '../styles/text';
-import colors from '../styles/colors';
+import textStyle from '../../styles/text';
+import colors from '../../styles/colors';
 
 const SmallButton = ({ title, action }) => (
     <TouchableOpacity style={ styles.smallButton } onPress={action}>

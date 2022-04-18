@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react'
 import { SectionList, StyleSheet, Text, SafeAreaView, View, ActivityIndicator } from 'react-native';
-import { getRequestHeaders } from '../utils/api';
+import { getRequestHeaders } from '../../utils/api';
 
-import BackButton from '../components/buttons/BackButton';
-import EmptyList from '../components/cards/EmptyList';
+import BackButton from '../../components/buttons/BackButton';
+import EmptyList from '../../components/cards/EmptyList';
 
-import colors from '../styles/colors';
-import textStyle from '../styles/text';
+import colors from '../../styles/colors';
+import textStyle from '../../styles/text';
 
 // Reservation item
 const Reservation = ({ from, until }) => (

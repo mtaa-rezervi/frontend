@@ -1,17 +1,17 @@
 import React, { useState, useEffect } from 'react'
 import { Alert, StyleSheet, Text, SafeAreaView, View, TouchableOpacity, FlatList, ActivityIndicator } from 'react-native';
 import { Entypo } from '@expo/vector-icons';
-import { loadSecure } from '../utils/secureStore';
-import { getRequestHeaders } from '../utils/api';
+import { loadSecure } from '../../utils/secureStore';
+import { getRequestHeaders } from '../../utils/api';
 
-import colors from '../styles/colors';
-import textStyle from '../styles/text';
+import colors from '../../styles/colors';
+import textStyle from '../../styles/text';
 
-import ProfileButton from '../components/buttons/ProfileButton';
-import ProfileIcon from '../components/buttons/Profile';
+import ProfileButton from '../../components/buttons/ProfileButton';
+import ProfileIcon from '../../components/buttons/Profile';
 import { useIsFocused } from '@react-navigation/native';
 
-import Listing from '../components/cards/Listing';
+import Listing from '../../components/cards/Listing';
 
 // Screen
 export default function ProfileScreen({ navigation }) {
@@ -55,7 +55,7 @@ export default function ProfileScreen({ navigation }) {
         last: user.name.last_name
       });
       
-      let picURL = user.profile_pic ? { uri: user.profile_pic } : require('../assets/images/Avatar.png');
+      let picURL = user.profile_pic ? { uri: user.profile_pic } : require('../../assets/images/Avatar.png');
       setProfilePicURL({ pic: picURL });
       
     } catch (error) {

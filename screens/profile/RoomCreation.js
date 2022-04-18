@@ -1,17 +1,17 @@
 import React, { useState } from 'react';
 import { TouchableOpacity, Alert, ActivityIndicator, ScrollView, FlatList, StyleSheet, SafeAreaView, View, Text, Button, Image, Platform } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
-import { loadSecure } from '../utils/secureStore';
-import { getRequestHeaders } from '../utils/api';
+import { loadSecure } from '../../utils/secureStore';
+import { getRequestHeaders } from '../../utils/api';
 import { Feather } from '@expo/vector-icons'; 
 
-import colors from '../styles/colors';
-import textStyle from '../styles/text';
+import colors from '../../styles/colors';
+import textStyle from '../../styles/text';
 
-import BackButton from '../components/buttons/BackButton';
-import StandardButton from '../components/buttons/StandardButton';
-import Input from '../components/Input';
-import Tag from '../components/buttons/Tag';
+import BackButton from '../../components/buttons/BackButton';
+import StandardButton from '../../components/buttons/StandardButton';
+import Input from '../../components/Input';
+import Tag from '../../components/buttons/Tag';
 
 // Ask for camera permissions
 const cameraPermissions = async () => {

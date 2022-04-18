@@ -1,16 +1,16 @@
 import React, { useState, useEffect } from 'react'
 import { ActivityIndicator, StyleSheet, Text, SafeAreaView, View, ScrollView } from 'react-native';
 import { useIsFocused } from '@react-navigation/native';
-import { loadSecure } from '../utils/secureStore';
-import { getRequestHeaders } from '../utils/api';
+import { loadSecure } from '../../utils/secureStore';
+import { getRequestHeaders } from '../../utils/api';
 
-import colors from '../styles/colors';
-import textStyle from '../styles/text';
+import colors from '../../styles/colors';
+import textStyle from '../../styles/text';
 
-import StandardButton from '../components/buttons/StandardButton';
-import Input from '../components/Input';
-import Tag from '../components/buttons/Tag';
-import ProfileIcon from '../components/buttons/Profile';
+import StandardButton from '../../components/buttons/StandardButton';
+import Input from '../../components/Input';
+import Tag from '../../components/buttons/Tag';
+import ProfileIcon from '../../components/buttons/Profile';
 
 export default function SearchScreen({ navigation }) {
   const isFocused = useIsFocused();
@@ -37,7 +37,7 @@ export default function SearchScreen({ navigation }) {
     });
 
     const user = await response.json();
-    let picURL = user.profile_pic ? { uri: user.profile_pic } : require('../assets/images/Avatar.png');
+    let picURL = user.profile_pic ? { uri: user.profile_pic } : require('../../assets/images/Avatar.png');
       
     setProfilePicURL({ pic: picURL });
   };
