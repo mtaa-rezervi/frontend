@@ -1,7 +1,7 @@
 import { StyleSheet, TouchableOpacity, View } from 'react-native';
 import { Feather } from '@expo/vector-icons'; 
 
-import colors from '../styles/colors';
+import colors from '../../styles/colors';
 
 export default function BackButton({ action, style }) {
   return (

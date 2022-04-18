@@ -7,8 +7,8 @@ import { loadSecure } from "../utils/secureStore";
 import colors from '../styles/colors';
 import textStyle from "../styles/text";
 
-import ProfileIcon from "../components/Profile";
-import Listing from "../components/Listing";
+import ProfileIcon from "../components/buttons/Profile";
+import Listing from "../components/cards/Listing";
 import { useIsFocused } from "@react-navigation/native";
 
 // Screen

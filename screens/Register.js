@@ -17,8 +17,8 @@ import colors from '../styles/colors';
 import textStyle from "../styles/text";
 
 import Input from "../components/Input";
-import StandardButton from "../components/StandardButton";
-import BackButton from "../components/BackButton";
+import StandardButton from "../components/buttons/StandardButton";
+import BackButton from "../components/buttons/BackButton";
 import userLogin from "../utils/userLogin";
 
 export default function RegisterScreen({ navigation }) {

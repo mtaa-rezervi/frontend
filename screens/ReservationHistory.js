@@ -6,8 +6,8 @@ import { getRequestHeaders } from '../utils/api';
 import colors from '../styles/colors';
 import textStyle from '../styles/text';
 
-import Listing from "../components/Listing";
-import BackButton from '../components/BackButton';
+import Listing from "../components/cards/Listing";
+import BackButton from '../components/buttons/BackButton';
 
 export default function ReservationHistory({ navigation, route }) {
   const [isLoading, setLoading] = useState(true);

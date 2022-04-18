@@ -8,10 +8,10 @@ import { Feather } from '@expo/vector-icons';
 import colors from '../styles/colors';
 import textStyle from '../styles/text';
 
-import BackButton from '../components/BackButton';
-import StandardButton from '../components/StandardButton';
+import BackButton from '../components/buttons/BackButton';
+import StandardButton from '../components/buttons/StandardButton';
 import Input from '../components/Input';
-import Tag from '../components/Tag';
+import Tag from '../components/buttons/Tag';
 
 // Ask for camera permissions
 const cameraPermissions = async () => {

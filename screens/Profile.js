@@ -7,11 +7,11 @@ import { getRequestHeaders } from '../utils/api';
 import colors from '../styles/colors';
 import textStyle from '../styles/text';
 
-import ProfileButton from '../components/ProfileButton';
-import ProfileIcon from '../components/Profile';
+import ProfileButton from '../components/buttons/ProfileButton';
+import ProfileIcon from '../components/buttons/Profile';
 import { useIsFocused } from '@react-navigation/native';
 
-import Listing from '../components/Listing';
+import Listing from '../components/cards/Listing';
 
 // Screen
 export default function ProfileScreen({ navigation }) {

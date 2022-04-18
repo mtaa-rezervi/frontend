@@ -9,10 +9,10 @@ import { loadSecure } from '../utils/secureStore';
 import colors from '../styles/colors';
 import textStyle from '../styles/text';
 
-import BackButton from '../components/BackButton';
+import BackButton from '../components/buttons/BackButton';
 import Input from '../components/Input';
-import EditImageIcon from '../components/EditImageIcon';
-import StandardButton from '../components/StandardButton';
+import EditImageIcon from '../components/buttons/EditImageIcon';
+import StandardButton from '../components/buttons/StandardButton';
 
 export default function EditProfileScreen({ navigation }) {
   const [isLoading, setLoading] = useState(false);

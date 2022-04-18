@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react'
 import { SectionList, StyleSheet, Text, SafeAreaView, View, ActivityIndicator } from 'react-native';
 import { getRequestHeaders } from '../utils/api';
 
-import BackButton from '../components/BackButton';
-import EmptyList from '../components/EmptyList';
+import BackButton from '../components/buttons/BackButton';
+import EmptyList from '../components/cards/EmptyList';
 
 import colors from '../styles/colors';
 import textStyle from '../styles/text';

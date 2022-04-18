@@ -7,9 +7,9 @@ import { getRequestHeaders } from '../utils/api';
 import colors from '../styles/colors';
 import textStyle from '../styles/text';
 
-import Listing from "../components/Listing";
-import BackButton from '../components/BackButton';
-import ProfileButton from '../components/ProfileButton';
+import Listing from "../components/cards/Listing";
+import BackButton from '../components/buttons/BackButton';
+import ProfileButton from '../components/buttons/ProfileButton';
 
 export default function UserListing({ navigation }) {
   const [isLoading, setLoading] = useState(true);

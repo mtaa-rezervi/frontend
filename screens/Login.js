@@ -5,7 +5,7 @@ import { useFonts } from 'expo-font';
 import AppLoading from 'expo-app-loading';
 
 import Input from "../components/Input";
-import StandardButton from "../components/StandardButton";
+import StandardButton from "../components/buttons/StandardButton";
 
 import colors from '../styles/colors';
 import userLogin from "../utils/userLogin";

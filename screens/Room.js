@@ -5,8 +5,8 @@ import { ActivityIndicator, Image, StyleSheet, Text, SafeAreaView, View, Touchab
 import Carousel, { Pagination } from 'react-native-snap-carousel'
 import { getRequestHeaders } from '../utils/api';
 
-import BackButton from '../components/BackButton';
-import StandardButton from "../components/StandardButton";
+import BackButton from '../components/buttons/BackButton';
+import StandardButton from "../components/buttons/StandardButton";
 
 import textStyle from '../styles/text';
 import colors from '../styles/colors';

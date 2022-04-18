@@ -4,8 +4,8 @@ import { useIsFocused } from '@react-navigation/native';
 import Moment from 'moment';
 
 import Input from '../components/Input';
-import StandardButton from '../components/StandardButton';
-import BackButton from '../components/BackButton';
+import StandardButton from '../components/buttons/StandardButton';
+import BackButton from '../components/buttons/BackButton';
 
 import textStyle from '../styles/text';
 import colors from '../styles/colors';

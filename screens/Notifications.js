@@ -4,9 +4,9 @@ import { loadSecure } from '../utils/secureStore';
 import { getRequestHeaders } from '../utils/api';
 import { useIsFocused } from '@react-navigation/native';
 
-import Notification from '../components/Notification';
-import ProfileIcon from '../components/Profile';
-import EmptyList from '../components/EmptyList';
+import Notification from '../components/cards/Notification';
+import ProfileIcon from '../components/buttons/Profile';
+import EmptyList from '../components/cards/EmptyList';
 
 import colors from '../styles/colors';
 import textStyle from '../styles/text';

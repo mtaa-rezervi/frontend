@@ -7,11 +7,10 @@ import { getRequestHeaders } from '../utils/api';
 import colors from '../styles/colors';
 import textStyle from '../styles/text';
 
-import BackButton from '../components/BackButton';
-import StandardButton from '../components/StandardButton';
+import StandardButton from '../components/buttons/StandardButton';
 import Input from '../components/Input';
-import Tag from '../components/Tag';
-import ProfileIcon from '../components/Profile';
+import Tag from '../components/buttons/Tag';
+import ProfileIcon from '../components/buttons/Profile';
 
 export default function SearchScreen({ navigation }) {
   const isFocused = useIsFocused();

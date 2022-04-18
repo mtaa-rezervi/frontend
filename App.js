@@ -1,5 +1,4 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet } from 'react-native';
 import { useFonts } from 'expo-font';
 import AppLoading from 'expo-app-loading';
 import { NavigationContainer } from '@react-navigation/native';
@@ -11,8 +10,6 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { Ionicons } from '@expo/vector-icons'; 
 
 import colors from './styles/colors';
-import textStyle from './styles/text';
-import ComponentsExample from './screens/ComponentsExample';
 
 import LoginScreen from './screens/Login';
 import RegisterScreen from './screens/Register';

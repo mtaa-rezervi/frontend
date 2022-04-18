@@ -1,8 +1,8 @@
 import { StyleSheet, Text, View } from 'react-native';
 import moment from 'moment';
 
-import colors from '../styles/colors';
-import textStyle from '../styles/text';
+import colors from '../../styles/colors';
+import textStyle from '../../styles/text';
 
 export default function Notification({ type, time, text, action, style }) {
   let component;

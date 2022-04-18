@@ -1,5 +1,5 @@
 import { StyleSheet, SafeAreaView, View, Text, TouchableOpacity, Platform, Button, ScrollView } from "react-native";
-import BackButton from "../components/BackButton";
+import BackButton from "../components/buttons/BackButton";
 import React, { useState } from 'react';
 
 import Moment from "moment";
@@ -8,7 +8,7 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 
 import textStyle from "../styles/text";
 import colors from "../styles/colors";
-import StandardButton from "../components/StandardButton";
+import StandardButton from "../components/buttons/StandardButton";
 
 const SmallButton = ({ title, action }) => (
     <TouchableOpacity style={ styles.smallButton } onPress={action}>
