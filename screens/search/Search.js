@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { StyleSheet, Text, SafeAreaView, View, ScrollView } from 'react-native';
 import { useIsFocused } from '@react-navigation/native';
 import { getProfilePic } from '../../utils/api';
+import Moment from 'moment';
 
 import colors from '../../styles/colors';
 import textStyle from '../../styles/text';
@@ -11,7 +12,7 @@ import Input from '../../components/Input';
 import Tag from '../../components/buttons/Tag';
 import ProfileIcon from '../../components/buttons/Profile';
 
-export default function SearchScreen({ navigation }) {
+export default function SearchScreen({ navigation, route }) {
   const isFocused = useIsFocused();
   const [profilePicURL, setProfilePicURL] = useState({});
   const [roomName, setRoomName] = useState('');
@@ -25,6 +26,8 @@ export default function SearchScreen({ navigation }) {
 
   const [amenities, setAmenities] = useState([]);
 
+  const [timeRange, setTimeRange] = useState(null);
+
   // Generate search query
   const generateQuery = () => {
     let finalQuery = '?';
@@ -36,6 +39,10 @@ export default function SearchScreen({ navigation }) {
     if (street !== '') query.street = street;
     if (state !== '') query.state = state;
     if (zip !== '') query.zip = zip;
+    if (timeRange) {
+      query.vacant_from = timeRange.timeFrom;
+      query.vacant_to = timeRange.timeUntil;
+    }
     query = new URLSearchParams(query);
 
     let amenitiesParam = amenities.map((amenity) => `amenity[]=${amenity}`);
@@ -71,8 +78,28 @@ export default function SearchScreen({ navigation }) {
     return validated;
   };
 
+  // Unsets selected time range
+  const unsetTimeRange = () => {
+    setTimeRange(null);
+    route.params = null;
+  };
+
+  // Set specified time range
+  const setDateTime = () => {
+    const dateRegex = new RegExp(/\d{4}-\d{2}-\d{2}/);
+    let date = new Date(route.params.day).toISOString();
+    date = dateRegex.exec(date)[0];
+
+    setTimeRange({
+      date: new Date(route.params.day).toISOString(), 
+      timeFrom: new Date(route.params.timeFrom).toISOString().replace(dateRegex, date), 
+      timeUntil: new Date(route.params.timeUntil).toISOString().replace(dateRegex, date)
+    });
+  };
+
   useEffect(() => {
     getProfilePic(setProfilePicURL);
+    if (route.params) setDateTime();
   }, [isFocused]);
 
   return (
@@ -156,15 +183,41 @@ export default function SearchScreen({ navigation }) {
             />
           </View>
         </View>
-        {/* Time and date */}
-        <Text style={[styles.subheading, textStyle.h2]}>Time and date</Text>
-        {/* <StandardButton style={{ marginBottom: 10, alignSelf: 'center' }}
-          title='Date selection' 
-          action={() => { console.log('Date') }} 
-        /> */}
+        {/* Time range */}
+        <Text style={[styles.subheading, textStyle.h2]}>Time range</Text>
+        { timeRange ? (
+          <>
+            <View style={styles.dateTimeContainer}>
+              <View style={{flexDirection: 'column', justifyContent: 'center'}}>
+                <Text style={[styles.dateTimeItem, textStyle.h3]}>Date</Text>
+                <Text style={[textStyle.h3, styles.currentDate]}>{Moment(timeRange.date).format('DD.MM.YYYY')}</Text>
+              </View>           
+              <View style={{flexDirection: 'column', justifyContent: 'center'}}>
+                <Text style={[styles.dateTimeItem, textStyle.h3]}>Time</Text>
+                <Text style={[textStyle.h3, styles.currentDate]}>{`${Moment(timeRange.timeFrom).format('HH:mm')} - ${Moment(timeRange.timeUntil).format('HH:mm')}`}</Text>
+              </View>
+            </View>
+            <StandardButton style={{ marginBottom: 10, alignSelf: 'center' }}
+              title='Unset time'
+              color={colors.red}
+              action={ unsetTimeRange }
+            />
+          </>
+        ) : null }
         <StandardButton style={{ marginBottom: 10, alignSelf: 'center' }}
-          title='Select time' 
-          action={() => { console.log('Time') }} 
+          title={timeRange ? 'Change time range' : 'Select time range'}
+          action={() => {
+            if (timeRange) {
+              navigation.navigate('SelectTime', { 
+                parent: 'Search', 
+                previousDate: timeRange.date, 
+                previousTimeFrom: timeRange.timeFrom, 
+                previousTimeUntil: timeRange.timeUntil 
+              });
+            } else {
+              navigation.navigate('SelectTime', { parent: 'Search' });
+            }
+          }}
         />
         {/* Button */}
         <StandardButton style={{alignSelf: 'center', marginTop: 30, marginBottom: 30 }} 
@@ -218,5 +271,20 @@ const styles = StyleSheet.create({
   },
   tag: {
     marginRight: 7
+  },
+  dateTimeContainer: {
+    width: 330,
+    flexDirection: 'row', 
+    justifyContent: 'space-around', 
+    alignItems:'center',
+    marginBottom: 15,
+    marginHorizontal: 20
+  },
+  dateTimeItem: {
+    color: colors.blue
+  },
+  currentDate: {
+    color: colors.grey,
+    //width: 133,
   },
 });

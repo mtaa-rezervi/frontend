@@ -18,10 +18,10 @@ const SmallButton = ({ title, action }) => (
 
 export default function SelectTime({ navigation, route }) {    
     const isIOS = Platform.OS === 'ios' ? true : false;
-
-    const [selectedDate, setSelectedDate] = useState(new Date().toISOString());
-    const [selectedTimeFrom, setSelectedTimeFrom] = useState(new Date().toISOString());
-    const [selectedTimeUntil, setSelectedTimeUntil] = useState(new Date().toISOString());
+    
+    const [selectedDate, setSelectedDate] = useState(new Date(route.params.previousDate ? route.params.previousDate : Date()).toISOString());
+    const [selectedTimeFrom, setSelectedTimeFrom] = useState(new Date(route.params.previousTimeFrom ? route.params.previousTimeFrom : Date()).toISOString());
+    const [selectedTimeUntil, setSelectedTimeUntil] = useState(new Date(route.params.previousTimeUntil ? route.params.previousTimeUntil : Date()).toISOString());
 
     const [dayModalVisible, setDayModalVisible] = useState(false);
     const [viewTimeFrom, setViewTimeFrom] = useState(false);
@@ -140,18 +140,25 @@ export default function SelectTime({ navigation, route }) {
                         />
                     </View>
 
-                    <StandardButton style={{alignSelf:'center', marginTop: 50, marginBottom: 100}} title={'Check current reservations'}
-                        action={() => navigation.navigate('RoomAgenda', { _id: route.params._id, name: route.params.name })} 
-                    />
+                    { route.params.parent === 'RoomBooking' ? (
+                        <StandardButton style={{alignSelf:'center', marginTop: 50, marginBottom: 100}} title={'Check current reservations'}
+                            action={() => navigation.navigate('RoomAgenda', { _id: route.params._id, name: route.params.name })} 
+                        />) : (null)
+                    }
                 </View>
             </ScrollView>
-            <StandardButton
-                title={"Confirm"}
-                action={()=> {
-                    console.log(selectedDate + " -- " + selectedTimeFrom + " -- " + selectedTimeUntil);
-                    navigation.navigate('RoomBooking', {_id: route.params._id, day: selectedDate, timeFrom: selectedTimeFrom, timeUntil: selectedTimeUntil})}}
-                style={styles.confirmButton}
-            />
+            <View style={{ flexDirection: 'column', justifyContent: 'flex-end' }}>
+                <StandardButton
+                    title={"Confirm"}
+                    action={()=> {
+                        //console.log(selectedDate + " -- " + selectedTimeFrom + " -- " + selectedTimeUntil);
+                        navigation.navigate(route.params.parent === 'RoomBooking' ? 'RoomBooking' : 'Search', {
+                            _id: route.params._id, day: selectedDate, timeFrom: selectedTimeFrom, timeUntil: selectedTimeUntil
+                        })
+                    }}
+                    style={styles.confirmButton}
+                />
+            </View>
         </SafeAreaView>
     );
 }
