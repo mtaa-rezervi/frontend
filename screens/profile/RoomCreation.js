@@ -291,10 +291,10 @@ export default function RoomCreation({ navigation }) {
 }
 
 const styles = StyleSheet.create({
-	container: {
-		flex: 1,
-		backgroundColor: colors.white,
-	},
+  container: {
+    flex: 1,
+    backgroundColor: colors.white,
+  },
   header: {
     marginBottom: 10
   },

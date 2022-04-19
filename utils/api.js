@@ -10,3 +10,19 @@ export async function getRequestHeaders() {
 
   return requestHeaders;
 }
+
+// Fetch user profile picture
+export async function getProfilePic(setProfilePicURL) {
+  const userIdParam = (await loadSecure()).userID;
+  const requestHeaders = await getRequestHeaders();
+
+  const response = await fetch(`https://mtaa-backend.herokuapp.com/users/${userIdParam}`, {
+    method: 'GET',
+    headers: requestHeaders
+  });
+
+  const user = await response.json();
+  let picURL = user.profile_pic ? { uri: user.profile_pic } : require('../assets/images/Avatar.png');
+
+  setProfilePicURL({ pic: picURL });
+}

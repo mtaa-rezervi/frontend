@@ -106,15 +106,17 @@ export default function RegisterScreen({ navigation }) {
           secureTextEntry={true}
         />
       </View>
-      <View style={styles.hasAccountStack}>
-        <Text style={styles.hasAccount}>Already have an account?</Text>
-        <Text style={styles.logIn} onPress={() => navigation.navigate('Login')}>Log in</Text>
+      <View style={{ marginTop: 60 }}>
+        <View style={styles.hasAccountStack}>
+          <Text style={styles.hasAccount}>Already have an account?</Text>
+          <Text style={styles.logIn} onPress={() => navigation.navigate('Login')}>Log in</Text>
+        </View>
+        <StandardButton 
+          style={styles.button}
+          title='Register' 
+          action={() => { setLoading(true); sendRegistration(firstName, lastName, username, email, password) }}
+        />
       </View>
-      <StandardButton 
-        style={styles.button}
-        title='Register' 
-        action={() => { setLoading(true); sendRegistration(firstName, lastName, username, email, password) }}
-      />
       { isLoading && 
       <View style={styles.activityIndicator}>
         <ActivityIndicator size='large' />

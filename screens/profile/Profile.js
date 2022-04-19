@@ -163,9 +163,9 @@ export default function ProfileScreen({ navigation }) {
   };
 
   useEffect(() => {
-		getCredentials();
+    getCredentials();
     getActiveReservations();
-	}, [isFocused]);
+  }, [isFocused]);
 
   const renderReservations = ({ item }) => (
     <Listing 
@@ -231,10 +231,10 @@ export default function ProfileScreen({ navigation }) {
 }
 
 const styles = StyleSheet.create({
-	container: {
-		flex: 1,
-		backgroundColor: colors.white
-	},
+  container: {
+    flex: 1,
+    backgroundColor: colors.white
+  },
   profileButtonsContainer: {
     height: 300,
     alignItems: 'center',

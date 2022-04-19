@@ -35,24 +35,26 @@ export default function LoginScreen({ navigation }) {
         value={password}
         onChangeText={text => setPassword(text)}
         />
-        <View style={styles.bottomTextContainer}>
-            <Text style={styles.bottomText}>Don&#39;t have an account yet?</Text>
-            <Text style={styles.register} onPress={() => navigation.navigate('Register')}>Register</Text>
+        <View style={{ marginTop: 60 }}>
+          <View style={styles.bottomTextContainer}>
+              <Text style={styles.bottomText}>Don&#39;t have an account yet?</Text>
+              <Text style={styles.register} onPress={() => navigation.navigate('Register')}>Register</Text>
+          </View>
+          <StandardButton 
+            style={styles.loginButton}
+            title='Login' 
+            action={ async () => {
+              setLoading(true);
+              try {
+                await userLogin(username, password, navigation);
+              } catch (error) {
+                alert('Something went wrong');
+              } finally {
+                setLoading(false);
+              }
+            }}
+          />
         </View>
-        <StandardButton 
-          style={styles.loginButton}
-          title='Login' 
-          action={ async () => {
-            setLoading(true);
-            try {
-              await userLogin(username, password, navigation);
-            } catch (error) {
-              alert('Something went wrong');
-            } finally {
-              setLoading(false);
-            }
-          }}
-        />
       { isLoading && 
       <View style={styles.activityIndicator}>
         <ActivityIndicator size='large' />

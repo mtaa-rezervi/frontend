@@ -245,7 +245,7 @@ const styles = StyleSheet.create({
   saveButton: {
     //marginLeft: 30,
     alignSelf: 'center',
-    marginTop: 60
+    marginTop: 70
   },
   activityIndicator: {
     position: 'absolute',

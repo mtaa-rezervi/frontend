@@ -69,7 +69,6 @@ export default function App() {
   if (!fontsLoaded) return (<AppLoading />);
 
   return (
-    //<View style={styles.container}><ComponentsExample/></View>
     <NavigationContainer>
       <Stack.Navigator
         screenOptions={{

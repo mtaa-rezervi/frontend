@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react'
-import { ActivityIndicator, StyleSheet, Text, SafeAreaView, View, ScrollView } from 'react-native';
+import { StyleSheet, Text, SafeAreaView, View, ScrollView } from 'react-native';
 import { useIsFocused } from '@react-navigation/native';
-import { loadSecure } from '../../utils/secureStore';
-import { getRequestHeaders } from '../../utils/api';
+import { getProfilePic } from '../../utils/api';
 
 import colors from '../../styles/colors';
 import textStyle from '../../styles/text';
@@ -25,22 +24,6 @@ export default function SearchScreen({ navigation }) {
   const [seatsLTE, setSeatsLTE] = useState('');
 
   const [amenities, setAmenities] = useState([]);
-
-  // Fetch and set user's profile picture
-  const getProfilePic = async () => {
-    const userIdParam =  (await loadSecure()).userID;
-    const requestHeaders = await getRequestHeaders();
-
-    const response = await fetch(`https://mtaa-backend.herokuapp.com/users/${userIdParam}`, {
-      method: 'GET',
-      headers: requestHeaders
-    });
-
-    const user = await response.json();
-    let picURL = user.profile_pic ? { uri: user.profile_pic } : require('../../assets/images/Avatar.png');
-      
-    setProfilePicURL({ pic: picURL });
-  };
 
   // Generate search query
   const generateQuery = () => {
@@ -89,7 +72,7 @@ export default function SearchScreen({ navigation }) {
   };
 
   useEffect(() => {
-    getProfilePic();
+    getProfilePic(setProfilePicURL);
   }, [isFocused]);
 
   return (
