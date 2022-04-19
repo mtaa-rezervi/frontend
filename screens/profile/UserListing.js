@@ -102,7 +102,8 @@ export default function UserListing({ navigation }) {
       text2={`${item.number_of_seats} seats`}
       text3={item.amenities.join(', ')} 
       buttonTitle='Remove'
-      buttonAction={ () => deleteRoomDialog(item) } 
+      buttonAction={() => deleteRoomDialog(item)} 
+      buttonColor={colors.red}
       cardAction={() => { 
         navigation.navigate('Room', { _id: item._id, name: item.name })
       }}

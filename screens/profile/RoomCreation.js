@@ -279,6 +279,7 @@ export default function RoomCreation({ navigation }) {
         {/* Button */}
         <StandardButton style={{alignSelf: 'center', marginTop: 30 }} 
           title='List this room' 
+          color={colors.green}
           action={() => { createRoomDialog() }} 
         />
       </ScrollView>

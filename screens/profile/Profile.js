@@ -177,6 +177,7 @@ export default function ProfileScreen({ navigation }) {
       text3={`Until: ${item.until}`} 
       buttonTitle='Cancel'
       buttonAction={() => cancelReservationDialog(item)}
+      buttonColor={colors.red}
       cardAction={() => { 
         navigation.navigate('Room', { _id: item.room_id, name: item.name })
       }} 

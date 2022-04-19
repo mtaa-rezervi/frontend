@@ -2,14 +2,14 @@ import { StyleSheet, Text, TouchableOpacity, Image, View } from 'react-native';
 import colors from '../../styles/colors';
 import textStyle from '../../styles/text';
 
-const SmallButton = ({ title, action }) => {
+const SmallButton = ({ title, action, color }) => {
   return (
-    <TouchableOpacity style={ styles.smallButton } onPress={action}>
+    <TouchableOpacity style={[styles.smallButton, { backgroundColor: color ? color : colors.blue }]} onPress={action}>
       <Text style={[textStyle.small, { color: colors.white}]}>{ title || 'Button' }</Text>
     </TouchableOpacity>
 )};
 
-export default function Listing({ style, roomName, image, text1, text2, text3, buttonTitle, buttonAction, cardAction }) {
+export default function Listing({ style, roomName, image, text1, text2, text3, buttonTitle, buttonAction, buttonColor, cardAction }) {
   //image == '' || image.uri == '' ? image = require('../assets/images/room1.jpg') : image = image;
 
   return (
@@ -26,7 +26,7 @@ export default function Listing({ style, roomName, image, text1, text2, text3, b
             <Text style={[styles.text, textStyle.smaller]}>{text2}</Text>
             <Text style={[styles.text, textStyle.smaller]}>{text3}</Text>
           </View>
-          <SmallButton title={buttonTitle} action={buttonAction} />
+          <SmallButton title={buttonTitle} action={buttonAction} color={buttonColor} />
         </View>
       </TouchableOpacity>
     </View>
