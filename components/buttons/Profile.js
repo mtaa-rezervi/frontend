@@ -1,6 +1,6 @@
 import { StyleSheet, TouchableOpacity, Image, View } from 'react-native';
 
-import colors from '../styles/colors';
+import colors from '../../styles/colors';
 
 export default function ProfileIcon({ image, action, style }) {
   return (

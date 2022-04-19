@@ -4,12 +4,12 @@ import React, { useState } from 'react'
 import colors from '../styles/colors';
 import textStyle from '../styles/text';
 
-import StandardButton from '../components/StandardButton';
+import StandardButton from '../components/buttons/StandardButton';
 import Input from '../components/Input';
-import ProfileButton from '../components/ProfileButton';
-import Listing from '../components/Listing';
-import Notification from '../components/Notification';
-import ProfileIcon from '../components/Profile';
+import ProfileButton from '../components/buttons/ProfileButton';
+import Listing from '../components/cards/Listing';
+import Notification from '../components/cards/Notification';
+import ProfileIcon from '../components/buttons/Profile';
 import Tag from '../components/Tag';
 
 export default function ComponentsExample() {

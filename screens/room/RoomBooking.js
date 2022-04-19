@@ -3,14 +3,14 @@ import { useState, useEffect } from 'react';
 import { useIsFocused } from '@react-navigation/native';
 import Moment from 'moment';
 
-import Input from '../components/Input';
-import StandardButton from '../components/StandardButton';
-import BackButton from '../components/BackButton';
+import Input from '../../components/Input';
+import StandardButton from '../../components/buttons/StandardButton';
+import BackButton from '../../components/buttons/BackButton';
 
-import textStyle from '../styles/text';
-import colors from '../styles/colors';
+import textStyle from '../../styles/text';
+import colors from '../../styles/colors';
 
-import { loadSecure } from '../utils/secureStore';
+import { loadSecure } from '../../utils/secureStore';
 
 
 export default function RoomBooking({ navigation, route }) {
@@ -150,7 +150,7 @@ export default function RoomBooking({ navigation, route }) {
         </View>
         <StandardButton
             title={'Change time'}
-            action={() => navigation.navigate('SelectTime', {_id: route.params._id, name: route.params.name})}
+            action={() => navigation.navigate('SelectTime', {_id: route.params._id, name: route.params.name, parent: 'RoomBooking'})}
             style={styles.changeTimeButton}
         />
 

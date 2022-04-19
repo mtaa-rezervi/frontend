@@ -1,6 +1,6 @@
 import { View, StyleSheet, Text, TouchableOpacity } from 'react-native';
-import colors from '../styles/colors';
-import textStyle from '../styles/text';
+import colors from '../../styles/colors';
+import textStyle from '../../styles/text';
 
 export default function StandardButton({ title, action, style }) {
   return (

@@ -1,14 +1,13 @@
 import React, { useState, useEffect } from "react";
-import { ActivityIndicator, ScrollView, FlatList, StyleSheet, SafeAreaView, View, Text} from "react-native";
+import { ActivityIndicator, FlatList, StyleSheet, SafeAreaView, View, Text} from "react-native";
 
-import { getRequestHeaders } from '../utils/api';
-import { loadSecure } from "../utils/secureStore";
+import { getRequestHeaders, getProfilePic } from '../../utils/api';
 
-import colors from '../styles/colors';
-import textStyle from "../styles/text";
+import colors from '../../styles/colors';
+import textStyle from "../../styles/text";
 
-import ProfileIcon from "../components/Profile";
-import Listing from "../components/Listing";
+import ProfileIcon from "../../components/buttons/Profile";
+import Listing from "../../components/cards/Listing";
 import { useIsFocused } from "@react-navigation/native";
 
 // Screen
@@ -47,22 +46,6 @@ export default function HomeScreen({ navigation }) {
     }
   };
 
-  // Fetch and set user's profile picture
-  const getProfilePic = async () => {
-    const userIdParam =  (await loadSecure()).userID;
-    const requestHeaders = await getRequestHeaders();
-
-    const response = await fetch(`https://mtaa-backend.herokuapp.com/users/${userIdParam}`, {
-      method: 'GET',
-      headers: requestHeaders
-    });
-
-    const user = await response.json();
-    let picURL = user.profile_pic ? { uri: user.profile_pic } : require('../assets/images/Avatar.png');
-      
-    setProfilePicURL({ pic: picURL });
-  };
-
   const onRefresh = () => {
     setRefreshing(true);
     getRooms();
@@ -70,7 +53,7 @@ export default function HomeScreen({ navigation }) {
   
   useEffect(() => {
     getRooms();
-    getProfilePic();
+    getProfilePic(setProfilePicURL);
   }, [isFocused]);
 
   const renderRooms = ({ item }) => (

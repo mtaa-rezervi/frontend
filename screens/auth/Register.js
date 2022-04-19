@@ -1,25 +1,13 @@
 import React, { useState } from "react";
-import {
-  StyleSheet,
-  View,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  SafeAreaView,
-  Alert,
-  ActivityIndicator
-} from "react-native";
+import { StyleSheet, View, Text, SafeAreaView, Alert, ActivityIndicator } from "react-native";
 
-import { useFonts } from 'expo-font';
-import AppLoading from 'expo-app-loading';
+import colors from '../../styles/colors';
+import textStyle from "../../styles/text";
 
-import colors from '../styles/colors';
-import textStyle from "../styles/text";
-
-import Input from "../components/Input";
-import StandardButton from "../components/StandardButton";
-import BackButton from "../components/BackButton";
-import userLogin from "../utils/userLogin";
+import Input from "../../components/Input";
+import StandardButton from "../../components/buttons/StandardButton";
+import BackButton from "../../components/buttons/BackButton";
+import userLogin from "../../utils/userLogin";
 
 export default function RegisterScreen({ navigation }) {
   const [isLoading, setLoading] = useState(false);
@@ -79,15 +67,6 @@ export default function RegisterScreen({ navigation }) {
     }
   };
 
-  let [fontsLoaded] = useFonts({
-    'roboto-bold': require('../assets/fonts/Roboto-Bold.ttf'),
-    'roboto-regular': require('../assets/fonts/Roboto-Regular.ttf'),
-  });
-  
-  if (!fontsLoaded) {
-    return <AppLoading />;
-  }
-
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
@@ -127,15 +106,17 @@ export default function RegisterScreen({ navigation }) {
           secureTextEntry={true}
         />
       </View>
-      <View style={styles.hasAccountStack}>
-        <Text style={styles.hasAccount}>Already have an account?</Text>
-        <Text style={styles.logIn} onPress={() => navigation.navigate('Login')}>Log in</Text>
+      <View style={{ marginTop: 60 }}>
+        <View style={styles.hasAccountStack}>
+          <Text style={styles.hasAccount}>Already have an account?</Text>
+          <Text style={styles.logIn} onPress={() => navigation.navigate('Login')}>Log in</Text>
+        </View>
+        <StandardButton 
+          style={styles.button}
+          title='Register' 
+          action={() => { setLoading(true); sendRegistration(firstName, lastName, username, email, password) }}
+        />
       </View>
-      <StandardButton 
-        style={styles.button}
-        title='Register' 
-        action={() => { setLoading(true); sendRegistration(firstName, lastName, username, email, password) }}
-      />
       { isLoading && 
       <View style={styles.activityIndicator}>
         <ActivityIndicator size='large' />

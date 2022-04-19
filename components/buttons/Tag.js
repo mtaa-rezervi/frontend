@@ -1,6 +1,6 @@
 import { Pressable, StyleSheet, Text, View } from 'react-native';
-import colors from '../styles/colors';
-import textStyle from '../styles/text';
+import colors from '../../styles/colors';
+import textStyle from '../../styles/text';
 import React, { useState } from 'react'
 
 export default function Tag({ title, action, style }) {

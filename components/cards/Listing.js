@@ -1,6 +1,6 @@
 import { StyleSheet, Text, TouchableOpacity, Image, View } from 'react-native';
-import colors from '../styles/colors';
-import textStyle from '../styles/text';
+import colors from '../../styles/colors';
+import textStyle from '../../styles/text';
 
 const SmallButton = ({ title, action }) => {
   return (

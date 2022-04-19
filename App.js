@@ -1,5 +1,4 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet } from 'react-native';
 import { useFonts } from 'expo-font';
 import AppLoading from 'expo-app-loading';
 import { NavigationContainer } from '@react-navigation/native';
@@ -11,24 +10,22 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { Ionicons } from '@expo/vector-icons'; 
 
 import colors from './styles/colors';
-import textStyle from './styles/text';
-import ComponentsExample from './screens/ComponentsExample';
 
-import LoginScreen from './screens/Login';
-import RegisterScreen from './screens/Register';
-import HomeScreen from './screens/Home';
-import SearchScreen from './screens/Search';
-import NotiScreen from './screens/Notifications';
-import ProfileScreen from './screens/Profile';
-import RoomScreen from './screens/Room';
-import EditProfileScreen from './screens/EditProfile';
-import UserListing from './screens/UserListing';
-import ReservationHistory from './screens/ReservationHistory';
-import RoomCreation from './screens/RoomCreation';
-import RoomBooking from './screens/RoomBooking';
+import LoginScreen from './screens/auth/Login';
+import RegisterScreen from './screens/auth/Register';
+import HomeScreen from './screens/home/Home';
+import SearchScreen from './screens/search/Search';
+import NotiScreen from './screens/notifications/Notifications';
+import ProfileScreen from './screens/profile/Profile';
+import RoomScreen from './screens/room/Room';
+import EditProfileScreen from './screens/profile/EditProfile';
+import UserListing from './screens/profile/UserListing';
+import ReservationHistory from './screens/profile/ReservationHistory';
+import RoomCreation from './screens/profile/RoomCreation';
+import RoomBooking from './screens/room/RoomBooking';
 import SelectTime from './screens/SelectTime';
-import SearchResults from './screens/SearchResults';
-import RoomAgenda from './screens/RoomAgenda';
+import SearchResults from './screens/search/SearchResults';
+import RoomAgenda from './screens/room/RoomAgenda';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -72,7 +69,6 @@ export default function App() {
   if (!fontsLoaded) return (<AppLoading />);
 
   return (
-    //<View style={styles.container}><ComponentsExample/></View>
     <NavigationContainer>
       <Stack.Navigator
         screenOptions={{

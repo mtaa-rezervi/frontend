@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from 'react'
 import { StyleSheet, Text, SafeAreaView, View, ActivityIndicator, FlatList, Alert } from 'react-native';
 
-import { getValueFor } from "../utils/secureStore";
-import { getRequestHeaders } from '../utils/api';
+import { getValueFor } from "../../utils/secureStore";
+import { getRequestHeaders } from '../../utils/api';
 
-import colors from '../styles/colors';
-import textStyle from '../styles/text';
+import colors from '../../styles/colors';
+import textStyle from '../../styles/text';
 
-import Listing from "../components/Listing";
-import BackButton from '../components/BackButton';
-import ProfileButton from '../components/ProfileButton';
+import Listing from "../../components/cards/Listing";
+import BackButton from '../../components/buttons/BackButton';
+import ProfileButton from '../../components/buttons/ProfileButton';
 
 export default function UserListing({ navigation }) {
   const [isLoading, setLoading] = useState(true);
@@ -133,10 +133,10 @@ export default function UserListing({ navigation }) {
 }
 
 const styles = StyleSheet.create({
-	container: {
-		flex: 1,
-		backgroundColor: colors.white,
-	},
+  container: {
+    flex: 1,
+    backgroundColor: colors.white,
+  },
   heading: {
     marginRight: 30,
     marginLeft: 30,
@@ -160,6 +160,7 @@ const styles = StyleSheet.create({
   },
   listingButton: {
     alignSelf: 'center',
+    //marginTop: 10
     //marginBottom: 10,
   },
   activityIndicator: {
