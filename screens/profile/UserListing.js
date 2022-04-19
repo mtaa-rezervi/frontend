@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from 'react'
 import { StyleSheet, Text, SafeAreaView, View, ActivityIndicator, FlatList, Alert } from 'react-native';
 
-import { getValueFor } from "../../utils/secureStore";
+import { loadSecure } from '../../utils/secureStore';
 import { getRequestHeaders } from '../../utils/api';
 
 import colors from '../../styles/colors';
 import textStyle from '../../styles/text';
 
 import Listing from "../../components/cards/Listing";
+import EmptyList from '../../components/cards/EmptyList';
 import BackButton from '../../components/buttons/BackButton';
 import ProfileButton from '../../components/buttons/ProfileButton';
 
@@ -56,16 +57,9 @@ export default function UserListing({ navigation }) {
 
   // Fetch rooms displayed on the screen
   const getRooms = async () => {
+    const userIdParam = (await loadSecure()).userID;
+    const requestHeaders = await getRequestHeaders();
     try {
-      const token = await getValueFor('bearer');
-      const userID = await getValueFor('_id');
-      const auth = ('Bearer ' + token).replace(/"/g, '');
-      const userIdParam = userID.replace(/"/g, '');
-
-      let requestHeaders = new Headers();
-      requestHeaders.append('Accept', 'application/json');
-      requestHeaders.append('Authorization', auth);
-      
       const endpoint = `https://mtaa-backend.herokuapp.com/users/${userIdParam}/active-listings`;
 
       const response = await fetch(endpoint, {
@@ -74,6 +68,7 @@ export default function UserListing({ navigation }) {
       });
 
       const responseJson = await response.json();
+      if (responseJson.active_listings.length === 0) alert('You have no listed rooms');
       setData(responseJson.active_listings);
     } catch (error) {
         console.error(error);
@@ -125,6 +120,7 @@ export default function UserListing({ navigation }) {
           onRefresh={onRefresh}
           refreshing={isRefreshing}
           keyExtractor={item => item._id}
+          ListEmptyComponent={ !isLoading && <EmptyList/> } 
           contentContainerStyle={styles.listingContainer}
         />
       )}
