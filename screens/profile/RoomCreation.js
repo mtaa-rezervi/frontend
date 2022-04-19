@@ -49,7 +49,10 @@ export default function RoomCreation({ navigation }) {
           text: 'Cancel',
           style: 'cancel',
         },
-        { text: 'Yes', onPress: () => { setLoading(true); createRoom() }},
+        { text: 'Yes', onPress: () => { 
+          setLoading(true);
+          createRoom(); 
+        }},
       ])
     )
   };  
@@ -61,14 +64,16 @@ export default function RoomCreation({ navigation }) {
 
     let formData = new FormData();
     formData.append('thumbnail', thumbnail);
+
     for (let i = 0; i < images.length; i++) {
       formData.append('images',  images[i]);
     }
+
     formData.append('json',
       JSON.stringify({
         name: roomName,
-        floor: Number(floor),
-        room_number: Number(roomNumber),
+        floor: floor,
+        room_number: roomNumber,
         info: description,
         street: street,
         city: city,
@@ -87,9 +92,12 @@ export default function RoomCreation({ navigation }) {
         body: formData
       });
       const responseJson = await response.json();
-      //console.log(responseJson);
-      if (response.status === 201) Alert.alert('Successfully created new room!');
-      else if (response.status === 422) Alert.alert(responseJson.errors[0].message);
+      if (response.status === 201) {
+        Alert.alert('Success', 'Successfully created new room!', [{
+          text: 'OK',
+          onPress: () => navigation.goBack()
+        }]);
+      } else if (response.status === 422) Alert.alert(responseJson.errors[0].message);
     } catch (error) {
       console.error(error);
       Alert.alert('Something went wrong');
@@ -280,7 +288,7 @@ export default function RoomCreation({ navigation }) {
         <StandardButton style={{alignSelf: 'center', marginTop: 30 }} 
           title='List this room' 
           color={colors.green}
-          action={() => { createRoomDialog() }} 
+          action={() => {createRoomDialog()}} 
         />
       </ScrollView>
       { isLoading && 

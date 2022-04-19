@@ -35,8 +35,7 @@ export default function RegisterScreen({ navigation }) {
           })
       });
       const json = await response.json();
-      
-      if(response.status == 201) {
+      if (response.status == 201) {
         console.log("account created");
         Alert.alert(
           'Success',
@@ -46,8 +45,7 @@ export default function RegisterScreen({ navigation }) {
             onPress: async () => await userLogin(username, password, navigation)
           }]
         )
-      }
-      else if(response.status == 409){
+      } else if (response.status == 409) {
         Alert.alert(
           'Error',  // title
           json.error.message, // text
@@ -55,8 +53,15 @@ export default function RegisterScreen({ navigation }) {
             text: 'OK'  // button
           }]
         )
-      }
-      else{
+      } else if (response.status == 422) {
+        Alert.alert(
+          'Error',  // title
+          json.errors[0].message, // text
+          [{
+            text: 'OK'  // button
+          }]
+        )
+      } else {
         alert(`Error occurred (${response.status})`);
       }
 
