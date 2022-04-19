@@ -23,19 +23,19 @@ export default function RoomBooking({ navigation, route }) {
 
   // shows confirmation alert after pressing the confirm button
     const showSubmitAlert = () => {
-    Alert.alert(
-      'Confirmation',
-      'Do you really want to submit this booking?',
-      [
-        {
-          text: 'No',
-        },
-        {
-          text: 'Yes',
-          onPress: () => submitBooking()
-        }
-      ]
-    )
+      Alert.alert(
+        'Confirmation',
+        'Do you really want to submit this booking?',
+        [
+          {
+            text: 'No',
+          },
+          {
+            text: 'Yes',
+            onPress: () => submitBooking()
+          }
+        ]
+      )
     }
 
   // submits the booking and creates the reservation
@@ -112,7 +112,7 @@ export default function RoomBooking({ navigation, route }) {
     }
 
   const setDateTime = () => {
-    console.log("room: " + route.params._id);
+    //console.log("room: " + route.params._id);
     
     var today  = Moment().format();
     setSelectedDate(today);
@@ -128,56 +128,54 @@ export default function RoomBooking({ navigation, route }) {
     if(route.params.timeUntil){
       setSelectedTimeUntil(route.params.timeUntil);
     }
-  }
+  };
 
   useEffect(() => {
     setDateTime();
   }, [isFocused]);
 
     return(
-        <SafeAreaView>
-            <BackButton action={() => navigation.goBack()}/>
-      <View style={styles.container}>
-        <Text style={[textStyle.h1, styles.header]}>Room booking</Text>
+      <SafeAreaView>
+        <BackButton action={() => navigation.goBack()}/>
+          <View style={styles.container}>
+            <Text style={[textStyle.h1, styles.header]}>Room booking</Text>
 
-        <View style={styles.dateTimeTitlesRow}>
-            <Text style={[styles.dateTimeItem, textStyle.h2]}>Date</Text>
-            <Text style={[styles.dateTimeItem, textStyle.h2]}>Time</Text>
-        </View>           
-        <View style={styles.dateTimeValuesRow}>
-            <Text style={[textStyle.h3, styles.currentDate]}>{Moment(selectedDate).format('DD.MM.YYYY')}</Text>
-            <Text style={[textStyle.h3, styles.currentDate]}>{`${Moment(selectedTimeFrom).format('HH:mm')} - ${Moment(selectedTimeUntil).format('HH:mm')}`}</Text>
-        </View>
-        <StandardButton
-            title={'Change time'}
-            action={() => navigation.navigate('SelectTime', {_id: route.params._id, name: route.params.name, parent: 'RoomBooking'})}
-            style={styles.changeTimeButton}
-        />
+            <View style={styles.dateTimeTitlesRow}>
+                <Text style={[styles.dateTimeItem, textStyle.h2]}>Date</Text>
+                <Text style={[styles.dateTimeItem, textStyle.h2]}>Time</Text>
+            </View>           
+            <View style={styles.dateTimeValuesRow}>
+                <Text style={[textStyle.h3, styles.currentDate]}>{Moment(selectedDate).format('DD.MM.YYYY')}</Text>
+                <Text style={[textStyle.h3, styles.currentDate]}>{`${Moment(selectedTimeFrom).format('HH:mm')} - ${Moment(selectedTimeUntil).format('HH:mm')}`}</Text>
+            </View>
+            <StandardButton
+                title={'Change time'}
+                action={() => navigation.navigate('SelectTime', {_id: route.params._id, name: route.params.name, parent: 'RoomBooking'})}
+                style={styles.changeTimeButton}
+            />
 
-        <Text style={[textStyle.h2, styles.meeting]}>Name of the meeting</Text>
-        <Input
-            placeholder={'Team meeting'}
-            value={meetingName}
-            onChangeText={text => setMeetingName(text)}
-            style={styles.input}
-        />
-    
-        <Text style={textStyle.h2}>E-mail notification</Text>
-        <View style={styles.emailsContainer}>
-          <ScrollView></ScrollView>
-        </View>
+            <Text style={[textStyle.h2, styles.meeting]}>Name of the meeting</Text>
+            <Input
+                placeholder={'Team meeting'}
+                value={meetingName}
+                onChangeText={text => setMeetingName(text)}
+                style={styles.input}
+            />
         
-        
-        <StandardButton
-            title={'Confirm'}
-            action={() => showSubmitAlert()}
-            style={styles.submitButton}
-        />
-      </View>
-        </SafeAreaView>
+            <Text style={textStyle.h2}>E-mail notification</Text>
+            <View style={styles.emailsContainer}>
+              <ScrollView></ScrollView>
+            </View>
+            
+            
+            <StandardButton
+                title={'Confirm'}
+                action={() => showSubmitAlert()}
+                style={styles.submitButton}
+            />
+          </View>
+      </SafeAreaView>
     );
-
-    
 }
 
 const styles = StyleSheet.create({
