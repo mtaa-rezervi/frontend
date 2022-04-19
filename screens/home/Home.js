@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { ActivityIndicator, FlatList, StyleSheet, SafeAreaView, View, Text} from "react-native";
 
-import { getRequestHeaders, getProfilePic } from '../utils/api';
+import { getRequestHeaders, getProfilePic } from '../../utils/api';
 
-import colors from '../styles/colors';
-import textStyle from "../styles/text";
+import colors from '../../styles/colors';
+import textStyle from "../../styles/text";
 
-import ProfileIcon from "../components/buttons/Profile";
-import Listing from "../components/cards/Listing";
+import ProfileIcon from "../../components/buttons/Profile";
+import Listing from "../../components/cards/Listing";
 import { useIsFocused } from "@react-navigation/native";
 
 // Screen

@@ -13,7 +13,7 @@ import colors from './styles/colors';
 
 import LoginScreen from './screens/auth/Login';
 import RegisterScreen from './screens/auth/Register';
-import HomeScreen from './screens/Home';
+import HomeScreen from './screens/home/Home';
 import SearchScreen from './screens/search/Search';
 import NotiScreen from './screens/notifications/Notifications';
 import ProfileScreen from './screens/profile/Profile';
@@ -23,7 +23,7 @@ import UserListing from './screens/profile/UserListing';
 import ReservationHistory from './screens/profile/ReservationHistory';
 import RoomCreation from './screens/profile/RoomCreation';
 import RoomBooking from './screens/room/RoomBooking';
-import SelectTime from './screens/room/SelectTime';
+import SelectTime from './screens/SelectTime';
 import SearchResults from './screens/search/SearchResults';
 import RoomAgenda from './screens/room/RoomAgenda';
 

@@ -150,7 +150,7 @@ export default function RoomBooking({ navigation, route }) {
         </View>
         <StandardButton
             title={'Change time'}
-            action={() => navigation.navigate('SelectTime', {_id: route.params._id, name: route.params.name})}
+            action={() => navigation.navigate('SelectTime', {_id: route.params._id, name: route.params.name, parent: 'RoomBooking'})}
             style={styles.changeTimeButton}
         />
 

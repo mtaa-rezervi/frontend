@@ -158,12 +158,12 @@ export default function SearchScreen({ navigation }) {
         </View>
         {/* Time and date */}
         <Text style={[styles.subheading, textStyle.h2]}>Time and date</Text>
-        <StandardButton style={{ marginBottom: 10, alignSelf: 'center' }}
+        {/* <StandardButton style={{ marginBottom: 10, alignSelf: 'center' }}
           title='Date selection' 
           action={() => { console.log('Date') }} 
-        />
+        /> */}
         <StandardButton style={{ marginBottom: 10, alignSelf: 'center' }}
-          title='Time selection' 
+          title='Select time' 
           action={() => { console.log('Time') }} 
         />
         {/* Button */}
