@@ -169,7 +169,8 @@ export default function RoomBooking({ navigation, route }) {
             
             
             <StandardButton
-                title={'Confirm'}
+                title={'Confirm booking'}
+                color={colors.green}
                 action={() => showSubmitAlert()}
                 style={styles.submitButton}
             />

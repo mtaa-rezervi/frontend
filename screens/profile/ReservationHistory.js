@@ -7,6 +7,7 @@ import colors from '../../styles/colors';
 import textStyle from '../../styles/text';
 
 import Listing from "../../components/cards/Listing";
+import EmptyList from '../../components/cards/EmptyList';
 import BackButton from '../../components/buttons/BackButton';
 
 export default function ReservationHistory({ navigation, route }) {
@@ -52,6 +53,8 @@ export default function ReservationHistory({ navigation, route }) {
           }
         })
       });
+
+      if (tmpRes.length === 0) alert('You have no previous reservations');
       setReservationHistory(tmpRes);
     } catch (error) {
       console.error(error);
@@ -99,6 +102,7 @@ export default function ReservationHistory({ navigation, route }) {
           onRefresh={onRefresh}
           refreshing={isRefreshing}
           keyExtractor={item => item._id}
+          ListEmptyComponent={ !isLoading && <EmptyList/> } 
           contentContainerStyle={styles.listingContainer}
         />
       )}

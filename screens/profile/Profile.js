@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Alert, StyleSheet, Text, SafeAreaView, View, TouchableOpacity, FlatList, ActivityIndicator } from 'react-native';
+import { Alert, StyleSheet, Text, SafeAreaView, View, TouchableOpacity, FlatList, ActivityIndicator, Image } from 'react-native';
 import { Entypo } from '@expo/vector-icons';
 import { loadSecure } from '../../utils/secureStore';
 import { getRequestHeaders } from '../../utils/api';
@@ -10,8 +10,15 @@ import textStyle from '../../styles/text';
 import ProfileButton from '../../components/buttons/ProfileButton';
 import ProfileIcon from '../../components/buttons/Profile';
 import { useIsFocused } from '@react-navigation/native';
-
 import Listing from '../../components/cards/Listing';
+//import EmptyList from '../../components/cards/EmptyList';
+
+const EmptyList = () => (
+  <View style={{ flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
+    <Text style={[textStyle.h3, { color: colors.grey, marginTop: 10 }]}>You have no active reservations :(</Text>
+    <Image style={{ width: 250, height: 250, marginTop: 30 }} source={require('../../assets/images/empty.png')} />
+  </View>
+);
 
 // Screen
 export default function ProfileScreen({ navigation }) {
@@ -177,6 +184,7 @@ export default function ProfileScreen({ navigation }) {
       text3={`Until: ${item.until}`} 
       buttonTitle='Cancel'
       buttonAction={() => cancelReservationDialog(item)}
+      buttonColor={colors.red}
       cardAction={() => { 
         navigation.navigate('Room', { _id: item.room_id, name: item.name })
       }} 
@@ -222,6 +230,7 @@ export default function ProfileScreen({ navigation }) {
             onRefresh={onRefresh}
             refreshing={isRefreshing}
             keyExtractor={item => item._id}
+            ListEmptyComponent={ !isLoading && <EmptyList/> } 
             contentContainerStyle={styles.activeReservationsContainer}
           />
         </>
