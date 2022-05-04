@@ -120,7 +120,7 @@ export default function UserListing({ navigation }) {
           onRefresh={onRefresh}
           refreshing={isRefreshing}
           keyExtractor={item => item._id}
-          ListEmptyComponent={ !isLoading && <EmptyList/> } 
+          ListEmptyComponent={ !isLoading && <EmptyList text={'You have no listed rooms'}/> } 
           contentContainerStyle={styles.listingContainer}
         />
       )}

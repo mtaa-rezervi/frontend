@@ -108,7 +108,7 @@ export default function RoomAgenda({ navigation, route }) {
         refreshing={isRefreshing}
         renderItem={renderReservations}
         renderSectionHeader={renderSectionHeader}
-        ListEmptyComponent={ !isLoading && <EmptyList/> } 
+        ListEmptyComponent={ !isLoading && <EmptyList text={'There are no current reservations for this room'}/> } 
       />
       { isLoading && 
         <View style={styles.activityIndicator}>

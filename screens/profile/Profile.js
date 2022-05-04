@@ -16,7 +16,7 @@ import Listing from '../../components/cards/Listing';
 const EmptyList = () => (
   <View style={{ flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
     <Image style={{ width: 250, height: 250, marginTop: 10 }} source={require('../../assets/images/empty.png')} />
-    <Text style={[textStyle.h3, { color: colors.grey, marginTop: 10 }]}>You have no active reservations :(</Text>
+    <Text style={[textStyle.h3, { color: colors.grey, marginTop: 10 }]}>You have no active reservations</Text>
   </View>
 );
 

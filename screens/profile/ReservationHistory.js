@@ -103,7 +103,7 @@ export default function ReservationHistory({ navigation, route }) {
           onRefresh={onRefresh}
           refreshing={isRefreshing}
           keyExtractor={item => item._id}
-          ListEmptyComponent={ !isLoading && <EmptyList/> } 
+          ListEmptyComponent={ !isLoading && <EmptyList text={'You have no previous reservations'}/> } 
           contentContainerStyle={styles.listingContainer}
         />
       )}

@@ -80,7 +80,7 @@ export default function NotiScreen({ navigation }) {
         refreshing={isRefreshing}
         keyExtractor={(item, index) => index}
         contentContainerStyle={styles.notiContainer}
-        ListEmptyComponent={ !isLoading && <EmptyList/>}
+        ListEmptyComponent={ !isLoading && <EmptyList text={'You have no notifications'}/>}
       />
       { isLoading && 
         <View style={styles.activityIndicator}>

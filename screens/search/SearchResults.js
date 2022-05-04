@@ -78,7 +78,7 @@ export default function SearchResults({ navigation, route }) {
         refreshing={isRefreshing}
         keyExtractor={item => item._id}
         contentContainerStyle={styles.listingContainer}
-        ListEmptyComponent={ !isLoading && <EmptyList/> } 
+        ListEmptyComponent={ !isLoading && <EmptyList text={'No matching rooms found'}/> } 
       />
       { isLoading && data.length === 0 && 
       <View style={styles.activityIndicator}>
