@@ -6,17 +6,17 @@ import { getRequestHeaders } from '../../utils/api';
 
 import colors from '../../styles/colors';
 import textStyle from '../../styles/text';
+import { SERVER_URL } from '../../constants';
 
 import ProfileButton from '../../components/buttons/ProfileButton';
 import ProfileIcon from '../../components/buttons/Profile';
 import { useIsFocused } from '@react-navigation/native';
 import Listing from '../../components/cards/Listing';
-//import EmptyList from '../../components/cards/EmptyList';
 
 const EmptyList = () => (
   <View style={{ flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
+    <Image style={{ width: 250, height: 250, marginTop: 10 }} source={require('../../assets/images/empty.png')} />
     <Text style={[textStyle.h3, { color: colors.grey, marginTop: 10 }]}>You have no active reservations :(</Text>
-    <Image style={{ width: 250, height: 250, marginTop: 30 }} source={require('../../assets/images/empty.png')} />
   </View>
 );
 
@@ -50,7 +50,7 @@ export default function ProfileScreen({ navigation }) {
     const userIdParam = (await loadSecure()).userID;
     const requestHeaders = await getRequestHeaders();
     try {
-      const response = await fetch(`https://mtaa-backend.herokuapp.com/users/${userIdParam}`, {
+      const response = await fetch(`${SERVER_URL}/users/${userIdParam}`, {
         method: 'GET',
         headers:requestHeaders
       });
@@ -82,7 +82,7 @@ export default function ProfileScreen({ navigation }) {
       roomsIDs = roomsIDs.map((id) => `id[]=${id}`);
       const query = roomsIDs.join('&');
 
-      const response = await fetch(`https://mtaa-backend.herokuapp.com/rooms?${query}`, {
+      const response = await fetch(`${SERVER_URL}/rooms?${query}`, {
         method: 'GET',
         headers: requestHeaders
       });
@@ -123,7 +123,7 @@ export default function ProfileScreen({ navigation }) {
     const requestHeaders = await getRequestHeaders();
     try {
       //setLoading(true)
-      const response = await fetch(`https://mtaa-backend.herokuapp.com/users/${userIdParam}/active-reservations`, {
+      const response = await fetch(`${SERVER_URL}/users/${userIdParam}/active-reservations`, {
         method: 'GET',
         headers: requestHeaders
       });
@@ -150,7 +150,7 @@ export default function ProfileScreen({ navigation }) {
   const cancelReservation = async (reservationID) => {
     const requestHeaders = await getRequestHeaders();
     try {
-      const response = await fetch(`https://mtaa-backend.herokuapp.com/reservations/${reservationID}`, {
+      const response = await fetch(`${SERVER_URL}/reservations/${reservationID}`, {
         method: 'DELETE',
         headers: requestHeaders
       });

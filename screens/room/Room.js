@@ -10,6 +10,7 @@ import StandardButton from "../../components/buttons/StandardButton";
 
 import textStyle from '../../styles/text';
 import colors from '../../styles/colors';
+import { SERVER_URL } from '../../constants';
 
 const SmallButton = ({ title, action }) => (
     <TouchableOpacity style={ styles.smallButton } onPress={action}>
@@ -60,7 +61,7 @@ export default function RoomScreen({ navigation, route }) {
     const requestHeaders = await getRequestHeaders();
     try {
       //checkVacancy(route.params._id, token)
-      const endpoint = `https://mtaa-backend.herokuapp.com/rooms/${route.params._id}`;
+      const endpoint = `${SERVER_URL}/rooms/${route.params._id}`;
       const response = await fetch(endpoint, {
         method: 'GET',
         headers: requestHeaders

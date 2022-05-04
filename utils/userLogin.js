@@ -1,8 +1,10 @@
 import { saveKeyValue } from "./secureStore";
 
+import { SERVER_URL } from '../constants';
+
 export default async function userLogin(user, pass, navigation){
     try {
-      const response = await fetch('https://mtaa-backend.herokuapp.com/users/login', {
+      const response = await fetch(SERVER_URL + '/users/login', {
           method: 'POST',
           headers: {
               Accept: 'application/json',

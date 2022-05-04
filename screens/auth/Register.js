@@ -3,6 +3,7 @@ import { StyleSheet, View, Text, SafeAreaView, Alert, ActivityIndicator } from "
 
 import colors from '../../styles/colors';
 import textStyle from "../../styles/text";
+import { SERVER_URL } from '../../constants';
 
 import Input from "../../components/Input";
 import StandardButton from "../../components/buttons/StandardButton";
@@ -20,7 +21,7 @@ export default function RegisterScreen({ navigation }) {
   
   const sendRegistration = async (firstName, lastName, username, email, password) => {
     try {
-      const response = await fetch('https://mtaa-backend.herokuapp.com/users/register', {      
+      const response = await fetch(SERVER_URL + '/users/register', {      
         method: 'POST',
           headers: {
             Accept: 'application/json',

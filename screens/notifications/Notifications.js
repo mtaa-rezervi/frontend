@@ -10,6 +10,7 @@ import EmptyList from '../../components/cards/EmptyList';
 
 import colors from '../../styles/colors';
 import textStyle from '../../styles/text';
+import { SERVER_URL } from '../../constants';
 
 // Screen
 export default function NotiScreen({ navigation }) {
@@ -25,7 +26,7 @@ export default function NotiScreen({ navigation }) {
     const userID = (await loadSecure()).userID;
     const requestHeaders = await getRequestHeaders();
     try {    
-      const endpoint = `https://mtaa-backend.herokuapp.com/users/${userID}/notifications`;
+      const endpoint = `${SERVER_URL}/users/${userID}/notifications`;
       const response = await fetch(endpoint, {
         method: 'GET',
         headers: requestHeaders

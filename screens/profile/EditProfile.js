@@ -8,6 +8,7 @@ import { loadSecure } from '../../utils/secureStore';
 
 import colors from '../../styles/colors';
 import textStyle from '../../styles/text';
+import { SERVER_URL } from '../../constants';
 
 import BackButton from '../../components/buttons/BackButton';
 import Input from '../../components/Input';
@@ -32,7 +33,7 @@ export default function EditProfileScreen({ navigation }) {
     const userIdParam =  (await loadSecure()).userID;
     const requestHeaders = await getRequestHeaders();
 
-    const response = await fetch(`https://mtaa-backend.herokuapp.com/users/${userIdParam}`, {
+    const response = await fetch(`${SERVER_URL}/users/${userIdParam}`, {
       method: 'GET',
       headers: requestHeaders
     });
@@ -84,7 +85,7 @@ export default function EditProfileScreen({ navigation }) {
     const auth = (await loadSecure()).auth;
 
     try {
-      const response = await fetch(`https://mtaa-backend.herokuapp.com/users/${userIdParam}`, {
+      const response = await fetch(`${SERVER_URL}/users/${userIdParam}`, {
         method: 'PUT',
         headers: {
           Accept: 'application/json',

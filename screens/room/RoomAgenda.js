@@ -7,6 +7,7 @@ import EmptyList from '../../components/cards/EmptyList';
 
 import colors from '../../styles/colors';
 import textStyle from '../../styles/text';
+import { SERVER_URL } from '../../constants';
 
 // Reservation item
 const Reservation = ({ from, until }) => (
@@ -37,7 +38,7 @@ export default function RoomAgenda({ navigation, route }) {
   const getReservations =  async () => {
     const requestHeaders = await getRequestHeaders();
     try {
-      const response = await fetch(`https://mtaa-backend.herokuapp.com/reservations?room_id=${route.params._id}`, {
+      const response = await fetch(`${SERVER_URL}/reservations?room_id=${route.params._id}`, {
         method: 'GET',
         headers: requestHeaders
       });

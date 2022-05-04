@@ -5,6 +5,7 @@ import { getRequestHeaders } from '../../utils/api';
 
 import colors from '../../styles/colors';
 import textStyle from '../../styles/text';
+import { SERVER_URL } from '../../constants';
 
 import Listing from "../../components/cards/Listing";
 import EmptyList from '../../components/cards/EmptyList';
@@ -27,7 +28,7 @@ export default function ReservationHistory({ navigation, route }) {
       roomsIDs = roomsIDs.map((id) => `id[]=${id}`);
       const query = roomsIDs.join('&');
 
-      const response = await fetch(`https://mtaa-backend.herokuapp.com/rooms?${query}`, {
+      const response = await fetch(`${SERVER_URL}/rooms?${query}`, {
         method: 'GET',
         headers: requestHeaders
       });

@@ -1,4 +1,6 @@
 import { loadSecure } from "./secureStore";
+
+import { SERVER_URL } from '../constants';
   
 // Generate request headers
 export async function getRequestHeaders() {
@@ -16,7 +18,7 @@ export async function getProfilePic(setProfilePicURL) {
   const userIdParam = (await loadSecure()).userID;
   const requestHeaders = await getRequestHeaders();
 
-  const response = await fetch(`https://mtaa-backend.herokuapp.com/users/${userIdParam}`, {
+  const response = await fetch(`${SERVER_URL}/users/${userIdParam}`, {
     method: 'GET',
     headers: requestHeaders
   });
