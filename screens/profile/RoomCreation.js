@@ -7,6 +7,7 @@ import { Feather } from '@expo/vector-icons';
 
 import colors from '../../styles/colors';
 import textStyle from '../../styles/text';
+import { SERVER_URL } from '../../constants';
 
 import BackButton from '../../components/buttons/BackButton';
 import StandardButton from '../../components/buttons/StandardButton';
@@ -86,7 +87,7 @@ export default function RoomCreation({ navigation }) {
     );
 
     try {
-      const response = await fetch('https://mtaa-backend.herokuapp.com/rooms', {
+      const response = await fetch(SERVER_URL + '/rooms', {
         method: 'POST',
         headers: requestHeaders,
         body: formData

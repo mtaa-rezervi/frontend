@@ -6,6 +6,7 @@ import { getRequestHeaders } from '../../utils/api';
 
 import colors from '../../styles/colors';
 import textStyle from '../../styles/text';
+import { SERVER_URL } from '../../constants';
 
 import Listing from "../../components/cards/Listing";
 import EmptyList from '../../components/cards/EmptyList';
@@ -34,7 +35,7 @@ export default function UserListing({ navigation }) {
   const deleteRoom = async (roomID) => {
     const requestHeaders = await getRequestHeaders();
     try {
-      const endpoint = `https://mtaa-backend.herokuapp.com/rooms/${roomID}`;
+      const endpoint = `${SERVER_URL}/rooms/${roomID}`;
       const response = await fetch(endpoint, {
         method: 'DELETE',
         headers: requestHeaders
@@ -60,8 +61,7 @@ export default function UserListing({ navigation }) {
     const userIdParam = (await loadSecure()).userID;
     const requestHeaders = await getRequestHeaders();
     try {
-      const endpoint = `https://mtaa-backend.herokuapp.com/users/${userIdParam}/active-listings`;
-
+      const endpoint = `${SERVER_URL}/users/${userIdParam}/active-listings`;
       const response = await fetch(endpoint, {
         method: 'GET',
         headers: requestHeaders
@@ -120,7 +120,7 @@ export default function UserListing({ navigation }) {
           onRefresh={onRefresh}
           refreshing={isRefreshing}
           keyExtractor={item => item._id}
-          ListEmptyComponent={ !isLoading && <EmptyList/> } 
+          ListEmptyComponent={ !isLoading && <EmptyList text={'You have no listed rooms'}/> } 
           contentContainerStyle={styles.listingContainer}
         />
       )}

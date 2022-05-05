@@ -5,6 +5,7 @@ import { getRequestHeaders, getProfilePic } from '../../utils/api';
 
 import colors from '../../styles/colors';
 import textStyle from "../../styles/text";
+import { SERVER_URL } from '../../constants';
 
 import ProfileIcon from "../../components/buttons/Profile";
 import Listing from "../../components/cards/Listing";
@@ -23,7 +24,7 @@ export default function HomeScreen({ navigation }) {
   const getRooms = async () => {
     const requestHeaders = await getRequestHeaders();
     try {
-      const endpoint = 'https://mtaa-backend.herokuapp.com/rooms';
+      const endpoint = SERVER_URL + '/rooms';
 
       const today = new Date()
       const dateFrom = new Date(today.getFullYear(), today.getMonth(), today.getUTCDate(), 8).toISOString();

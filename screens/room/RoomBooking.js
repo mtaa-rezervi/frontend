@@ -9,6 +9,7 @@ import BackButton from '../../components/buttons/BackButton';
 
 import textStyle from '../../styles/text';
 import colors from '../../styles/colors';
+import { SERVER_URL } from '../../constants';
 
 import { loadSecure } from '../../utils/secureStore';
 
@@ -51,7 +52,7 @@ export default function RoomBooking({ navigation, route }) {
     let timeUntilISO = day + "T" + timeUntil + ":00+02:00";
 
     try {
-      const response = await fetch(`https://mtaa-backend.herokuapp.com/reservations`, {
+      const response = await fetch(`${SERVER_URL}/reservations`, {
         method: 'POST',
         headers: {
           Accept: 'application/json',

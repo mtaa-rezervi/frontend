@@ -8,6 +8,7 @@ import EmptyList from '../../components/cards/EmptyList';
 
 import textStyle from '../../styles/text';
 import colors from '../../styles/colors';
+import { SERVER_URL } from '../../constants';
 
 export default function SearchResults({ navigation, route }) {
   const [isRefreshing, setRefreshing] = useState(false);
@@ -19,7 +20,7 @@ export default function SearchResults({ navigation, route }) {
   const getRooms = async () => {
     const requestHeaders = await getRequestHeaders();
     try {
-      const endpoint = 'https://mtaa-backend.herokuapp.com/rooms';
+      const endpoint = SERVER_URL + '/rooms';
       const response = await fetch(endpoint + route.params.query, {
         method: 'GET',
         headers: requestHeaders
@@ -77,7 +78,7 @@ export default function SearchResults({ navigation, route }) {
         refreshing={isRefreshing}
         keyExtractor={item => item._id}
         contentContainerStyle={styles.listingContainer}
-        ListEmptyComponent={ !isLoading && <EmptyList/> } 
+        ListEmptyComponent={ !isLoading && <EmptyList text={'No matching rooms found'}/> } 
       />
       { isLoading && data.length === 0 && 
       <View style={styles.activityIndicator}>
