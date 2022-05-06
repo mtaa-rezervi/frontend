@@ -26,6 +26,7 @@ import RoomBooking from './screens/room/RoomBooking';
 import SelectTime from './screens/SelectTime';
 import SearchResults from './screens/search/SearchResults';
 import RoomAgenda from './screens/room/RoomAgenda';
+import ChatScreen from './screens/chat/Chat';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -74,8 +75,8 @@ export default function App() {
         screenOptions={{
           headerShown: false
         }}>
-        <Stack.Screen name='Login' component={LoginScreen} />
-        <Stack.Screen name='Register' component={RegisterScreen} />
+        {/* <Stack.Screen name='Login' component={LoginScreen} />
+        <Stack.Screen name='Register' component={RegisterScreen} /> */}
         <Stack.Screen name='TabNavigator' component={TabNavigator} />
         <Stack.Screen name='Room' component={RoomScreen} />
         <Stack.Screen name='Profile' component={ProfileScreen} />
@@ -87,6 +88,7 @@ export default function App() {
         <Stack.Screen name='SelectTime' component={SelectTime}/>
         <Stack.Screen name='SearchResults' component={SearchResults} />
         <Stack.Screen name='RoomAgenda' component={RoomAgenda} />
+        <Stack.Screen name='ChatScreen' component={ChatScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );

@@ -98,7 +98,9 @@ export default function RoomScreen({ navigation, route }) {
               <Text style={[styles.text, textStyle.small]}>{room.number_of_seats} seats</Text>
               <Text style={[styles.text, textStyle.small]}>{room.amenities.join(', ')}</Text>
             </View>
-            <SmallButton title={'Call owner'} action={() => console.log('calling')} />
+            <SmallButton title={'Chat'} 
+              action={() => navigation.navigate('ChatScreen')} 
+            />
           </View>
           <View style={styles.address}>
             <Text style={[styles.heading, textStyle.h2]}>Address</Text>
