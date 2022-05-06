@@ -6,14 +6,14 @@ import { getRequestHeaders } from '../../utils/api';
 import { getValueFor } from "../../utils/secureStore";
 
 import BackButton from '../../components/buttons/BackButton';
-import StandardButton from "../../components/buttons/StandardButton";
+import SendButton from "../../components/buttons/SendButton";
 import Input from "../../components/Input";
 
 import textStyle from '../../styles/text';
 import colors from '../../styles/colors';
 import { SERVER_URL } from '../../constants';
 
-export default function ChatScreen({ navigation }) {
+export default function ChatScreen({ navigation, route }) {
   const [isLoading, setLoading] = useState(true);
   const isFocused = useIsFocused();
 
@@ -50,24 +50,25 @@ export default function ChatScreen({ navigation }) {
   };
 
   useEffect(() => {
-    connectSocket();
+    //connectSocket();
   }, []);
 
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
         <BackButton action={() => {
-          websocket.close();
+          //ws.close();
           navigation.goBack();
         }}/>
-        <Text style={[textStyle.h1, styles.heading]}>Chat</Text>
+        <Text style={[textStyle.h1, styles.heading]}>{`Your chat with ${route.params.owner.name.first_name}`}</Text>
       </View>
       <View style={styles.messageInput}>
         <Input placeholder={'message'} 
           value={message}
           onChangeText={text => setMessage(text)}
+          width={260}
         />
-        <StandardButton
+        <SendButton
           action={() => { 
             sendMessage();
             setMessage(''); 
@@ -95,9 +96,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   messageInput: {
-    flexDirection: 'column',
+    flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'space-evenly'
   },
   activityIndicator: {
     position: 'absolute',

@@ -7,16 +7,11 @@ import { getRequestHeaders } from '../../utils/api';
 
 import BackButton from '../../components/buttons/BackButton';
 import StandardButton from "../../components/buttons/StandardButton";
+import SmallButton from "../../components/buttons/SmallButton";
 
 import textStyle from '../../styles/text';
 import colors from '../../styles/colors';
 import { SERVER_URL } from '../../constants';
-
-const SmallButton = ({ title, action }) => (
-    <TouchableOpacity style={ styles.smallButton } onPress={action}>
-      <Text style={[textStyle.small, { color: colors.white}]}>{ title || 'Button' }</Text>
-    </TouchableOpacity>
-);
 
 const ImageCarousel = ({ data }) => {
   const [index, setIndex] = React.useState(0)
@@ -55,7 +50,7 @@ const ImageCarousel = ({ data }) => {
 
 export default function RoomScreen({ navigation, route }) {
   const [isLoading, setLoading] = useState(true);
-  const [room, setData] = useState([]);
+  const [room, setRoom] = useState([]);
 
   const getRoom = async () => {
     const requestHeaders = await getRequestHeaders();
@@ -68,13 +63,12 @@ export default function RoomScreen({ navigation, route }) {
       });
 
       const room = await response.json();
-      //console.log(room)
-      room.address = `${room.address.street}, ${room.address.city} ${room.address.zip}, ${room.address.state}`
-      room.image_urls.splice(0, 0, room.thumbnail_url)
-      setData(room);
+      room.address = `${room.address.street}, ${room.address.city} ${room.address.zip}, ${room.address.state}`;
+      room.image_urls.splice(0, 0, room.thumbnail_url);
+      setRoom(room);
     } catch (error) {
-        console.error(error);
-        alert('Something went wrong');
+      console.error(error);
+      alert('Something went wrong');
     } finally {
       setLoading(false);
     }
@@ -83,6 +77,25 @@ export default function RoomScreen({ navigation, route }) {
   useEffect(() => {
     getRoom();
   }, []);
+
+  const navigateToChat = async () => {
+    const requestHeaders = await getRequestHeaders();
+    try {
+      const endpoint = `${SERVER_URL}/users/${room.owner_id}`;
+      const response = await fetch(endpoint, {
+        method: 'GET',
+        headers: requestHeaders
+      });
+
+      const owner = await response.json();
+      navigation.navigate('ChatScreen', { owner: owner });
+    } catch (error) {
+      console.error(error);
+      alert('Something went wrong');
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -99,7 +112,9 @@ export default function RoomScreen({ navigation, route }) {
               <Text style={[styles.text, textStyle.small]}>{room.amenities.join(', ')}</Text>
             </View>
             <SmallButton title={'Chat'} 
-              action={() => navigation.navigate('ChatScreen')} 
+              action={() => {
+                navigateToChat();
+              }} 
             />
           </View>
           <View style={styles.address}>
@@ -158,14 +173,6 @@ const styles = StyleSheet.create({
     width: 330,
     height: 206,
     alignSelf: 'center'
-  },
-  smallButton: {
-    width: 129,
-    backgroundColor: colors.blue,
-    height: 49,
-    borderRadius: 10,
-    justifyContent: 'center',
-    alignItems: 'center'
   },
   textContainer: {
     flexDirection: 'column',
