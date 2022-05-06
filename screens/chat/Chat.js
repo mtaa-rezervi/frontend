@@ -7,7 +7,7 @@ import { getValueFor } from "../../utils/secureStore";
 
 import BackButton from '../../components/buttons/BackButton';
 import SendButton from "../../components/buttons/SendButton";
-import Input from "../../components/Input";
+import Input from "../../components/inputs/Input";
 
 import textStyle from '../../styles/text';
 import colors from '../../styles/colors';

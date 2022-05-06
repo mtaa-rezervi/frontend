@@ -8,7 +8,7 @@ import colors from '../../styles/colors';
 import textStyle from '../../styles/text';
 
 import StandardButton from '../../components/buttons/StandardButton';
-import Input from '../../components/Input';
+import Input from '../../components/inputs/Input';
 import Tag from '../../components/buttons/Tag';
 import ProfileIcon from '../../components/buttons/Profile';
 

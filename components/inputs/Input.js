@@ -1,6 +1,6 @@
 import { StyleSheet, View, TextInput } from 'react-native';
-import colors from '../styles/colors';
-import textStyle from '../styles/text';
+import colors from '../../styles/colors';
+import textStyle from '../../styles/text';
 import React from 'react'
 
 export default function Input({ placeholder, secureTextEntry, value, onChangeText, width, style }) {

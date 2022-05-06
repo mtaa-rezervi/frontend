@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import { useIsFocused } from '@react-navigation/native';
 import Moment from 'moment';
 
-import Input from '../../components/Input';
+import Input from '../../components/inputs/Input';
 import StandardButton from '../../components/buttons/StandardButton';
 import BackButton from '../../components/buttons/BackButton';
 

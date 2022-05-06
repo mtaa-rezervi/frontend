@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { ActivityIndicator, StyleSheet, SafeAreaView, View, Text, Image } from "react-native";
 
-import Input from "../../components/Input";
+import Input from "../../components/inputs/Input";
 import StandardButton from "../../components/buttons/StandardButton";
 
 import colors from '../../styles/colors';
