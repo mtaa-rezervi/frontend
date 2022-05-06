@@ -27,6 +27,7 @@ import SelectTime from './screens/SelectTime';
 import SearchResults from './screens/search/SearchResults';
 import RoomAgenda from './screens/room/RoomAgenda';
 import ChatScreen from './screens/chat/Chat';
+import ComponentsExample from './screens/ComponentsExample';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -70,13 +71,14 @@ export default function App() {
   if (!fontsLoaded) return (<AppLoading />);
 
   return (
+    //<ComponentsExample/>
     <NavigationContainer>
       <Stack.Navigator
         screenOptions={{
           headerShown: false
         }}>
-        {/* <Stack.Screen name='Login' component={LoginScreen} />
-        <Stack.Screen name='Register' component={RegisterScreen} /> */}
+        <Stack.Screen name='Login' component={LoginScreen} />
+        <Stack.Screen name='Register' component={RegisterScreen} />
         <Stack.Screen name='TabNavigator' component={TabNavigator} />
         <Stack.Screen name='Room' component={RoomScreen} />
         <Stack.Screen name='Profile' component={ProfileScreen} />

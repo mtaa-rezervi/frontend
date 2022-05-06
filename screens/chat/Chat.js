@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { ActivityIndicator, StyleSheet, Text, SafeAreaView, View, ScrollView} from 'react-native';
+import { ActivityIndicator, StyleSheet, Text, SafeAreaView, View, FlatList } from 'react-native';
 import { useIsFocused } from '@react-navigation/native';
 
 import { getRequestHeaders } from '../../utils/api';
@@ -8,22 +8,75 @@ import { getValueFor } from "../../utils/secureStore";
 import BackButton from '../../components/buttons/BackButton';
 import SendButton from "../../components/buttons/SendButton";
 import Input from "../../components/inputs/Input";
+import Message from "../../components/cards/Message";
+import EmptyList from "../../components/cards/EmptyList";
 
 import textStyle from '../../styles/text';
 import colors from '../../styles/colors';
 import { SERVER_URL } from '../../constants';
 
 export default function ChatScreen({ navigation, route }) {
-  const [isLoading, setLoading] = useState(true);
   const isFocused = useIsFocused();
+  const [isLoading, setLoading] = useState(true);
+  const [isRefreshing, setRefreshing] = useState(false);
+  const dms = useRef(null);
+
+  const [userID, setUserID] = useState(null);
+  const [username, setUsername] = useState('');
 
   const [messages, setMessages] = useState([]);
-  const [message, setMessage] = useState('');
+  const [messageText, setMessageText] = useState('');
   
   const socketUrl = '192.168.1.194:3000';
   const ws = useRef(new WebSocket(`ws://${socketUrl}/chat`)).current;
   const [websocket, setWebSocket] = useState(null);
 
+  // TODO: - Tu bude nejake api volanie na historiu sprav...
+  // Load messages and user credentials 
+  const loadData = async () => {
+    const id = await getValueFor('_id');
+    setUserID(id);
+    setUsername(await getValueFor('username'));
+
+    const demoMessages = [
+      {
+        from: id,
+        to: route.params.owner._id,
+        time: '2022-05-06T18:00:00.473Z',
+        message: 'Ahojky 🤪'
+      },
+      {
+        from: route.params.owner._id,
+        to: id,
+        time: '2022-05-06T18:03:00.473Z',
+        message: 'Ahoj 🧐'
+      },
+      {
+        from: route.params.owner._id,
+        to: id,
+        time: '2022-05-06T18:20:19.473Z',
+        message: 'Hahahahah hihihi'
+      },
+      {
+        from: id,
+        to: route.params.owner._id,
+        time: '2022-05-06T18:23:19.473Z',
+        message: 'Hahaaha hihihi'
+      },
+    ];
+    setMessages([...demoMessages]);
+    setLoading(false);
+  };
+
+  // TODO: - sfunkcnit
+  // Fetch new messages 
+  const updateMessages = async () => {
+    const newMessages = [];
+    setMessages([...messages, ...newMessages]);
+    setRefreshing(false);
+  };
+
+  // TODO: - sfunkcnit
   const connectSocket = async () => {
     //const socketUrl = '192.168.1.194:3000';
     //const ws = new WebSocket(`ws://${socketUrl}/chat`);
@@ -44,14 +97,39 @@ export default function ChatScreen({ navigation, route }) {
     };
   };
 
-  const sendMessage = () => {
-    ws.send(message);
-    //ws.send(message);
-  };
-
   useEffect(() => {
+    loadData();
     //connectSocket();
   }, []);
+
+  const onRefresh = () => {
+    setRefreshing(true);
+    updateMessages();
+  };
+
+  // TODO: - sfunkcnit
+  // Send new message
+  const sendMessage = () => {
+    //ws.send(message);
+    const newMessage = {
+      from: userID,
+      to: route.params.owner._id,
+      time: new Date(Date.now()),
+      message: messageText
+    };
+    console.log(newMessage)
+    setMessages([...messages, newMessage]);
+    setMessageText('');
+  };
+
+  const renderMessages = ({ item }) => (
+    <Message 
+      time={item.time}
+      style={item.from === userID ? styles.myMessage : styles.otherMessage}
+      text={item.message}
+      color={ item.from === userID ? colors.lightBlue : colors.lightGrey }
+    />
+  );
 
   return (
     <SafeAreaView style={styles.container}>
@@ -62,17 +140,26 @@ export default function ChatScreen({ navigation, route }) {
         }}/>
         <Text style={[textStyle.h1, styles.heading]}>{`Your chat with ${route.params.owner.name.first_name}`}</Text>
       </View>
+      <FlatList
+        data={messages}
+        ref={dms}
+        renderItem={renderMessages}
+        onRefresh={onRefresh}
+        refreshing={isRefreshing}
+        keyExtractor={(item, index) => index}
+        contentContainerStyle={styles.messageContainer}
+        ListEmptyComponent={ !isLoading && <EmptyList text={'You have no messages'}/>}
+        onContentSizeChange={() => dms.current.scrollToEnd() }
+        onLayout={() => dms.current.scrollToEnd() }
+      />
       <View style={styles.messageInput}>
         <Input placeholder={'message'} 
-          value={message}
-          onChangeText={text => setMessage(text)}
+          value={messageText}
+          onChangeText={text => setMessageText(text)}
           width={260}
         />
         <SendButton
-          action={() => { 
-            sendMessage();
-            setMessage(''); 
-          }}
+          action={() => sendMessage()}
         />
       </View>
     </SafeAreaView>
@@ -95,10 +182,24 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
   },
+  messageContainer: {
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  myMessage: {
+    marginLeft: 17,
+    marginBottom: 14
+  },  
+  otherMessage: {
+    marginRight: 17,
+    marginBottom: 14
+  },
   messageInput: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-evenly'
+    justifyContent: 'space-evenly',
+    marginVertical: 20 
   },
   activityIndicator: {
     position: 'absolute',
