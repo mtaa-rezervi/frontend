@@ -13,6 +13,7 @@ export default function Input({ placeholder, secureTextEntry, value, onChangeTex
         secureTextEntry={ secureTextEntry || false }
         placeholder={ placeholder || 'Placeholder' }
         onChangeText={ onChangeText } 
+        placeholderTextColor={'#afafaf'}
         autoCapitalize='none'/>
     </View>
   );

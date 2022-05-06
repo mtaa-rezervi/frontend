@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { ActivityIndicator, StyleSheet, Text, SafeAreaView, View, FlatList } from 'react-native';
+import { ActivityIndicator, StyleSheet, Text, SafeAreaView, View, FlatList, KeyboardAvoidingView, Platform } from 'react-native';
 import { useIsFocused } from '@react-navigation/native';
 
 import { getRequestHeaders } from '../../utils/api';
@@ -117,7 +117,7 @@ export default function ChatScreen({ navigation, route }) {
       time: new Date(Date.now()),
       message: messageText
     };
-    console.log(newMessage)
+    //console.log(newMessage)
     setMessages([...messages, newMessage]);
     setMessageText('');
   };
@@ -152,16 +152,20 @@ export default function ChatScreen({ navigation, route }) {
         onContentSizeChange={() => dms.current.scrollToEnd() }
         onLayout={() => dms.current.scrollToEnd() }
       />
-      <View style={styles.messageInput}>
-        <Input placeholder={'message'} 
-          value={messageText}
-          onChangeText={text => setMessageText(text)}
-          width={260}
-        />
-        <SendButton
-          action={() => sendMessage()}
-        />
-      </View>
+      <KeyboardAvoidingView
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+      >
+        <View style={styles.messageInput}>
+          <Input placeholder={'Message'} 
+            value={messageText}
+            onChangeText={text => setMessageText(text)}
+            width={260}
+          />
+          <SendButton
+            action={() => sendMessage()}
+          />
+        </View>
+      </KeyboardAvoidingView>
     </SafeAreaView>
   );
 }
@@ -185,7 +189,7 @@ const styles = StyleSheet.create({
   messageContainer: {
     flexDirection: 'column',
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   myMessage: {
     marginLeft: 17,
@@ -199,7 +203,10 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-evenly',
-    marginVertical: 20 
+    paddingTop: 10,
+    paddingBottom: 20,
+    borderTopColor: colors.lightGrey,
+    borderTopWidth: 1,
   },
   activityIndicator: {
     position: 'absolute',
