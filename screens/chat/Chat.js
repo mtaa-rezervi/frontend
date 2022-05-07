@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { ActivityIndicator, StyleSheet, Text, SafeAreaView, View, FlatList, KeyboardAvoidingView, Platform } from 'react-native';
 import { useIsFocused } from '@react-navigation/native';
 
+import { SERVER_URL } from '../../constants';
 import { getRequestHeaders } from '../../utils/api';
 import { getValueFor } from "../../utils/secureStore";
 
@@ -13,7 +14,6 @@ import EmptyList from "../../components/cards/EmptyList";
 
 import textStyle from '../../styles/text';
 import colors from '../../styles/colors';
-import { SERVER_URL } from '../../constants';
 
 export default function ChatScreen({ navigation, route }) {
   const isFocused = useIsFocused();
@@ -31,7 +31,7 @@ export default function ChatScreen({ navigation, route }) {
   const ws = useRef(new WebSocket(`ws://${socketUrl}/chat`)).current;
   const [websocket, setWebSocket] = useState(null);
 
-  // TODO: - Tu bude nejake api volanie na historiu sprav...
+  // TODO: - Tu bude nejake api volanie pre historiu sprav...
   // Load messages and user credentials 
   const loadData = async () => {
     const id = await getValueFor('_id');
@@ -68,7 +68,7 @@ export default function ChatScreen({ navigation, route }) {
     setLoading(false);
   };
 
-  // TODO: - sfunkcnit
+  // TODO: - sfunkcnit, v zasade to asi bude skoro rovnake ako loadData()
   // Fetch new messages 
   const updateMessages = async () => {
     const newMessages = [];
@@ -127,7 +127,7 @@ export default function ChatScreen({ navigation, route }) {
       time={item.time}
       style={item.from === userID ? styles.myMessage : styles.otherMessage}
       text={item.message}
-      color={ item.from === userID ? colors.lightBlue : colors.lightGrey }
+      color={item.from === userID ? colors.lightBlue : colors.lightGrey}
     />
   );
 
@@ -148,7 +148,7 @@ export default function ChatScreen({ navigation, route }) {
         refreshing={isRefreshing}
         keyExtractor={(item, index) => index}
         contentContainerStyle={styles.messageContainer}
-        ListEmptyComponent={ !isLoading && <EmptyList text={'You have no messages'}/>}
+        ListEmptyComponent={!isLoading && <EmptyList text={'You have no messages'}/>}
         onContentSizeChange={() => dms.current.scrollToEnd() }
         onLayout={() => dms.current.scrollToEnd() }
       />
@@ -189,14 +189,18 @@ const styles = StyleSheet.create({
   messageContainer: {
     flexDirection: 'column',
     justifyContent: 'center',
-    alignItems: 'center',
+    // alignItems: 'center',
   },
   myMessage: {
-    marginLeft: 17,
+    marginRight: 17,
+    // marginLeft: 17,
+    alignSelf: 'flex-end',
     marginBottom: 14
   },  
   otherMessage: {
-    marginRight: 17,
+    marginLeft: 17,
+    // marginRight: 17,
+    alignSelf: 'flex-start',
     marginBottom: 14
   },
   messageInput: {
