@@ -15,6 +15,8 @@ import EmptyList from "../../components/cards/EmptyList";
 import textStyle from '../../styles/text';
 import colors from '../../styles/colors';
 
+import io from "socket.io-client";
+
 export default function ChatScreen({ navigation, route }) {
   const isFocused = useIsFocused();
   const [isLoading, setLoading] = useState(true);
@@ -27,9 +29,13 @@ export default function ChatScreen({ navigation, route }) {
   const [messages, setMessages] = useState([]);
   const [messageText, setMessageText] = useState('');
   
+  /*
   const socketUrl = '192.168.1.194:3000';
   const ws = useRef(new WebSocket(`ws://${socketUrl}/chat`)).current;
   const [websocket, setWebSocket] = useState(null);
+  */
+
+  const [socket, setSocket] = useState(null);
 
   // TODO: - Tu bude nejake api volanie pre historiu sprav...
   // Load messages and user credentials 
@@ -85,6 +91,7 @@ export default function ChatScreen({ navigation, route }) {
     const serverMessagesList = [];
     const username = await getValueFor('username');
 
+    /*
     ws.onopen = () => {
       console.log('Room opened');
       ws.send(JSON.stringify({ username: username }));
@@ -95,11 +102,25 @@ export default function ChatScreen({ navigation, route }) {
       setMessages([...serverMessagesList])
       console.log(messages)
     };
+    */
+
+    const newSocket = io(SERVER_URL);
+    setSocket(newSocket);
+
+
   };
 
   useEffect(() => {
     loadData();
-    //connectSocket();
+    connectSocket();
+    if(socket){
+      console.log("socket created");
+      socket.on("message", (message) => {
+        console.log("message received: ", message);
+        setMessages([...messages, message]);
+      })
+    }
+    
   }, []);
 
   const onRefresh = () => {
@@ -111,16 +132,30 @@ export default function ChatScreen({ navigation, route }) {
   // Send new message
   const sendMessage = () => {
     //ws.send(message);
+
     const newMessage = {
       from: userID,
       to: route.params.owner._id,
       time: new Date(Date.now()),
       message: messageText
     };
-    //console.log(newMessage)
+    console.log(newMessage)
+
+    // sends the message object to socket server
+    socket.emit("message", newMessage);
+
     setMessages([...messages, newMessage]);
     setMessageText('');
   };
+
+  
+
+  const receiveMessage = () => {
+    socket.on("message", (message) => {
+      console.log("receivedMessage: ", message);
+    })
+  }
+
 
   const renderMessages = ({ item }) => (
     <Message 
