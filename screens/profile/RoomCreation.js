@@ -11,7 +11,7 @@ import { SERVER_URL } from '../../constants';
 
 import BackButton from '../../components/buttons/BackButton';
 import StandardButton from '../../components/buttons/StandardButton';
-import Input from '../../components/Input';
+import Input from '../../components/inputs/Input';
 import Tag from '../../components/buttons/Tag';
 
 // Ask for camera permissions

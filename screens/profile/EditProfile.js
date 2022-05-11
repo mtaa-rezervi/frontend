@@ -11,7 +11,7 @@ import textStyle from '../../styles/text';
 import { SERVER_URL } from '../../constants';
 
 import BackButton from '../../components/buttons/BackButton';
-import Input from '../../components/Input';
+import Input from '../../components/inputs/Input';
 import EditImageIcon from '../../components/buttons/EditImageIcon';
 import StandardButton from '../../components/buttons/StandardButton';
 

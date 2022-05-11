@@ -2,12 +2,7 @@ import { StyleSheet, Text, TouchableOpacity, Image, View } from 'react-native';
 import colors from '../../styles/colors';
 import textStyle from '../../styles/text';
 
-const SmallButton = ({ title, action, color }) => {
-  return (
-    <TouchableOpacity style={[styles.smallButton, { backgroundColor: color ? color : colors.blue }]} onPress={action}>
-      <Text style={[textStyle.small, { color: colors.white}]}>{ title || 'Button' }</Text>
-    </TouchableOpacity>
-)};
+import SmallButton from '../buttons/SmallButton';
 
 export default function Listing({ style, roomName, image, text1, text2, text3, buttonTitle, buttonAction, buttonColor, cardAction }) {
   //image == '' || image.uri == '' ? image = require('../assets/images/room1.jpg') : image = image;
@@ -40,14 +35,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingRight: 20, // 15 is another option here
     paddingLeft: 20,
-  },
-  smallButton: {
-    width: 129,
-    backgroundColor: colors.blue,
-    height: 49,
-    borderRadius: 10,
-    justifyContent: 'center',
-    alignItems: 'center'
   },
   card: {
     width: 330,

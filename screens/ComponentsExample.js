@@ -5,12 +5,14 @@ import colors from '../styles/colors';
 import textStyle from '../styles/text';
 
 import StandardButton from '../components/buttons/StandardButton';
-import Input from '../components/Input';
+import Input from '../components/inputs/Input';
 import ProfileButton from '../components/buttons/ProfileButton';
 import Listing from '../components/cards/Listing';
 import Notification from '../components/cards/Notification';
 import ProfileIcon from '../components/buttons/Profile';
-import Tag from '../components/Tag';
+import Tag from '../components/buttons/Tag';
+
+import Message from '../components/cards/Message';
 
 export default function ComponentsExample() {
   const [text, setText] = useState('');
@@ -34,6 +36,7 @@ export default function ComponentsExample() {
         buttonAction={() => {console.log('Clicked')}} 
       /> 
       <Notification type='booked_room' time='1hr' text='Someone has just reserved your room, Room 1 on Carrot st. 123!' />
+      <Message text='kddjahdgahdgdddhgdffgadghagfhdgfadgfgfsagfsgfagfagdha dhadagdfgaf' color={colors.lightGrey} />
       {/* <Notification type='new_booking' time='1hr' text='You have just reserved a room, Room 2 on Broccoli st. 11!' />
       <Notification type='missed_call' time='1hr' text='Missed call from Alice.' action={() => {console.log('Clicked')}} />
       <Notification type='removed_listing' time='1hr' text='Room named, Room 1 that you had reservation for has just been removed.' /> */}

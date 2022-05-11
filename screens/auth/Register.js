@@ -5,7 +5,7 @@ import colors from '../../styles/colors';
 import textStyle from "../../styles/text";
 import { SERVER_URL } from '../../constants';
 
-import Input from "../../components/Input";
+import Input from "../../components/inputs/Input";
 import StandardButton from "../../components/buttons/StandardButton";
 import BackButton from "../../components/buttons/BackButton";
 import userLogin from "../../utils/userLogin";
