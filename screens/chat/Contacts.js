@@ -65,7 +65,6 @@ export default function ContactScreen({ navigation }) {
    
 
     const renderUsers = ({ item }) => (
-        <View>
         <TouchableOpacity
             style={styles.mainProfileButton}
             onPress={() => navigation.navigate('ChatScreenTest', { _id: item._id, username: item.credentials.username })}>
@@ -80,12 +79,11 @@ export default function ContactScreen({ navigation }) {
             <Text style={[styles.subtitle, textStyle.h3]}>{item.credentials.username}</Text>
             </View>
         </TouchableOpacity>
-        </View>
     );
 
 
     return(
-        <SafeAreaView>
+        <SafeAreaView style={styles.container}>
             <View style={styles.header}>
                 <Text style={textStyle.h1}>Users</Text>
             </View>
@@ -106,6 +104,16 @@ const styles = StyleSheet.create({
       flex: 1,
       backgroundColor: colors.white,
     },
+    header: {
+        height: 65,
+        marginRight: 30,
+        marginLeft: 30,
+        marginTop: 24,
+        paddingBottom: 10,
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+      },
     pfpWrapper:{
         marginLeft: 20,
         marginRight: 30
@@ -125,16 +133,6 @@ const styles = StyleSheet.create({
       },
       subtitle: {
         color: colors.grey,
-      },
-    header: {
-        height: 65,
-        marginRight: 30,
-        marginLeft: 30,
-        marginTop: 24,
-        paddingBottom: 10,
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: "center"
       },
     user: {
         alignContent:"center",

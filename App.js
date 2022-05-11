@@ -56,13 +56,13 @@ const TabNavigator = () => {
         options={{
           tabBarIcon: ({color}) => <MaterialCommunityIcons style={styles.tabBarIcon} name='bell' size={30} color={color} />,
         }}/>
-      <Tab.Screen name="Profile" component={ProfileScreen} 
-        options={{
-          tabBarIcon: ({color}) => <Ionicons style={styles.tabBarIcon} name='person-circle-sharp' size={34} color={color} />,
-        }}/>
       <Tab.Screen name="Chat" component={ContactScreen} 
         options={{
           tabBarIcon: ({color}) => <Entypo style={styles.tabBarIcon} name='chat' size={30} color={color} />,
+        }}/>
+      <Tab.Screen name="Profile" component={ProfileScreen} 
+        options={{
+          tabBarIcon: ({color}) => <Ionicons style={styles.tabBarIcon} name='person-circle-sharp' size={34} color={color} />,
         }}/>
     </Tab.Navigator>
   );

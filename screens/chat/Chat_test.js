@@ -25,7 +25,9 @@ export default class ChatScreenTest extends Component {
       chatMessages: [],
       userID: null,
       contactID: null,
-      roomName: null
+      roomName: null,
+      FlatListRef: null,
+      isLoading: false
     };
   }
 
@@ -40,6 +42,8 @@ export default class ChatScreenTest extends Component {
   }
 
   async getOlderMessages(){
+    this.setState({ isLoading: true });
+
     const requestHeaders = await getRequestHeaders();
     const endpoint = `${SERVER_URL}/chat?user1=${this.state.userID}&user2=${this.state.contactID}`;
     const response = await fetch(endpoint, {
@@ -48,6 +52,7 @@ export default class ChatScreenTest extends Component {
     });
     const messages = await response.json();
     this.setState({ chatMessages: messages });
+    this.setState({ isLoading: false });
   }
   
   async componentDidMount() {
@@ -147,16 +152,37 @@ export default class ChatScreenTest extends Component {
         />
     ));
 
+    const renderMessages = ({ item }) => (
+      <Message 
+        time={item.time}
+        style={item.from === this.state.userID ? styles.myMessage : styles.otherMessage}
+        text={item.message}
+        color={item.from === this.state.userID ? colors.lightBlue : colors.lightGrey}
+      />
+    );
+
     return (
       <SafeAreaView style={styles.container}>
-        <BackButton action={() => {
-          this.leaveRoom();
-          this.props.navigation.goBack();
-        }}/>
-        <Text style={[styles.heading, textStyle.h2]}>Your chat with {this.props.route.params.username}</Text>
-        <ScrollView ref={(scroll) => {this.scroll = scroll;}}>
+        <View style={styles.header}>
+          <BackButton action={() => {
+            this.leaveRoom();
+            this.props.navigation.goBack();
+          }}/>
+          <Text style={[styles.heading, textStyle.h1]}>Your chat with {this.props.route.params.username}</Text>
+        </View>
+        {/* <ScrollView ref={(scroll) => {this.scroll = scroll;}}>
             {chatMessages}
-        </ScrollView>
+        </ScrollView> */}
+        <FlatList
+          data={this.state.chatMessages}
+          ref={ref => (this.state.FlatListRef = ref)}
+          renderItem={renderMessages}
+          keyExtractor={(item, index) => index}
+          contentContainerStyle={styles.messageContainer}
+          ListEmptyComponent={!this.state.isLoading && <EmptyList style={{width: 330, alignSelf: 'center'}} text={'You have no previous messages with this user'}/>}
+          onContentSizeChange={() => this.state.FlatListRef.scrollToEnd() }
+          onLayout={() => this.state.FlatListRef.scrollToEnd() }
+        />
         <KeyboardAvoidingView
             behavior={Platform.OS === "ios" ? "padding" : "height"}
         >
@@ -184,12 +210,11 @@ export default class ChatScreenTest extends Component {
 
 const styles = StyleSheet.create({
   container: {
-    marginTop: 50,
     flex: 1,
-    backgroundColor: "#F5FCFF"
+    backgroundColor: colors.white,
   },
   header: {
-    paddingBottom: 5,
+    paddingBottom: 10,
     marginBottom: 10
   },
   heading: {
@@ -238,8 +263,4 @@ const styles = StyleSheet.create({
     backgroundColor: colors.white,
     opacity: 0.8
   },
-  heading: {
-    marginLeft: 30,
-    marginBottom: 20
-  }
 });

@@ -183,7 +183,7 @@ export default function ChatScreen({ navigation, route }) {
         refreshing={isRefreshing}
         keyExtractor={(item, index) => index}
         contentContainerStyle={styles.messageContainer}
-        ListEmptyComponent={!isLoading && <EmptyList text={'You have no messages'}/>}
+        ListEmptyComponent={!isLoading && <EmptyList text={'You have no previous messages with this user'}/>}
         onContentSizeChange={() => dms.current.scrollToEnd() }
         onLayout={() => dms.current.scrollToEnd() }
       />
