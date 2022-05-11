@@ -1,10 +1,10 @@
-import React, { useState, useEffect, useRef } from "react";
-import { ActivityIndicator, StyleSheet, Text, SafeAreaView, View, FlatList, KeyboardAvoidingView, Platform } from 'react-native';
-import { useIsFocused } from '@react-navigation/native';
+import React, { Component, useRef } from "react";
+import { ScrollView, ActivityIndicator, StyleSheet, Text, SafeAreaView, View, FlatList, KeyboardAvoidingView, Platform, Keyboard } from 'react-native';
+import io from "socket.io-client";
+import { SERVER_URL } from "../../constants"
 
-import { SERVER_URL } from '../../constants';
-import { getRequestHeaders } from '../../utils/api';
-import { getValueFor } from "../../utils/secureStore";
+import { getValueFor, loadSecure } from "../../utils/secureStore";
+import { getRequestHeaders } from "../../utils/api";
 
 import BackButton from '../../components/buttons/BackButton';
 import SendButton from "../../components/buttons/SendButton";
@@ -15,194 +15,197 @@ import EmptyList from "../../components/cards/EmptyList";
 import textStyle from '../../styles/text';
 import colors from '../../styles/colors';
 
-import io from "socket.io-client";
-
-export default function ChatScreen({ navigation, route }) {
-  const isFocused = useIsFocused();
-  const [isLoading, setLoading] = useState(true);
-  const [isRefreshing, setRefreshing] = useState(false);
-  const dms = useRef(null);
-
-  const [userID, setUserID] = useState(null);
-  const [username, setUsername] = useState('');
-
-  const [messages, setMessages] = useState([]);
-  const [messageText, setMessageText] = useState('');
-  
-  /*
-  const socketUrl = '192.168.1.194:3000';
-  const ws = useRef(new WebSocket(`ws://${socketUrl}/chat`)).current;
-  const [websocket, setWebSocket] = useState(null);
-  */
-
-  const [socket, setSocket] = useState(null);
-
-  // TODO: - Tu bude nejake api volanie pre historiu sprav...
-  // Load messages and user credentials 
-  const loadData = async () => {
-    const id = await getValueFor('_id');
-    setUserID(id);
-    setUsername(await getValueFor('username'));
-
-    const demoMessages = [
-      {
-        from: id,
-        to: route.params.owner._id,
-        time: '2022-05-06T18:00:00.473Z',
-        message: 'Ahojky 🤪'
-      },
-      {
-        from: route.params.owner._id,
-        to: id,
-        time: '2022-05-06T18:03:00.473Z',
-        message: 'Ahoj 🧐'
-      },
-      {
-        from: route.params.owner._id,
-        to: id,
-        time: '2022-05-06T18:20:19.473Z',
-        message: 'Hahahahah hihihi'
-      },
-      {
-        from: id,
-        to: route.params.owner._id,
-        time: '2022-05-06T18:23:19.473Z',
-        message: 'Hahaaha hihihi'
-      },
-    ];
-    setMessages([...demoMessages]);
-    setLoading(false);
-  };
-
-  // TODO: - sfunkcnit, v zasade to asi bude skoro rovnake ako loadData()
-  // Fetch new messages 
-  const updateMessages = async () => {
-    const newMessages = [];
-    setMessages([...messages, ...newMessages]);
-    setRefreshing(false);
-  };
-
-  // TODO: - sfunkcnit
-  const connectSocket = async () => {
-    //const socketUrl = '192.168.1.194:3000';
-    //const ws = new WebSocket(`ws://${socketUrl}/chat`);
-    //setWebSocket(ws);
-
-    const serverMessagesList = [];
-    const username = await getValueFor('username');
-
-    /*
-    ws.onopen = () => {
-      console.log('Room opened');
-      ws.send(JSON.stringify({ username: username }));
+// source: https://github.com/Hyllesen/TaxiApp/tree/01_SocketIoChat
+export default class ChatScreenTest extends Component {
+  _isMounted = false;
+  constructor(props) {
+    super(props);
+    this.state = {
+      chatMessage: "",
+      chatMessages: [],
+      userID: null,
+      contactID: null,
+      roomName: null,
+      FlatListRef: null,
+      isLoading: false
     };
-
-    ws.onmessage = (message) => {
-      serverMessagesList.push(message.data);
-      setMessages([...serverMessagesList])
-      console.log(messages)
-    };
-    */
-
-    const newSocket = io(SERVER_URL);
-    setSocket(newSocket);
-
-
-  };
-
-  useEffect(() => {
-    loadData();
-    connectSocket();
-    if(socket){
-      console.log("socket created");
-      socket.on("message", (message) => {
-        console.log("message received: ", message);
-        setMessages([...messages, message]);
-      })
-    }
-    
-  }, []);
-
-  const onRefresh = () => {
-    setRefreshing(true);
-    updateMessages();
-  };
-
-  // TODO: - sfunkcnit
-  // Send new message
-  const sendMessage = () => {
-    //ws.send(message);
-
-    const newMessage = {
-      from: userID,
-      to: route.params.owner._id,
-      time: new Date(Date.now()),
-      message: messageText
-    };
-    console.log(newMessage)
-
-    // sends the message object to socket server
-    socket.emit("message", newMessage);
-
-    setMessages([...messages, newMessage]);
-    setMessageText('');
-  };
-
-  
-
-  const receiveMessage = () => {
-    socket.on("message", (message) => {
-      console.log("receivedMessage: ", message);
-    })
   }
 
+  async getUserID() {
+    const id = await getValueFor('_id');
+    const userID = id.replace(/['"]+/g, '');
+    this.setState({ userID: userID });
+  }
 
-  const renderMessages = ({ item }) => (
-    <Message 
-      time={item.time}
-      style={item.from === userID ? styles.myMessage : styles.otherMessage}
-      text={item.message}
-      color={item.from === userID ? colors.lightBlue : colors.lightGrey}
-    />
-  );
+  async setContactID() {
+    this.setState({ contactID: this.props.route.params._id });
+  }
 
-  return (
-    <SafeAreaView style={styles.container}>
-      <View style={styles.header}>
-        <BackButton action={() => {
-          //ws.close();
-          navigation.goBack();
-        }}/>
-        <Text style={[textStyle.h1, styles.heading]}>{`Your chat with ${route.params.owner.name.first_name}`}</Text>
-      </View>
-      <FlatList
-        data={messages}
-        ref={dms}
-        renderItem={renderMessages}
-        onRefresh={onRefresh}
-        refreshing={isRefreshing}
-        keyExtractor={(item, index) => index}
-        contentContainerStyle={styles.messageContainer}
-        ListEmptyComponent={!isLoading && <EmptyList text={'You have no messages'}/>}
-        onContentSizeChange={() => dms.current.scrollToEnd() }
-        onLayout={() => dms.current.scrollToEnd() }
+  async getOlderMessages(){
+    this.setState({ isLoading: true });
+
+    const requestHeaders = await getRequestHeaders();
+    const endpoint = `${SERVER_URL}/chat?user1=${this.state.userID}&user2=${this.state.contactID}`;
+    const response = await fetch(endpoint, {
+      method: 'GET',
+      headers: requestHeaders
+    });
+    const messages = await response.json();
+    this.setState({ chatMessages: messages });
+    this.setState({ isLoading: false });
+  }
+  
+  async componentDidMount() {
+    this._isMounted = true;
+    try{
+      await this.getUserID();
+      await this.setContactID();
+      await this.getOlderMessages();
+    }catch(err){
+      console.log("error: ", err);
+    }
+
+    this.socket = io(SERVER_URL);
+    
+    var user1 = "";
+    var user2 = "";
+    if(this.state.userID > this.state.contactID){
+      user1 = this.state.userID;
+      user2 = this.state.contactID;
+    }else{
+      user1 = this.state.contactID;
+      user2 = this.state.userID;
+    }
+
+    const roomName = `${user1}_${user2}`;
+
+    this.setState({ roomName: roomName });
+
+    this.socket.emit("join_room", {
+      room_name: roomName
+    });
+
+    this.socket.on("message", msg => {
+        //console.log("received message: ", msg);
+        //const msgText = msg.message;
+        this.setState({ chatMessages: [...this.state.chatMessages, msg] });
+    });
+  }
+
+  componentWillUnmount(){
+    this._isMounted = false;
+  }
+
+  leaveRoom(){
+    this.socket.emit("leave_room", {
+      room_name: this.state.roomName
+    });
+    this.socket.disconnect();
+  }
+  
+  async submitChatMessage() {
+    if(this.state.chatMessage !== ""){
+      const newMessage = {
+          from: this.state.userID,
+          to: this.state.contactID,
+          time: new Date(Date.now()),
+          message: this.state.chatMessage
+      };
+
+
+      // sends the message object to socket server
+      this.socket.emit("message", {
+        roomName: this.state.roomName,
+        message: newMessage
+      });
+
+      const auth = (await loadSecure()).auth;
+      const endpoint = `${SERVER_URL}/chat`;
+      const response = await fetch(endpoint, {
+        method: 'POST',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+          'Authorization': auth
+        },
+        body: JSON.stringify(newMessage)
+      });
+
+      if(response.status == 201){
+        console.log("message saved");
+      }else{
+        console.log("error: ", response.status);
+      }
+      this.setState({ chatMessage: "" });
+      }
+  }
+
+  render() {
+    // const chatMessages = this.state.chatMessages.map(chatMessage => (
+    //   //<Text key={chatMessage}>{chatMessage.message}</Text>
+    //   <Message
+    //     key={chatMessage.time}
+    //     time={chatMessage.time}
+    //     style={chatMessage.from === this.state.userID ? styles.myMessage : styles.otherMessage}
+    //     text={chatMessage.message}
+    //     color={chatMessage.from === this.state.userID ? colors.lightBlue : colors.lightGrey}
+    //     />
+    // ));
+
+    const renderMessages = ({ item }) => (
+      <Message 
+        time={item.time}
+        style={item.from === this.state.userID ? styles.myMessage : styles.otherMessage}
+        text={item.message}
+        color={item.from === this.state.userID ? colors.lightBlue : colors.lightGrey}
       />
-      <KeyboardAvoidingView
-        behavior={Platform.OS === "ios" ? "padding" : "height"}
-      >
-        <View style={styles.messageInput}>
-          <Input placeholder={'Message'} 
-            value={messageText}
-            onChangeText={text => setMessageText(text)}
-            width={260}
-          />
-          <SendButton
-            action={() => sendMessage()}
-          />
+    );
+
+    return (
+      <SafeAreaView style={styles.container}>
+        <View style={styles.header}>
+          <BackButton action={() => {
+            this.leaveRoom();
+            this.props.navigation.goBack();
+          }}/>
+          <Text style={[styles.heading, textStyle.h1]}>Your chat with {this.props.route.params.username}</Text>
         </View>
-      </KeyboardAvoidingView>
-    </SafeAreaView>
-  );
+        {/* <ScrollView ref={(scroll) => {this.scroll = scroll;}}>
+            {chatMessages}
+        </ScrollView> */}
+        <FlatList
+          data={this.state.chatMessages}
+          ref={ref => (this.state.FlatListRef = ref)}
+          renderItem={renderMessages}
+          keyExtractor={(item, index) => index}
+          contentContainerStyle={styles.messageContainer}
+          ListEmptyComponent={!this.state.isLoading && <EmptyList style={{width: 330, alignSelf: 'center'}} text={'You have no previous messages with this user'}/>}
+          onContentSizeChange={() => this.state.FlatListRef.scrollToEnd() }
+          onLayout={() => this.state.FlatListRef.scrollToEnd() }
+        />
+        <KeyboardAvoidingView
+            behavior={Platform.OS === "ios" ? "padding" : "height"}
+        >
+            <View style={styles.messageInput}>
+                <Input placeholder={'Message'} 
+                    value={this.state.chatMessage}
+                    onChangeText={chatMessage => {
+                        this.setState({ chatMessage });
+                    }}
+                    width={260}
+                />
+                <SendButton
+                    action={() => {
+                        this.submitChatMessage();
+                        Keyboard.dismiss();
+                    }}
+                />
+            </View>
+        </KeyboardAvoidingView>
+      </SafeAreaView>
+      
+    );
+  }
 }
 
 const styles = StyleSheet.create({
@@ -259,5 +262,5 @@ const styles = StyleSheet.create({
     height: '100%',
     backgroundColor: colors.white,
     opacity: 0.8
-  }
+  },
 });

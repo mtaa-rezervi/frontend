@@ -36,8 +36,8 @@ export default function ContactScreen({ navigation }) {
         const userID = userIDvalue.replace(/['"]+/g, '');
 
         try {
-            const endpoint = SERVER_URL + '/users/all';
-
+            //const endpoint = SERVER_URL + '/users/all';
+            const endpoint = SERVER_URL + `/chat/dms/${userID}`;
             const response = await fetch(endpoint, {
                 method: 'GET',
                 headers: requestHeaders
@@ -45,15 +45,13 @@ export default function ContactScreen({ navigation }) {
 
             const users = await response.json();
             //console.log(users);
-
-            const otherUsers = []
-            for( const user of users){
-                if(String(user._id) != userID){
-                    otherUsers.push(user);
-                }
-            }
-
-            setUsers(otherUsers);
+            // const otherUsers = []
+            // for(const user of users){
+            //     if(String(user._id) != userID){
+            //         otherUsers.push(user);
+            //     }
+            // }
+            setUsers(users);
         } catch (error) {
             console.error(error);
             alert('Something went wrong');
@@ -65,29 +63,26 @@ export default function ContactScreen({ navigation }) {
    
 
     const renderUsers = ({ item }) => (
-        <View>
         <TouchableOpacity
             style={styles.mainProfileButton}
-            onPress={() => navigation.navigate('ChatScreenTest', { _id: item._id, username: item.credentials.username })}>
-            
+            onPress={() => navigation.navigate('ChatScreen', { _id: item._id, username: item.credentials.username })}>
             <View style={styles.pfpWrapper}>
                 <ProfileIcon
                     image={(item.profile_pic ? {uri: item.profile_pic} : require('../../assets/images/Avatar.png'))}
                 />
             </View>
             <View style={{flexDirection: 'column'}}>
-            <Text style={[styles.buttonText, textStyle.h2]}>{item.name.first_name} {item.name.last_name}</Text>
-            <Text style={[styles.subtitle, textStyle.h3]}>{item.credentials.username}</Text>
+                <Text style={[styles.buttonText, textStyle.h2]}>{item.name.first_name} {item.name.last_name}</Text>
+                <Text style={[styles.subtitle, textStyle.h3]}>{item.credentials.username}</Text>
             </View>
         </TouchableOpacity>
-        </View>
     );
 
 
     return(
-        <SafeAreaView>
+        <SafeAreaView style={styles.container}>
             <View style={styles.header}>
-                <Text style={textStyle.h1}>Users</Text>
+                <Text style={textStyle.h1}>Your messages</Text>
             </View>
             <FlatList
                 data={users}
@@ -106,6 +101,16 @@ const styles = StyleSheet.create({
       flex: 1,
       backgroundColor: colors.white,
     },
+    header: {
+        height: 65,
+        marginRight: 30,
+        marginLeft: 30,
+        marginTop: 24,
+        paddingBottom: 10,
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+      },
     pfpWrapper:{
         marginLeft: 20,
         marginRight: 30
@@ -125,16 +130,6 @@ const styles = StyleSheet.create({
       },
       subtitle: {
         color: colors.grey,
-      },
-    header: {
-        height: 65,
-        marginRight: 30,
-        marginLeft: 30,
-        marginTop: 24,
-        paddingBottom: 10,
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: "center"
       },
     user: {
         alignContent:"center",

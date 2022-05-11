@@ -89,7 +89,7 @@ export default function RoomScreen({ navigation, route }) {
 
       const owner = await response.json();
       
-      navigation.navigate('ChatScreen', { owner: owner });
+      navigation.navigate('ChatScreen', { _id: owner._id, username: owner.credentials.username });
     } catch (error) {
       console.error(error);
       alert('Something went wrong');

@@ -28,7 +28,6 @@ import SearchResults from './screens/search/SearchResults';
 import RoomAgenda from './screens/room/RoomAgenda';
 import ChatScreen from './screens/chat/Chat';
 import ComponentsExample from './screens/ComponentsExample';
-import ChatScreenTest from './screens/chat/Chat_test';
 import ContactScreen from './screens/chat/Contacts';
 
 const Stack = createNativeStackNavigator();
@@ -56,13 +55,13 @@ const TabNavigator = () => {
         options={{
           tabBarIcon: ({color}) => <MaterialCommunityIcons style={styles.tabBarIcon} name='bell' size={30} color={color} />,
         }}/>
-      <Tab.Screen name="Profile" component={ProfileScreen} 
-        options={{
-          tabBarIcon: ({color}) => <Ionicons style={styles.tabBarIcon} name='person-circle-sharp' size={34} color={color} />,
-        }}/>
       <Tab.Screen name="Chat" component={ContactScreen} 
         options={{
           tabBarIcon: ({color}) => <Entypo style={styles.tabBarIcon} name='chat' size={30} color={color} />,
+        }}/>
+      <Tab.Screen name="Profile" component={ProfileScreen} 
+        options={{
+          tabBarIcon: ({color}) => <Ionicons style={styles.tabBarIcon} name='person-circle-sharp' size={34} color={color} />,
         }}/>
     </Tab.Navigator>
   );
@@ -98,7 +97,7 @@ export default function App() {
         <Stack.Screen name='RoomAgenda' component={RoomAgenda} />
         <Stack.Screen name='ChatScreen' component={ChatScreen} />
         <Stack.Screen name='Contacts' component={ContactScreen} />
-        <Stack.Screen name='ChatScreenTest' component={ChatScreenTest} />
+        {/* <Stack.Screen name='ChatScreenTest' component={ChatScreenTest} /> */}
       </Stack.Navigator>
     </NavigationContainer>
   );
