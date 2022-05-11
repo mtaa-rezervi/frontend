@@ -3,7 +3,8 @@ import { ScrollView, ActivityIndicator, StyleSheet, Text, SafeAreaView, View, Fl
 import io from "socket.io-client";
 import { SERVER_URL } from "../../constants"
 
-import { getValueFor } from "../../utils/secureStore";
+import { getValueFor, loadSecure } from "../../utils/secureStore";
+import { getRequestHeaders } from "../../utils/api";
 
 import BackButton from '../../components/buttons/BackButton';
 import SendButton from "../../components/buttons/SendButton";
@@ -16,6 +17,7 @@ import colors from '../../styles/colors';
 
 // source: https://github.com/Hyllesen/TaxiApp/tree/01_SocketIoChat
 export default class ChatScreenTest extends Component {
+  _isMounted = false;
   constructor(props) {
     super(props);
     this.state = {
@@ -37,10 +39,23 @@ export default class ChatScreenTest extends Component {
     this.setState({ contactID: this.props.route.params._id });
   }
 
+  async getOlderMessages(){
+    const requestHeaders = await getRequestHeaders();
+    const endpoint = `${SERVER_URL}/chat?user1=${this.state.userID}&user2=${this.state.contactID}`;
+    const response = await fetch(endpoint, {
+      method: 'GET',
+      headers: requestHeaders
+    });
+    const messages = await response.json();
+    this.setState({ chatMessages: messages });
+  }
+  
   async componentDidMount() {
+    this._isMounted = true;
     try{
       await this.getUserID();
       await this.setContactID();
+      await this.getOlderMessages();
     }catch(err){
       console.log("error: ", err);
     }
@@ -66,10 +81,14 @@ export default class ChatScreenTest extends Component {
     });
 
     this.socket.on("message", msg => {
-        console.log("received message: ", msg);
+        //console.log("received message: ", msg);
         //const msgText = msg.message;
         this.setState({ chatMessages: [...this.state.chatMessages, msg] });
     });
+  }
+
+  componentWillUnmount(){
+    this._isMounted = false;
   }
 
   leaveRoom(){
@@ -79,12 +98,11 @@ export default class ChatScreenTest extends Component {
     this.socket.disconnect();
   }
   
-
-  submitChatMessage() {
+  async submitChatMessage() {
     if(this.state.chatMessage !== ""){
       const newMessage = {
           from: this.state.userID,
-          //to: route.params.owner._id,
+          to: this.state.contactID,
           time: new Date(Date.now()),
           message: this.state.chatMessage
       };
@@ -96,6 +114,23 @@ export default class ChatScreenTest extends Component {
         message: newMessage
       });
 
+      const auth = (await loadSecure()).auth;
+      const endpoint = `${SERVER_URL}/chat`;
+      const response = await fetch(endpoint, {
+        method: 'POST',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+          'Authorization': auth
+        },
+        body: JSON.stringify(newMessage)
+      });
+
+      if(response.status == 201){
+        console.log("message saved");
+      }else{
+        console.log("error: ", response.status);
+      }
       this.setState({ chatMessage: "" });
       }
   }
@@ -118,7 +153,7 @@ export default class ChatScreenTest extends Component {
           this.leaveRoom();
           this.props.navigation.goBack();
         }}/>
-        <Text style={textStyle.h1}>Your chat with {this.props.route.params.username}</Text>
+        <Text style={[styles.heading, textStyle.h2]}>Your chat with {this.props.route.params.username}</Text>
         <ScrollView ref={(scroll) => {this.scroll = scroll;}}>
             {chatMessages}
         </ScrollView>
@@ -202,5 +237,9 @@ const styles = StyleSheet.create({
     height: '100%',
     backgroundColor: colors.white,
     opacity: 0.8
+  },
+  heading: {
+    marginLeft: 30,
+    marginBottom: 20
   }
 });
