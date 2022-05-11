@@ -214,7 +214,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.white,
   },
   header: {
-    paddingBottom: 10,
+    paddingBottom: 5,
     marginBottom: 10
   },
   heading: {
