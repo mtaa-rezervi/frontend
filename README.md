@@ -1,5 +1,5 @@
 # frontend
-Frontend for our workspace reservation app made with (Expo)[https://expo.dev].
+Frontend for our workspace reservation app made with [Expo](https://expo.dev).
 
 This mobile app allows users to:
 - View, create, and edit room reservations: Users can browse available rooms, book them, and make changes to existing reservations.
